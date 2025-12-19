@@ -2,7 +2,7 @@ const indicator = document.querySelector(".indicator");
 const tabs = document.querySelectorAll(".tab");
 
 // Load first page by default
-loadPage("page/page1.html");
+loadPage("pages/page1.html");
 
 function changeTab(tab, page) {
     tabs.forEach(t => t.classList.remove("active"));

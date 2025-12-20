@@ -69,6 +69,12 @@ html, body {
   border-radius: 20px 20px 0 0;
   object-fit: cover;
   margin-bottom: 15px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.profile-photo[src] {
+  opacity: 1;
 }
 
 .name {
@@ -507,32 +513,33 @@ updateDotIndicator(0);
    ✅ FIXED FETCH (ONLY NEW PART)
    ================================ */
 
+const bannerImg = document.getElementById("banner");
+const CACHE_KEY = "hsr_banner_url";
+
+// 1️⃣ Load cached banner immediately
+const cachedBanner = localStorage.getItem(CACHE_KEY);
+if (cachedBanner) {
+  bannerImg.src = cachedBanner;
+}
+
+// 2️⃣ Fetch latest banner in background
 fetch(
   "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices"
 )
   .then(res => res.json())
   .then(data => {
+    const lastNotice = data?.at(-1);
+    const bannerUrl = lastNotice?.banner?.at(-1);
 
-    if (!Array.isArray(data) || data.length === 0) {
-      console.warn("No notices");
-      return;
+    if (!bannerUrl) return;
+
+    // Update only if changed
+    if (bannerUrl !== cachedBanner) {
+      bannerImg.src = bannerUrl;
+      localStorage.setItem(CACHE_KEY, bannerUrl);
     }
-
-    // last notice in the array
-    const lastNotice = data[data.length - 1];
-
-    if (!Array.isArray(lastNotice.banner) || lastNotice.banner.length === 0) {
-      console.warn("No banner found");
-      return;
-    }
-
-    // last banner inside banner array
-    const lastBannerUrl =
-      lastNotice.banner[lastNotice.banner.length - 1];
-
-    document.getElementById("banner").src = lastBannerUrl;
   })
-  .catch(err => console.error("Fetch error:", err));
+  .catch(console.error);
 
 </script>
 

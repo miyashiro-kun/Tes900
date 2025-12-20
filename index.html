@@ -5,7 +5,7 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Smooth Swipe Island + Link Tree Default</title>
+<title>Smooth Swipe Island - Fixed</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -20,7 +20,7 @@ body {
 
 .container {
   display:flex;
-  width:300vw;
+  width:300vw; /* 3 halaman */
   height:100vh;
   will-change: transform;
 }
@@ -35,7 +35,7 @@ body {
   color:white;
 }
 
-.page1 {background:#020617;}
+.page1 {background:#020617;} /* Link Tree */
 .page2 {background:#1e3a8a;}
 .page3 {background:#064e3b;}
 
@@ -107,6 +107,7 @@ body {
 <body>
 
 <div class="container" id="container">
+  <!-- Halaman default = page0 (Link Tree) -->
   <div class="page page1">
     <div class="profile"></div>
     <button class="btn">Instagram</button>
@@ -135,19 +136,18 @@ const totalPages = 3;
 const pageWidth = window.innerWidth;
 const dotSpacing = 23;
 
-let currentPage = 0; // DEFAULT page = Link Tree (page1)
+let currentPage = 0; // page0 = Link Tree
 let startX = 0;
 let currentX = 0;
 let startTime = 0;
 let isSwiping = false;
 let hideTimeout = null;
 
-// Set initial container position
+// Set container initial position
 container.style.transform = `translateX(${-currentPage*pageWidth}px)`;
 
 // Dot helper
 function updateDotIndicator(progress){
-  const maxLeft = dotSpacing*(totalPages-1);
   dotIndicator.style.left = `${Math.min(Math.max(progress,0),totalPages-1)*dotSpacing}px`;
 }
 
@@ -172,9 +172,9 @@ document.addEventListener("touchmove", e=>{
     delta *= 0.6;
   }
 
-  // Move container
   const offset = -currentPage*pageWidth + delta;
-  setTranslate(offset,false);
+  container.style.transition = "none";
+  container.style.transform = `translateX(${offset}px)`;
 
   // Smooth dot
   const progress = currentPage - delta/pageWidth;
@@ -198,19 +198,14 @@ document.addEventListener("touchend", ()=>{
     currentPage--;
   }
 
-  // Snap
-  setTranslate(-currentPage*pageWidth,true);
+  container.style.transition = "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+  container.style.transform = `translateX(${-currentPage*pageWidth}px)`;
   updateDotIndicator(currentPage);
 
   hideTimeout = setTimeout(()=>{
     island.classList.remove("show");
   },1000);
 });
-
-function setTranslate(x,animate=false){
-  container.style.transition = animate?"transform 0.45s cubic-bezier(.22,.61,.36,1)":"none";
-  container.style.transform = `translateX(${x}px)`;
-}
 
 // Initial dot
 updateDotIndicator(currentPage);

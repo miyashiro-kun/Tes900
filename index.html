@@ -3,23 +3,25 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
-<title>Swipe + Desktop Button Navigation</title>
-
+<title>Swipe Link Tree</title>
 <style>
 * { box-sizing: border-box; }
 
 html, body {
   margin:0; padding:0;
   overflow:hidden;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background:black;
   height:100%;
   touch-action: pan-y;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Container & Pages */
 .container {
   display:flex;
-  width:300vw; /* tetap lebar semua halaman */
+  width:300vw;
   height:100vh;
   will-change: transform;
   transition: transform 0.45s cubic-bezier(.22,.61,.36,1);
@@ -28,56 +30,148 @@ html, body {
 .page {
   width:100vw;
   height:100vh;
-  display:flex;
+  flex-shrink: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 5vh 3vw;
+  color: #222;
+  background: transparent;
+  display: flex;
   flex-direction: column;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  flex-shrink:0;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.page1 {background:#020617;}
-.page2 {background:#1e3a8a;}
-.page3 {background:#064e3b;}
-
-.profile {
-  width:20vw;
-  max-width:120px;
-  height:20vw;
-  max-height:120px;
-  border-radius:50%;
-  background:url("https://via.placeholder.com/300") center/cover no-repeat;
-  border:3px solid white;
-  margin-bottom:3vh;
+/* --- Page 1: Link Tree --- */
+.page1 {
+  background: #fce8f4;
+  color: #222;
 }
 
-.btn {
-  width:60vw;
-  max-width:220px;
-  padding:2vh 0;
-  margin:1.5vh 0;
-  border-radius:30px;
-  border:none;
-  font-size:4vw;
-  font-weight:bold;
-  cursor:pointer;
+/* Link Tree Card */
+.linktree-card {
+  background: #fff0f8;
+  border-radius: 20px;
+  padding: 25px 20px;
+  width: 90vw;
+  max-width: 360px;
+  box-shadow: 0 8px 24px rgb(255 192 203 / 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.profile-photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 3px solid white;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.name {
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 0 0 6px 0;
+  text-align: center;
+}
+
+.desc {
+  font-size: 0.9rem;
+  color: #444;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.btn-message {
+  background: #ec1a8f;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 35px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-message:hover {
+  background: #c2177d;
+}
+
+/* Link Buttons */
+.links {
+  width: 90vw;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.link-btn {
+  background: #ffffff;
+  border-radius: 20px;
+  border: none;
+  padding: 14px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #222;
+  box-shadow: 0 4px 10px rgb(255 192 203 / 0.3);
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.link-btn:hover {
+  background: #fbd6e8;
+}
+
+/* Icons for links using emoji placeholders */
+.link-btn span {
+  font-size: 1.2rem;
+  display: inline-block;
+  width: 28px;
+  text-align: center;
+}
+
+/* --- Page 2 and 3 --- */
+.page2 {
+  background: #1e3a8a;
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+  justify-content: center;
+}
+
+.page3 {
+  background: #064e3b;
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+  justify-content: center;
 }
 
 /* Island dot indicator */
 .island {
   position: fixed;
-  top:2vh;
-  left:50%;
+  top: 2vh;
+  left: 50%;
   transform: translateX(-50%);
   background: rgba(0,0,0,0.75);
   backdrop-filter: blur(14px);
   padding: 1vh 3vw;
-  border-radius:999px;
-  display:flex;
-  gap:2vw;
+  border-radius: 999px;
+  display: flex;
+  gap: 2vw;
   opacity: 0;
   transition: opacity 0.25s ease;
-  pointer-events:none;
+  pointer-events: none;
   z-index: 999;
 }
 
@@ -156,13 +250,26 @@ html, body {
 <body>
 
 <div class="container" id="container">
+  <!-- Page 1 Link Tree -->
   <div class="page page1">
-    <div class="profile"></div>
-    <button class="btn">Instagram</button>
-    <button class="btn">YouTube</button>
-    <button class="btn">Portfolio</button>
+    <div class="linktree-card">
+      <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile" class="profile-photo" />
+      <h2 class="name">Eina Antaswari Kinanthi</h2>
+      <p class="desc">Senior UI/UX Designer with big dreams. 🚀</p>
+      <button class="btn-message">Message me</button>
+    </div>
+    <div class="links">
+      <button class="link-btn"><span>🏀</span> My Dribbble</button>
+      <button class="link-btn"><span>🎨</span> Freebies UI Kit</button>
+      <button class="link-btn"><span>🔗</span> My Linkedin</button>
+      <button class="link-btn"><span>📝</span> Just write my thoughts</button>
+    </div>
   </div>
+
+  <!-- Page 2 -->
   <div class="page page2"><h1>Page 2</h1></div>
+
+  <!-- Page 3 -->
   <div class="page page3"><h1>Page 3</h1></div>
 </div>
 

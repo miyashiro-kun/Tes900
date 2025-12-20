@@ -78,6 +78,67 @@ html, body {
   opacity: 1;
 }
 
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  background: #e0e0e0;
+  border: none;
+  width: 300px;
+  max-width: 200px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.tab-btn.active {
+  background: #38bdf8;
+  color: #fff;
+}
+
+.code-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.code-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.code-text {
+  font-weight: 700;
+}
+
+.code-rewards {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.copy-btn, .redeem-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.copy-btn { background: #38bdf8; color: #fff; margin-right: 6px; }
+.redeem-btn { background: #22c55e; color: #fff; }
+
+
 .name {
   font-weight: 700;
   font-size: 1.3rem;
@@ -249,6 +310,7 @@ html, body {
 }
 
 .code-card {
+  max-width: 670px;
   background: rgba(255,255,255,0.08);
   border-radius: 14px;
   padding: 14px 16px;
@@ -258,6 +320,7 @@ html, body {
 
 .code-row {
   display: flex;
+  width: 300px;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
@@ -479,7 +542,20 @@ html, body {
   </div>
 
   <!-- Page 2 -->
-  <div class="page page3"><h1>Page 2</h1></div>
+  <div class="page page2">
+  <h1 class="page-title">Redeem Codes</h1>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-game="zenless">ZENLESS</button>
+    <button class="tab-btn" data-game="genshin">GENSHIN</button>
+    <button class="tab-btn" data-game="starrail">STAR RAIL</button>
+  </div>
+
+  <!-- Codes container -->
+  <div id="codesContainer" class="loading">Loading codes…</div>
+</div>
+
 
   <!-- Page 3 -->
   <div class="page page3"><h1>Page 3</h1></div>
@@ -674,8 +750,95 @@ document.querySelectorAll(".link-btn").forEach(btn => {
 
 
 </script>
+<script>
+  const API_URLS = {
+  zenless: "https://api.ennead.cc/mihoyo/zenless/codes",
+  genshin: "https://api.ennead.cc/mihoyo/genshin/codes",
+  starrail: "https://api.ennead.cc/mihoyo/starrail/codes"
+};
 
+const REDEEM_URLS = {
+  zenless: code => `https://zenless.hoyoverse.com/redemption?code=${code}`,
+  genshin: code => `https://genshin.hoyoverse.com/en/gift?code=${code}`,
+  starrail: code => `https://hsr.hoyoverse.com/gift?code=${code}`
+};
 
+const codesContainer = document.getElementById("codesContainer");
+let currentGame = "zenless";
+
+// Helper to fetch via AllOrigins proxy
+async function fetchViaProxy(url) {
+  const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+  const res = await fetch(proxyUrl);
+  return res.json();
+}
+
+// Load codes for a given game
+async function loadCodes(game) {
+  codesContainer.innerHTML = "Loading codes…";
+  try {
+    const data = await fetchViaProxy(API_URLS[game]);
+    renderCodes(game, data.active);
+  } catch (err) {
+    codesContainer.innerHTML = "Failed to load codes.";
+    console.error(err);
+  }
+}
+
+// Render code cards
+function renderCodes(game, codes) {
+  codesContainer.innerHTML = "";
+
+  if (!codes || codes.length === 0) {
+    codesContainer.innerHTML = "No active codes.";
+    return;
+  }
+
+  codes.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "code-card";
+
+    card.innerHTML = `
+      <div class="code-row">
+        <div class="code-text">${item.code}</div>
+        <div>
+          <button class="copy-btn">Copy</button>
+          <button class="redeem-btn">Redeem</button>
+        </div>
+      </div>
+      <div class="code-rewards">
+        Rewards: ${item.rewards.join(", ")}
+      </div>
+    `;
+
+    card.querySelector(".copy-btn").onclick = () => {
+      navigator.clipboard.writeText(item.code);
+      alert("Copied: " + item.code);
+    };
+
+    card.querySelector(".redeem-btn").onclick = () => {
+      const url = REDEEM_URLS[game](item.code);
+      window.open(url, "_blank");
+    };
+
+    codesContainer.appendChild(card);
+  });
+}
+
+// Tab buttons
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentGame = btn.dataset.game;
+    loadCodes(currentGame);
+  });
+});
+
+// Load default game on page load
+loadCodes(currentGame);
+
+</script>
 
 </body>
 </html>

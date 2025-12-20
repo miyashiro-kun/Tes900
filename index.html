@@ -17,7 +17,7 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     overflow: hidden;
     font-family: Arial, sans-serif;
     background: black;
-    touch-action: pan-y; /* IMPORTANT */
+    touch-action: pan-y;
   }
 
   /* Pages */
@@ -62,21 +62,22 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     font-weight: bold;
   }
 
-  /* Island */
+  /* Dynamic Island */
   .island {
     position: fixed;
-    bottom: 26px;
+    top: 12px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(12px);
-    padding: 10px 18px;
+    backdrop-filter: blur(14px);
+    padding: 10px 20px;
     border-radius: 999px;
     display: flex;
     gap: 10px;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.25s ease;
     pointer-events: none;
+    z-index: 999;
   }
 
   .island.show {
@@ -134,6 +135,7 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
   let currentX = 0;
   let startTime = 0;
   let isSwiping = false;
+  let hideTimeout;
 
   function updateDots() {
     dots.forEach((dot, i) => {
@@ -142,11 +144,15 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
   }
 
   function setTranslate(x, animate = false) {
-    container.style.transition = animate ? "transform 0.45s cubic-bezier(.22,.61,.36,1)" : "none";
+    container.style.transition = animate
+      ? "transform 0.45s cubic-bezier(.22,.61,.36,1)"
+      : "none";
     container.style.transform = `translateX(${x}px)`;
   }
 
   document.addEventListener("touchstart", e => {
+    clearTimeout(hideTimeout);
+
     startX = e.touches[0].clientX;
     currentX = startX;
     startTime = Date.now();
@@ -162,7 +168,9 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     currentX = e.touches[0].clientX;
     const delta = currentX - startX;
 
-    const offset = -currentPage * window.innerWidth + delta * 0.6;
+    const offset =
+      -currentPage * window.innerWidth + delta * 0.6;
+
     setTranslate(offset, false);
   });
 
@@ -170,24 +178,23 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     if (!isSwiping) return;
     isSwiping = false;
 
-    island.classList.remove("show");
-
     const distance = currentX - startX;
     const time = Date.now() - startTime;
     const velocity = Math.abs(distance / time);
 
-    if (
-      (distance < -80 || velocity > 0.5) && currentPage < 2
-    ) {
+    if ((distance < -80 || velocity > 0.5) && currentPage < 2) {
       currentPage++;
-    } else if (
-      (distance > 80 || velocity > 0.5) && currentPage > 0
-    ) {
+    } else if ((distance > 80 || velocity > 0.5) && currentPage > 0) {
       currentPage--;
     }
 
     setTranslate(-currentPage * window.innerWidth, true);
     updateDots();
+
+    // ⏱ Delay 1 second before hiding island
+    hideTimeout = setTimeout(() => {
+      island.classList.remove("show");
+    }, 1000);
   });
 </script>
 

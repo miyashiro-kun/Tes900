@@ -210,11 +210,23 @@ html, body {
 
 /* --- Page 2 and 3 --- */
 .page2 {
-  background: #0b1220;
-  color: white;
-  justify-content: flex-start;
-  padding-top: 6vh;
+  background: #f8fafc;
+  color: #0f172a;
 }
+
+.codes-section h3 {
+  color: #020617;
+}
+
+.code-card {
+  background: white;
+}
+
+.copy-btn.redeem-btn {
+  background: #22c55e;
+  color: #022c22;
+}
+
 
 .page-title {
   font-size: 1.6rem;
@@ -240,7 +252,7 @@ html, body {
   border-radius: 14px;
   padding: 14px 16px;
   margin-bottom: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 .code-row {
@@ -274,6 +286,7 @@ html, body {
 }
 
 .code-desc {
+  text-align: left;
   margin-top: 6px;
   font-size: 0.85rem;
   opacity: 0.85;
@@ -426,7 +439,7 @@ html, body {
   <!-- Page 1 Link Tree -->
   <div class="page page1">
     <div class="linktree-card">
-      <img id="banner" alt="Banner Image" class="profile-photo" />
+      <img src="https://awsimages.detik.net.id/community/media/visual/2022/02/17/bruce-leung-1_34.png" id="banner" alt="Banner Image" class="profile-photo" />
       <h2 class="name">Eina Antaswari Kinanthi</h2>
       <p class="desc">Senior UI/UX Designer with big dreams. 🚀</p>
       <button class="btn-message">Message me</button>
@@ -434,28 +447,28 @@ html, body {
     <div class="links">
       <!-- Each link-btn with collapse panel -->
       <div>
-        <button class="link-btn"><span>🏀</span> My Dribbble</button>
+        <button class="link-btn" aria-expanded="false"><span>🏀</span> My Dribbble</button>
         <div class="collapse-panel">
           <div>visit me</div>
           <button class="visit-btn" onclick="alert('Dribbble clicked')">Go</button>
         </div>
       </div>
       <div>
-        <button class="link-btn"><span>🎨</span> Freebies UI Kit</button>
+        <button class="link-btn" aria-expanded="false"><span>🎨</span> Freebies UI Kit</button>
         <div class="collapse-panel">
           <div>visit me</div>
           <button class="visit-btn" onclick="alert('Freebies clicked')">Go</button>
         </div>
       </div>
       <div>
-        <button class="link-btn"><span>🔗</span> My Linkedin</button>
+        <button class="link-btn" aria-expanded="false"><span>🔗</span> My Linkedin</button>
         <div class="collapse-panel">
           <div>visit me <br> everytime u wanted </div>
           <button class="visit-btn" onclick="alert('Linkedin clicked')">Go</button>
         </div>
       </div>
       <div>
-        <button class="link-btn"><span>📝</span> Just write my thoughts</button>
+        <button class="link-btn" aria-expanded="false"><span>📝</span> Just write my thoughts</button>
         <div class="collapse-panel">
           <div>visit me</div>
           <button class="visit-btn" onclick="alert('Thoughts clicked')">Go</button>
@@ -466,11 +479,8 @@ html, body {
 
   <!-- Page 2 -->
   <div class="page page2">
-  <h2 class="page-title">🎁 Redeem Codes</h2>
-
-  <div id="codes-container">
-    <div class="loading">Loading codes...</div>
-  </div>
+  <h1 class="page-title">Redeem Codes</h1>
+  <div id="codesContainer" class="loading">Loading codes…</div>
 </div>
 
   <!-- Page 3 -->
@@ -502,7 +512,7 @@ const dotIndicator = document.getElementById("dot-indicator");
 const btnPrev = document.getElementById("btnPrev");
 const btnNext = document.getElementById("btnNext");
 
-let totalPages = 3;
+let totalPages = document.querySelectorAll('.page').length;
 let pageWidth = window.innerWidth;
 
 let currentPage = 0;
@@ -549,7 +559,7 @@ window.addEventListener('resize', ()=>{
   setTranslate(-currentPage*pageWidth);
 });
 
-document.addEventListener("touchstart", e => {
+container.addEventListener("touchstart", e => {
   clearTimeout(hideTimeout);
 
   startX = e.touches[0].clientX;
@@ -567,7 +577,7 @@ document.addEventListener("touchstart", e => {
   island.classList.add("show");
 }, { passive: true });
 
-document.addEventListener("touchmove", e => {
+container.addEventListener("touchmove", e => {
   if (!isSwiping) return;
 
   currentX = e.touches[0].clientX;
@@ -607,7 +617,7 @@ document.addEventListener("touchmove", e => {
 }, { passive: true });
 
 
-document.addEventListener("touchend", () => {
+container.addEventListener("touchend", () => {
   if (!isSwiping) return;
   isSwiping = false;
 
@@ -664,143 +674,73 @@ document.querySelectorAll(".link-btn").forEach(btn => {
   });
 });
 
-/* ================================
-   Page 1: Profile Banner (Star Rail)
-   ================================ */
 
-const bannerImg = document.getElementById("banner");
+</script>
+<script>
+const API_URL = "https://db.hashblen.com/codes";
 
-const PROFILE_CACHE_KEY = "hsr_profile_banner";
+const REDEEM_URLS = {
+  zzz: code => `https://zenless.hoyoverse.com/redemption?code=${code}`,
+  genshin: code => `https://genshin.hoyoverse.com/en/gift?code=${code}`,
+  hsr: code => `https://hsr.hoyoverse.com/gift?code=${code}`
+};
 
-const cachedBanner = localStorage.getItem(PROFILE_CACHE_KEY);
-if (cachedBanner) {
-  bannerImg.src = cachedBanner;
-}
+const containerEl = document.getElementById("codesContainer");
 
-fetch("https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices")
+fetch(API_URL)
   .then(res => res.json())
-  .then(data => {
-    const lastNotice = data?.at(-2);
-    const banners = lastNotice?.banner || [];
-
-    // SAFE banner selection
-    // Prefer primary banner, fallback to last
-    const bannerUrl = banners[0] || banners.at(-1);
-
-    if (!bannerUrl) return;
-
-    // Update cache only if changed
-    if (bannerUrl !== cachedBanner) {
-      bannerImg.src = bannerUrl;
-      localStorage.setItem(CACHE_KEY, bannerUrl);
-    }
-  })
-  .catch(err => console.error("Banner fetch error:", err));
-
-/* ================================
-   Shared Banner Loader (Page 2)
-   ================================ */
-
-function loadHoYoBanner({ key, api, target }) {
-  const CACHE_KEY = `hoyo_banner_${key}`;
-  const cached = localStorage.getItem(CACHE_KEY);
-
-  if (cached) {
-    target.style.backgroundImage = `url(${cached})`;
-  }
-
-  fetch(api)
-    .then(res => res.json())
-    .then(data => {
-      if (!Array.isArray(data)) return;
-
-      let bannerUrl = null;
-
-      // ⭐ STAR RAIL = SAME AS PROFILE BANNER
-      if (key === "starrail") {
-        const notice = [...data].reverse().find(n => n.banner?.length);
-        bannerUrl = notice?.banner?.at(-1);
-      }
-
-      // 🎮 GENSHIN / ZZZ (safe fallback)
-      else {
-        const notice = [...data].reverse().find(n => n.banner?.length);
-        const banners = notice?.banner || [];
-        bannerUrl = banners.at(-1) || banners[0];
-      }
-
-      if (!bannerUrl || bannerUrl === cached) return;
-
-      target.style.backgroundImage = `url(${bannerUrl})`;
-      localStorage.setItem(CACHE_KEY, bannerUrl);
-    })
-    .catch(err => console.error(`Banner fetch error (${key})`, err));
-}
-
-
-/* ================================
-   Page 2: Codes Rendering
-   ================================ */
-
-const codesContainer = document.getElementById("codes-container");
-
-fetch("https://db.hashblen.com/codes")
-  .then(res => res.json())
-  .then(data => {
-    codesContainer.innerHTML = "";
-    Object.entries(data).forEach(([key, list]) => {
-      if (Array.isArray(list) && list.length) renderSection(key, list);
-    });
-  })
-  .catch(() => codesContainer.textContent = "Failed to load codes.");
-
-function renderSection(gameKey, list) {
-  const section = document.createElement("div");
-  section.className = "codes-section";
-
-  const header = document.createElement("div");
-  header.className = "section-header";
-  header.innerHTML = `<h3>${formatTitle(gameKey)} Codes</h3>`;
-  section.appendChild(header);
-
-  const bannerApis = {
-    zzz: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/zenless/news/notices",
-    genshin: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/genshin/news/notices",
-    starrail: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices"
-  };
-
-  if (bannerApis[gameKey]) {
-    loadHoYoBanner({ key: gameKey, api: bannerApis[gameKey], target: header });
-  }
-
-  list.sort((a, b) => b.added_at - a.added_at).forEach(item => {
-    const card = document.createElement("div");
-    card.className = "code-card";
-    card.innerHTML = `
-      <div class="code-row">
-        <div class="code-text">${item.code}</div>
-        <button class="copy-btn">Copy</button>
-      </div>
-      <div class="code-desc">${item.description}</div>
-    `;
-    card.querySelector(".copy-btn").onclick = () => {
-      navigator.clipboard.writeText(item.code);
-      showCopied(card);
-    };
-    section.appendChild(card);
+  .then(data => renderCodes(data))
+  .catch(() => {
+    containerEl.innerHTML = "Failed to load codes.";
   });
 
-  codesContainer.appendChild(section);
-}
+function renderCodes(data) {
+  containerEl.innerHTML = "";
 
-function showCopied(card) {
-  const btn = card.querySelector(".copy-btn");
-  btn.textContent = "Copied!";
-  setTimeout(() => (btn.textContent = "Copy"), 1200);
-}
+  Object.entries(data).forEach(([game, codes]) => {
+    if (!codes || !codes.length) return;
 
-function formatTitle(key) {
-  return key.charAt(0).toUpperCase() + key.slice(1);
+    const section = document.createElement("div");
+    section.className = "codes-section";
+
+    section.innerHTML = `
+      <h3>${game.toUpperCase()}</h3>
+    `;
+
+    codes.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "code-card";
+
+      const redeemUrl = REDEEM_URLS[game]
+        ? REDEEM_URLS[game](item.code)
+        : "#";
+
+      card.innerHTML = `
+        <div class="code-row">
+          <div class="code-text">${item.code}</div>
+          <div style="display:flex; gap:8px;">
+            <button class="copy-btn">Copy</button>
+            <button class="copy-btn redeem-btn">Redeem</button>
+          </div>
+        </div>
+        <div class="code-desc">${item.description}</div>
+      `;
+
+      // Copy behavior
+      card.querySelector(".copy-btn").onclick = () => {
+        navigator.clipboard.writeText(item.code);
+      };
+
+      // Redeem behavior
+      card.querySelector(".redeem-btn").onclick = () => {
+        window.open(redeemUrl, "_blank");
+      };
+
+      section.appendChild(card);
+    });
+
+    containerEl.appendChild(section);
+  });
 }
 </script>
 

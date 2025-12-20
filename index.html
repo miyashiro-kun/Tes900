@@ -2,15 +2,22 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Swipe Island Dots</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Smooth Swipe Island</title>
 
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
     overflow: hidden;
     font-family: Arial, sans-serif;
     background: black;
+    touch-action: pan-y; /* IMPORTANT */
   }
 
   /* Pages */
@@ -18,7 +25,7 @@
     display: flex;
     width: 300vw;
     height: 100vh;
-    transition: transform 0.4s ease;
+    will-change: transform;
   }
 
   .page {
@@ -55,26 +62,25 @@
     font-weight: bold;
   }
 
-  /* Island dots */
+  /* Island */
   .island {
     position: fixed;
-    bottom: 28px;
+    bottom: 26px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     padding: 10px 18px;
     border-radius: 999px;
     display: flex;
     gap: 10px;
     opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.2s ease;
     pointer-events: none;
   }
 
   .island.show {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
   }
 
   .dot {
@@ -112,7 +118,6 @@
   </div>
 </div>
 
-<!-- Island Indicator -->
 <div class="island" id="island">
   <div class="dot active"></div>
   <div class="dot"></div>
@@ -126,36 +131,64 @@
 
   let currentPage = 0;
   let startX = 0;
-  let endX = 0;
+  let currentX = 0;
+  let startTime = 0;
+  let isSwiping = false;
 
   function updateDots() {
-    dots.forEach((dot, index) => {
-      dot.classList.toggle("active", index === currentPage);
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("active", i === currentPage);
     });
+  }
+
+  function setTranslate(x, animate = false) {
+    container.style.transition = animate ? "transform 0.45s cubic-bezier(.22,.61,.36,1)" : "none";
+    container.style.transform = `translateX(${x}px)`;
   }
 
   document.addEventListener("touchstart", e => {
     startX = e.touches[0].clientX;
+    currentX = startX;
+    startTime = Date.now();
+    isSwiping = true;
+
     island.classList.add("show");
+    setTranslate(-currentPage * window.innerWidth, false);
   });
 
-  document.addEventListener("touchend", e => {
-    endX = e.changedTouches[0].clientX;
+  document.addEventListener("touchmove", e => {
+    if (!isSwiping) return;
+
+    currentX = e.touches[0].clientX;
+    const delta = currentX - startX;
+
+    const offset = -currentPage * window.innerWidth + delta * 0.6;
+    setTranslate(offset, false);
+  });
+
+  document.addEventListener("touchend", () => {
+    if (!isSwiping) return;
+    isSwiping = false;
+
     island.classList.remove("show");
-    handleSwipe();
-  });
 
-  function handleSwipe() {
-    const distance = endX - startX;
+    const distance = currentX - startX;
+    const time = Date.now() - startTime;
+    const velocity = Math.abs(distance / time);
 
-    if (Math.abs(distance) < 50) return;
+    if (
+      (distance < -80 || velocity > 0.5) && currentPage < 2
+    ) {
+      currentPage++;
+    } else if (
+      (distance > 80 || velocity > 0.5) && currentPage > 0
+    ) {
+      currentPage--;
+    }
 
-    if (distance < 0 && currentPage < 2) currentPage++;
-    if (distance > 0 && currentPage > 0) currentPage--;
-
-    container.style.transform = `translateX(-${currentPage * 100}vw)`;
+    setTranslate(-currentPage * window.innerWidth, true);
     updateDots();
-  }
+  });
 </script>
 
 </body>

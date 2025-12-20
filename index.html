@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>Swipe Link Tree Responsive</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+<title>Swipe Link Tree Responsive Final</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -17,6 +15,16 @@ html, body {
   font-family: Arial, sans-serif;
   background:black;
   height:100%;
+  touch-action: pan-y;
+}
+
+/* Force mobile layout even in desktop mode */
+@media (min-width: 800px) {
+  html, body, .container, .page {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow-x: hidden;
+  }
 }
 
 .container {

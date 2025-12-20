@@ -210,11 +210,23 @@ html, body {
 
 /* --- Page 2 and 3 --- */
 .page2 {
-  background: #0b1220;
-  color: white;
-  justify-content: flex-start;
-  padding-top: 6vh;
+  background: #f8fafc;
+  color: #0f172a;
 }
+
+.codes-section h3 {
+  color: #020617;
+}
+
+.code-card {
+  background: white;
+}
+
+.copy-btn.redeem-btn {
+  background: #22c55e;
+  color: #022c22;
+}
+
 
 .page-title {
   font-size: 1.6rem;
@@ -466,11 +478,8 @@ html, body {
 
   <!-- Page 2 -->
   <div class="page page2">
-  <h2 class="page-title">🎁 Redeem Codes</h2>
-
-  <div id="codes-container">
-    <div class="loading">Loading codes...</div>
-  </div>
+  <h1 class="page-title">Redeem Codes</h1>
+  <div id="codesContainer" class="loading">Loading codes…</div>
 </div>
 
   <!-- Page 3 -->
@@ -665,6 +674,73 @@ document.querySelectorAll(".link-btn").forEach(btn => {
 });
 
 
+</script>
+<script>
+const API_URL = "https://db.hashblen.com/codes";
+
+const REDEEM_URLS = {
+  zzz: code => `https://zenless.hoyoverse.com/redemption?code=${code}`,
+  genshin: code => `https://genshin.hoyoverse.com/en/gift?code=${code}`,
+  hsr: code => `https://hsr.hoyoverse.com/gift?code=${code}`
+};
+
+const containerEl = document.getElementById("codesContainer");
+
+fetch(API_URL)
+  .then(res => res.json())
+  .then(data => renderCodes(data))
+  .catch(() => {
+    containerEl.innerHTML = "Failed to load codes.";
+  });
+
+function renderCodes(data) {
+  containerEl.innerHTML = "";
+
+  Object.entries(data).forEach(([game, codes]) => {
+    if (!codes || !codes.length) return;
+
+    const section = document.createElement("div");
+    section.className = "codes-section";
+
+    section.innerHTML = `
+      <h3>${game.toUpperCase()}</h3>
+    `;
+
+    codes.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "code-card";
+
+      const redeemUrl = REDEEM_URLS[game]
+        ? REDEEM_URLS[game](item.code)
+        : "#";
+
+      card.innerHTML = `
+        <div class="code-row">
+          <div class="code-text">${item.code}</div>
+          <div style="display:flex; gap:8px;">
+            <button class="copy-btn">Copy</button>
+            <button class="copy-btn redeem-btn">Redeem</button>
+          </div>
+        </div>
+        <div class="code-desc">${item.description}</div>
+      `;
+
+      // Copy behavior
+      card.querySelector(".copy-btn").onclick = () => {
+        navigator.clipboard.writeText(item.code);
+      };
+
+      // Redeem behavior
+      card.querySelector(".redeem-btn").onclick = () => {
+        window.open(redeemUrl, "_blank");
+      };
+
+      section.appendChild(card);
+    });
+
+    containerEl.appendChild(section);
+  });
+}
 </script>
 
 

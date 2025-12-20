@@ -5,7 +5,7 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Smooth Swipe Island FIXED</title>
+<title>Smooth Swipe Island + Elastic Edge</title>
 
 <style>
   * { box-sizing: border-box; }
@@ -90,6 +90,24 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     height: 14px;
     background: white;
   }
+
+  .dot-wrapper {
+    position: relative;
+    width: 60px;
+    height: 14px;
+  }
+
+  .dot-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: white;
+    transition: left 0.25s ease;
+  }
+
 </style>
 </head>
 
@@ -106,17 +124,24 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
   <div class="page page3"><h1>Page 3</h1></div>
 </div>
 
+<!-- Island with smooth moving dot -->
 <div class="island" id="island">
-  <div class="dot active"></div>
-  <div class="dot"></div>
-  <div class="dot"></div>
+  <div class="dot-wrapper">
+    <div class="dot" style="left:0;"></div>
+    <div class="dot" style="left:23px;"></div>
+    <div class="dot" style="left:46px;"></div>
+    <div class="dot-indicator" id="dot-indicator"></div>
+  </div>
 </div>
 
 <script>
   const container = document.getElementById("container");
   const island = document.getElementById("island");
-  const dots = document.querySelectorAll(".dot");
+  const dotIndicator = document.getElementById("dot-indicator");
 
+  const totalPages = 3;
+  const pageWidth = window.innerWidth;
+  const dotSpacing = 23; // distance between dots
   let currentPage = 0;
   let startX = 0;
   let currentX = 0;
@@ -124,17 +149,17 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
   let isSwiping = false;
   let hideTimeout;
 
-  function updateDots() {
-    dots.forEach((dot, i) =>
-      dot.classList.toggle("active", i === currentPage)
-    );
-  }
-
-  function setTranslate(x, animate = false) {
-    container.style.transition = animate
+  function setTranslate(x, animate=false){
+    container.style.transition = animate 
       ? "transform 0.45s cubic-bezier(.22,.61,.36,1)"
       : "none";
     container.style.transform = `translateX(${x}px)`;
+  }
+
+  function updateDotIndicator(progress){
+    // progress = 0..1
+    const maxLeft = dotSpacing * (totalPages - 1);
+    dotIndicator.style.left = `${progress * maxLeft}px`;
   }
 
   document.addEventListener("touchstart", e => {
@@ -144,18 +169,29 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     startTime = Date.now();
     isSwiping = true;
     island.classList.add("show");
-    setTranslate(-currentPage * innerWidth, false);
   });
 
   document.addEventListener("touchmove", e => {
-    if (!isSwiping) return;
+    if(!isSwiping) return;
     currentX = e.touches[0].clientX;
-    const delta = currentX - startX;
-    setTranslate(-currentPage * innerWidth + delta * 0.6, false);
+    let delta = currentX - startX;
+
+    // 🔹 Edge resistance
+    if((currentPage === 0 && delta > 0) || (currentPage === totalPages-1 && delta < 0)){
+      delta *= 0.3; // resist at edges
+    } else {
+      delta *= 0.6; // normal swipe
+    }
+
+    setTranslate(-currentPage * pageWidth + delta, false);
+
+    // 🔹 Smooth dot
+    const progress = Math.min(Math.max(currentPage - delta / pageWidth, 0), totalPages-1);
+    updateDotIndicator(progress);
   });
 
   document.addEventListener("touchend", () => {
-    if (!isSwiping) return;
+    if(!isSwiping) return;
     isSwiping = false;
 
     const distance = currentX - startX;
@@ -165,20 +201,23 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     const swipeLeft = distance < -50;
     const swipeRight = distance > 50;
 
-    if (swipeLeft && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage < 2) {
+    if(swipeLeft && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage < totalPages-1){
       currentPage++;
-    } 
-    else if (swipeRight && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage > 0) {
+    } else if(swipeRight && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage > 0){
       currentPage--;
     }
 
-    setTranslate(-currentPage * innerWidth, true);
-    updateDots();
+    // Snap to page
+    setTranslate(-currentPage * pageWidth, true);
+    updateDotIndicator(currentPage);
 
-    hideTimeout = setTimeout(() => {
+    hideTimeout = setTimeout(()=>{
       island.classList.remove("show");
-    }, 1000);
+    },1000);
   });
+
+  // Initial dot position
+  updateDotIndicator(currentPage);
 </script>
 
 </body>

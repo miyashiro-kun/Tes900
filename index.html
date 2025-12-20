@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-<title>Swipe Link Tree Responsive Final</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+<title>Swipe + Desktop Button Navigation</title>
 
 <style>
 * { box-sizing: border-box; }
 
 html, body {
-  margin:0;
-  padding:0;
+  margin:0; padding:0;
   overflow:hidden;
   font-family: Arial, sans-serif;
   background:black;
@@ -18,7 +17,134 @@ html, body {
   touch-action: pan-y;
 }
 
-/* Force mobile layout even in desktop mode */
+.container {
+  display:flex;
+  width:300vw; /* 3 halaman */
+  height:100vh;
+  will-change: transform;
+  transition: transform 0.45s cubic-bezier(.22,.61,.36,1);
+}
+
+.page {
+  width:100vw;
+  height:100vh;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  color:white;
+}
+
+.page1 {background:#020617;}
+.page2 {background:#1e3a8a;}
+.page3 {background:#064e3b;}
+
+.profile {
+  width:20vw;
+  max-width:120px;
+  height:20vw;
+  max-height:120px;
+  border-radius:50%;
+  background:url("https://via.placeholder.com/300") center/cover no-repeat;
+  border:3px solid white;
+  margin-bottom:3vh;
+}
+
+.btn {
+  width:60vw;
+  max-width:220px;
+  padding:2vh 0;
+  margin:1.5vh 0;
+  border-radius:30px;
+  border:none;
+  font-size:4vw;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* Island indicator */
+.island {
+  position: fixed;
+  top:2vh;
+  left:50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(14px);
+  padding: 1vh 3vw;
+  border-radius:999px;
+  display:flex;
+  gap:2vw;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events:none;
+  z-index: 999;
+}
+
+.island.show {
+  opacity: 1;
+}
+
+.dot-wrapper {
+  position: relative;
+  width: 60px;
+  height: 14px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #666;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  transition: all 0.25s ease;
+}
+
+.dot-indicator {
+  position: absolute;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  transition: left 0.1s linear;
+}
+
+/* FAB Buttons for desktop */
+.fab {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255 255 255 / 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 24px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.fab:hover {
+  background: rgba(255 255 255 / 0.4);
+}
+
+.fab-left {
+  left: 12px;
+}
+
+.fab-right {
+  right: 12px;
+}
+
+/* Show FAB on desktop */
 @media (min-width: 800px) {
   html, body, .container, .page {
     width: 100vw !important;
@@ -35,95 +161,10 @@ html, body {
     flex-shrink: 0;
     width: 100vw;
   }
-}
 
-.container {
-  display:flex;
-  width:300vw; /* 3 halaman */
-  height:100vh;
-  will-change: transform;
-}
-
-.page {
-  width:100vw;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  color:white;
-}
-
-.page1 {background:#020617;} /* Link Tree */
-.page2 {background:#1e3a8a;}
-.page3 {background:#064e3b;}
-
-.profile {
-  width:20vw;
-  max-width:120px;
-  height:20vw;
-  max-height:120px;
-  border-radius:50%;
-  background:url("https://via.placeholder.com/300") center/cover;
-  border:3px solid white;
-  margin-bottom:3vh;
-}
-
-.btn {
-  width:60vw;
-  max-width:220px;
-  padding:2vh 0;
-  margin:1.5vh 0;
-  border-radius:30px;
-  border:none;
-  font-size:4vw;
-  max-font-size:16px;
-  font-weight:bold;
-}
-
-.island {
-  position: fixed;
-  top:2vh;
-  left:50%;
-  transform:translateX(-50%);
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(14px);
-  padding:1vh 3vw;
-  border-radius:999px;
-  display:flex;
-  gap:2vw;
-  opacity:0;
-  transition:opacity 0.25s ease;
-  pointer-events:none;
-  z-index:999;
-}
-
-.island.show {opacity:1;}
-
-.dot-wrapper {
-  position: relative;
-  width:60px;
-  height:14px;
-}
-
-.dot {
-  width:8px;
-  height:8px;
-  background:#666;
-  border-radius:50%;
-  position:absolute;
-  top:0;
-  transition:all 0.25s ease;
-}
-
-.dot-indicator {
-  position:absolute;
-  top:0;
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  background:white;
-  transition:left 0.1s linear;
+  .fab {
+    display: flex;
+  }
 }
 </style>
 </head>
@@ -140,6 +181,7 @@ html, body {
   <div class="page page3"><h1>Page 3</h1></div>
 </div>
 
+<!-- Island dot indicator -->
 <div class="island" id="island">
   <div class="dot-wrapper">
     <div class="dot" style="left:0;"></div>
@@ -149,14 +191,19 @@ html, body {
   </div>
 </div>
 
+<!-- FAB Buttons -->
+<button class="fab fab-left" id="btnPrev" aria-label="Previous page">&lt;</button>
+<button class="fab fab-right" id="btnNext" aria-label="Next page">&gt;</button>
+
 <script>
 const container = document.getElementById("container");
 const island = document.getElementById("island");
 const dotIndicator = document.getElementById("dot-indicator");
+const btnPrev = document.getElementById("btnPrev");
+const btnNext = document.getElementById("btnNext");
 
 let totalPages = 3;
 let pageWidth = window.innerWidth;
-let dotSpacing = 23;
 
 let currentPage = 0;
 let startX = 0;
@@ -165,16 +212,39 @@ let startTime = 0;
 let isSwiping = false;
 let hideTimeout = null;
 
+function setTranslate(x){
+  container.style.transform = `translateX(${x}px)`;
+}
+
+function updateDotIndicator(progress){
+  dotIndicator.style.left = `${Math.min(Math.max(progress,0),totalPages-1)*23}px`;
+}
+
+function showIsland(){
+  clearTimeout(hideTimeout);
+  island.classList.add("show");
+  hideTimeout = setTimeout(() => {
+    island.classList.remove("show");
+  }, 1000);
+}
+
+function goToPage(page){
+  if(page < 0) page = 0;
+  if(page >= totalPages) page = totalPages - 1;
+  currentPage = page;
+  container.style.transition = "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+  setTranslate(-currentPage*pageWidth);
+  updateDotIndicator(currentPage);
+  showIsland();
+}
+
 // Update pageWidth on resize (responsive)
 window.addEventListener('resize', ()=>{
   pageWidth = window.innerWidth;
   setTranslate(-currentPage*pageWidth);
 });
 
-function updateDotIndicator(progress){
-  dotIndicator.style.left = `${Math.min(Math.max(progress,0),totalPages-1)*dotSpacing}px`;
-}
-
+// Touch events for swipe mobile
 document.addEventListener("touchstart", e=>{
   clearTimeout(hideTimeout);
   startX = e.touches[0].clientX;
@@ -213,12 +283,12 @@ document.addEventListener("touchend", ()=>{
   const time = Date.now()-startTime;
   const velocity = Math.abs(distance/time);
 
-  const swipeLeft = distance<-50;
-  const swipeRight = distance>50;
+  const swipeLeft = distance < -50;
+  const swipeRight = distance > 50;
 
-  if(swipeLeft && (Math.abs(distance)>80 || velocity>0.5) && currentPage<totalPages-1){
+  if(swipeLeft && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage < totalPages - 1){
     currentPage++;
-  } else if(swipeRight && (Math.abs(distance)>80 || velocity>0.5) && currentPage>0){
+  } else if(swipeRight && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage > 0){
     currentPage--;
   }
 
@@ -231,13 +301,23 @@ document.addEventListener("touchend", ()=>{
   },1000);
 });
 
-function setTranslate(x){
-  container.style.transform = `translateX(${x}px)`;
-}
+// Buttons for desktop navigation
+btnPrev.addEventListener('click', () => {
+  if(currentPage > 0){
+    goToPage(currentPage - 1);
+  }
+});
 
-// Initial
-setTranslate(-currentPage*pageWidth);
-updateDotIndicator(currentPage);
+btnNext.addEventListener('click', () => {
+  if(currentPage < totalPages - 1){
+    goToPage(currentPage + 1);
+  }
+});
+
+// Initialize position and dot indicator
+setTranslate(0);
+updateDotIndicator(0);
 </script>
+
 </body>
 </html>

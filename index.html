@@ -512,34 +512,39 @@ updateDotIndicator(0);
 /* ================================
    ✅ FIXED FETCH (ONLY NEW PART)
    ================================ */
+/* ================================
+   Banner fetch + safe cache
+   ================================ */
 
 const bannerImg = document.getElementById("banner");
 const CACHE_KEY = "hsr_banner_url";
 
-// 1️⃣ Load cached banner immediately
+// Load cached banner instantly (if exists)
 const cachedBanner = localStorage.getItem(CACHE_KEY);
 if (cachedBanner) {
   bannerImg.src = cachedBanner;
 }
 
-// 2️⃣ Fetch latest banner in background
-fetch(
-  "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices"
-)
+// Fetch latest banner in background
+fetch("https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices")
   .then(res => res.json())
   .then(data => {
-    const lastNotice = data?.at(-1);
-    const bannerUrl = lastNotice?.banner?.at(-2);
+    const lastNotice = data?.at(-2);
+    const banners = lastNotice?.banner || [];
+
+    // SAFE banner selection
+    // Prefer primary banner, fallback to last
+    const bannerUrl = banners[0] || banners.at(-1);
 
     if (!bannerUrl) return;
 
-    // Update only if changed
+    // Update cache only if changed
     if (bannerUrl !== cachedBanner) {
       bannerImg.src = bannerUrl;
       localStorage.setItem(CACHE_KEY, bannerUrl);
     }
   })
-  .catch(console.error);
+  .catch(err => console.error("Banner fetch error:", err));
 
 </script>
 

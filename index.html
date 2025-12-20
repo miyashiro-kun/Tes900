@@ -506,88 +506,97 @@ let pageWidth = window.innerWidth;
 
 let currentPage = 0;
 let startX = 0;
-let startY = 0;
 let currentX = 0;
 let startTime = 0;
 let isSwiping = false;
-let isHorizontalSwipe = false;
 let hideTimeout = null;
 
-function setTranslate(x) {
+function setTranslate(x){
   container.style.transform = `translateX(${x}px)`;
 }
 
-function updateDotIndicator(progress) {
+function updateDotIndicator(progress){
   dotIndicator.style.left =
-    `${Math.min(Math.max(progress, 0), totalPages - 1) * 23}px`;
+    `${Math.min(Math.max(progress,0),totalPages-1)*23}px`;
 }
 
-function showIsland() {
+function showIsland(){
   clearTimeout(hideTimeout);
   island.classList.add("show");
-  hideTimeout = setTimeout(() => island.classList.remove("show"), 1000);
+  hideTimeout = setTimeout(() => {
+    island.classList.remove("show");
+  }, 1000);
 }
 
-function goToPage(page) {
-  currentPage = Math.max(0, Math.min(page, totalPages - 1));
-  container.style.transition = "transform 0.45s cubic-bezier(.22,.61,.36,1)";
-  setTranslate(-currentPage * pageWidth);
+function goToPage(page){
+  if(page < 0) page = 0;
+  if(page >= totalPages) page = totalPages - 1;
+  currentPage = page;
+  container.style.transition =
+    "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+  setTranslate(-currentPage*pageWidth);
   updateDotIndicator(currentPage);
   showIsland();
 }
 
-window.addEventListener("resize", () => {
+window.addEventListener('resize', ()=>{
   pageWidth = window.innerWidth;
-  setTranslate(-currentPage * pageWidth);
+  setTranslate(-currentPage*pageWidth);
 });
 
-/* Touch handling (horizontal only) */
-document.addEventListener("touchstart", e => {
+document.addEventListener("touchstart", e=>{
+  clearTimeout(hideTimeout);
   startX = e.touches[0].clientX;
-  startY = e.touches[0].clientY;
   currentX = startX;
   startTime = Date.now();
   isSwiping = true;
-  isHorizontalSwipe = false;
   island.classList.add("show");
 });
 
-document.addEventListener("touchmove", e => {
-  if (!isSwiping) return;
+document.addEventListener("touchmove", e=>{
+  if(!isSwiping) return;
+  currentX = e.touches[0].clientX;
+  let delta = currentX - startX;
 
-  const dx = e.touches[0].clientX - startX;
-  const dy = e.touches[0].clientY - startY;
-
-  if (!isHorizontalSwipe) {
-    if (Math.abs(dx) < Math.abs(dy)) {
-      isSwiping = false;
-      return; // vertical scroll wins
-    }
-    isHorizontalSwipe = true;
+  if((currentPage===0 && delta>0) ||
+     (currentPage===totalPages-1 && delta<0)){
+    delta *= 0.3;
+  } else {
+    delta *= 0.6;
   }
 
-  e.preventDefault();
-  currentX = e.touches[0].clientX;
-
-  let delta = dx * 0.6;
-  const offset = -currentPage * pageWidth + delta;
-
+  const offset = -currentPage*pageWidth + delta;
   container.style.transition = "none";
   setTranslate(offset);
 
-  updateDotIndicator(currentPage - delta / pageWidth);
-}, { passive: false });
+  const progress = currentPage - delta/pageWidth;
+  updateDotIndicator(progress);
+});
 
-document.addEventListener("touchend", () => {
-  if (!isHorizontalSwipe) return;
+document.addEventListener("touchend", ()=>{
+  if(!isSwiping) return;
+  isSwiping = false;
 
   const distance = currentX - startX;
-  const velocity = Math.abs(distance / (Date.now() - startTime));
+  const time = Date.now()-startTime;
+  const velocity = Math.abs(distance/time);
 
-  if (distance < -80 || velocity > 0.5) currentPage++;
-  if (distance > 80 || velocity > 0.5) currentPage--;
+  if(distance < -50 && (Math.abs(distance) > 80 || velocity > 0.5)
+     && currentPage < totalPages - 1){
+    currentPage++;
+  } else if(distance > 50 && (Math.abs(distance) > 80 || velocity > 0.5)
+     && currentPage > 0){
+    currentPage--;
+  }
 
-  goToPage(currentPage);
+  container.style.transition =
+    "transform 4.45s cubic-bezier(.22,.61,.36,1)";
+  setTranslate(-currentPage*pageWidth);
+  updateDotIndicator(currentPage);
+
+  hideTimeout = setTimeout(()=>{
+    island.classList.remove("show");
+  },1000);
 });
 
 btnPrev.onclick = () => currentPage > 0 && goToPage(currentPage - 1);

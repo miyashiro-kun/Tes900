@@ -209,12 +209,81 @@ html, body {
 
 /* --- Page 2 and 3 --- */
 .page2 {
-  background: #1e3a8a;
+  background: #0b1220;
   color: white;
-  font-weight: bold;
-  font-size: 2rem;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 6vh;
 }
+
+.page-title {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.codes-section {
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 32px;
+}
+
+.codes-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 6px;
+}
+
+.code-card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+.code-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.code-text {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+.copy-btn {
+  background: #38bdf8;
+  color: #020617;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
+}
+
+.code-desc {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.loading {
+  opacity: 0.7;
+  text-align: center;
+}
+
 
 .page3 {
   background: #064e3b;
@@ -360,7 +429,13 @@ html, body {
   </div>
 
   <!-- Page 2 -->
-  <div class="page page2"><h1>Page 2</h1></div>
+  <div class="page page2">
+  <h2 class="page-title">🎁 Redeem Codes</h2>
+
+  <div id="codes-container">
+    <div class="loading">Loading codes...</div>
+  </div>
+</div>
 
   <!-- Page 3 -->
   <div class="page page3"><h1>Page 3</h1></div>
@@ -476,7 +551,7 @@ document.addEventListener("touchend", ()=>{
   }
 
   container.style.transition =
-    "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+    "transform 4.45s cubic-bezier(.22,.61,.36,1)";
   setTranslate(-currentPage*pageWidth);
   updateDotIndicator(currentPage);
 
@@ -545,6 +620,67 @@ fetch("https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/
     }
   })
   .catch(err => console.error("Banner fetch error:", err));
+
+const codesContainer = document.getElementById("codes-container");
+
+fetch("https://db.hashblen.com/codes")
+  .then(res => res.json())
+  .then(data => {
+    codesContainer.innerHTML = "";
+
+    Object.entries(data).forEach(([gameKey, codes]) => {
+      if (!Array.isArray(codes) || !codes.length) return;
+      renderSection(formatTitle(gameKey), codes);
+    });
+  })
+  .catch(err => {
+    console.error(err);
+    codesContainer.innerHTML = "Failed to load codes.";
+  });
+
+function renderSection(title, list) {
+  const section = document.createElement("div");
+  section.className = "codes-section";
+
+  section.innerHTML = `<h3>${title} Codes</h3>`;
+
+  // Optional: newest first
+  list
+    .sort((a, b) => b.added_at - a.added_at)
+    .forEach(item => {
+      const card = document.createElement("div");
+      card.className = "code-card";
+
+      card.innerHTML = `
+        <div class="code-row">
+          <div class="code-text">${item.code}</div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-desc">${item.description}</div>
+      `;
+
+      card.querySelector(".copy-btn").addEventListener("click", () => {
+        navigator.clipboard.writeText(item.code);
+        showCopied(card);
+      });
+
+      section.appendChild(card);
+    });
+
+  codesContainer.appendChild(section);
+}
+
+function showCopied(card) {
+  const btn = card.querySelector(".copy-btn");
+  const original = btn.textContent;
+  btn.textContent = "Copied!";
+  setTimeout(() => (btn.textContent = original), 1200);
+}
+
+function formatTitle(key) {
+  return key.charAt(0).toUpperCase() + key.slice(1);
+}
+
 
 </script>
 

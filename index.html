@@ -426,7 +426,7 @@ html, body {
   <!-- Page 1 Link Tree -->
   <div class="page page1">
     <div class="linktree-card">
-      <img id="banner" alt="Banner Image" class="profile-photo" />
+      <img src="https://awsimages.detik.net.id/community/media/visual/2022/02/17/bruce-leung-1_34.png" id="banner" alt="Banner Image" class="profile-photo" />
       <h2 class="name">Eina Antaswari Kinanthi</h2>
       <p class="desc">Senior UI/UX Designer with big dreams. 🚀</p>
       <button class="btn-message">Message me</button>
@@ -434,28 +434,28 @@ html, body {
     <div class="links">
       <!-- Each link-btn with collapse panel -->
       <div>
-        <button class="link-btn"><span>🏀</span> My Dribbble</button>
+        <button class="link-btn" aria-expanded="false"><span>🏀</span> My Dribbble</button>
         <div class="collapse-panel">
           <div>visit me</div>
           <button class="visit-btn" onclick="alert('Dribbble clicked')">Go</button>
         </div>
       </div>
       <div>
-        <button class="link-btn"><span>🎨</span> Freebies UI Kit</button>
+        <button class="link-btn" aria-expanded="false"><span>🎨</span> Freebies UI Kit</button>
         <div class="collapse-panel">
           <div>visit me</div>
           <button class="visit-btn" onclick="alert('Freebies clicked')">Go</button>
         </div>
       </div>
       <div>
-        <button class="link-btn"><span>🔗</span> My Linkedin</button>
+        <button class="link-btn" aria-expanded="false"><span>🔗</span> My Linkedin</button>
         <div class="collapse-panel">
           <div>visit me <br> everytime u wanted </div>
           <button class="visit-btn" onclick="alert('Linkedin clicked')">Go</button>
         </div>
       </div>
       <div>
-        <button class="link-btn"><span>📝</span> Just write my thoughts</button>
+        <button class="link-btn" aria-expanded="false">><span>📝</span> Just write my thoughts</button>
         <div class="collapse-panel">
           <div>visit me</div>
           <button class="visit-btn" onclick="alert('Thoughts clicked')">Go</button>
@@ -502,7 +502,7 @@ const dotIndicator = document.getElementById("dot-indicator");
 const btnPrev = document.getElementById("btnPrev");
 const btnNext = document.getElementById("btnNext");
 
-let totalPages = 3;
+let totalPages = document.querySelectorAll('.page').length;
 let pageWidth = window.innerWidth;
 
 let currentPage = 0;
@@ -549,7 +549,7 @@ window.addEventListener('resize', ()=>{
   setTranslate(-currentPage*pageWidth);
 });
 
-document.addEventListener("touchstart", e => {
+container.addEventListener("touchstart", e => {
   clearTimeout(hideTimeout);
 
   startX = e.touches[0].clientX;
@@ -567,7 +567,7 @@ document.addEventListener("touchstart", e => {
   island.classList.add("show");
 }, { passive: true });
 
-document.addEventListener("touchmove", e => {
+container.addEventListener("touchmove", e => {
   if (!isSwiping) return;
 
   currentX = e.touches[0].clientX;
@@ -607,7 +607,7 @@ document.addEventListener("touchmove", e => {
 }, { passive: true });
 
 
-document.addEventListener("touchend", () => {
+container.addEventListener("touchend", () => {
   if (!isSwiping) return;
   isSwiping = false;
 
@@ -664,132 +664,7 @@ document.querySelectorAll(".link-btn").forEach(btn => {
   });
 });
 
-/* ================================
-   Page 1: Profile Banner (Star Rail)
-   ================================ */
 
-const bannerImg = document.getElementById("banner");
-const PROFILE_CACHE_KEY = "hsr_profile_banner";
-
-const cachedProfile = localStorage.getItem(PROFILE_CACHE_KEY);
-if (cachedProfile) bannerImg.src = cachedProfile;
-
-fetch("https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices")
-  .then(res => res.json())
-  .then(data => {
-    const notice = [...data].reverse().find(n => n.banner?.length);
-    const bannerUrl = notice?.banner?.[0];
-    if (!bannerUrl || bannerUrl === cachedProfile) return;
-    bannerImg.src = bannerUrl;
-    localStorage.setItem(PROFILE_CACHE_KEY, bannerUrl);
-  })
-  .catch(console.error);
-
-/* ================================
-   Shared Banner Loader (Page 2)
-   ================================ */
-
-function loadHoYoBanner({ key, api, target }) {
-  const CACHE_KEY = `hoyo_banner_${key}`;
-  const cached = localStorage.getItem(CACHE_KEY);
-
-  if (cached) {
-    target.style.backgroundImage = `url(${cached})`;
-  }
-
-  fetch(api)
-    .then(res => res.json())
-    .then(data => {
-      if (!Array.isArray(data)) return;
-
-      let bannerUrl = null;
-
-      // ⭐ STAR RAIL = SAME AS PROFILE BANNER
-      if (key === "starrail") {
-        const notice = [...data].reverse().find(n => n.banner?.length);
-        bannerUrl = notice?.banner?.at(-1);
-      }
-
-      // 🎮 GENSHIN / ZZZ (safe fallback)
-      else {
-        const notice = [...data].reverse().find(n => n.banner?.length);
-        const banners = notice?.banner || [];
-        bannerUrl = banners.at(-1) || banners[0];
-      }
-
-      if (!bannerUrl || bannerUrl === cached) return;
-
-      target.style.backgroundImage = `url(${bannerUrl})`;
-      localStorage.setItem(CACHE_KEY, bannerUrl);
-    })
-    .catch(err => console.error(`Banner fetch error (${key})`, err));
-}
-
-
-/* ================================
-   Page 2: Codes Rendering
-   ================================ */
-
-const codesContainer = document.getElementById("codes-container");
-
-fetch("https://db.hashblen.com/codes")
-  .then(res => res.json())
-  .then(data => {
-    codesContainer.innerHTML = "";
-    Object.entries(data).forEach(([key, list]) => {
-      if (Array.isArray(list) && list.length) renderSection(key, list);
-    });
-  })
-  .catch(() => codesContainer.textContent = "Failed to load codes.");
-
-function renderSection(gameKey, list) {
-  const section = document.createElement("div");
-  section.className = "codes-section";
-
-  const header = document.createElement("div");
-  header.className = "section-header";
-  header.innerHTML = `<h3>${formatTitle(gameKey)} Codes</h3>`;
-  section.appendChild(header);
-
-  const bannerApis = {
-    zzz: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/zenless/news/notices",
-    genshin: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/genshin/news/notices",
-    starrail: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices"
-  };
-
-  if (bannerApis[gameKey]) {
-    loadHoYoBanner({ key: gameKey, api: bannerApis[gameKey], target: header });
-  }
-
-  list.sort((a, b) => b.added_at - a.added_at).forEach(item => {
-    const card = document.createElement("div");
-    card.className = "code-card";
-    card.innerHTML = `
-      <div class="code-row">
-        <div class="code-text">${item.code}</div>
-        <button class="copy-btn">Copy</button>
-      </div>
-      <div class="code-desc">${item.description}</div>
-    `;
-    card.querySelector(".copy-btn").onclick = () => {
-      navigator.clipboard.writeText(item.code);
-      showCopied(card);
-    };
-    section.appendChild(card);
-  });
-
-  codesContainer.appendChild(section);
-}
-
-function showCopied(card) {
-  const btn = card.querySelector(".copy-btn");
-  btn.textContent = "Copied!";
-  setTimeout(() => (btn.textContent = "Copy"), 1200);
-}
-
-function formatTitle(key) {
-  return key.charAt(0).toUpperCase() + key.slice(1);
-}
 </script>
 
 

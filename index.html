@@ -617,78 +617,85 @@ body {
 
 <script>
 /* ================================
-   Swipe Navigation
+   1. SWIPE NAVIGATION LOGIC
    ================================ */
-
 const container = document.getElementById("container");
 const island = document.getElementById("island");
 const dotIndicator = document.getElementById("dot-indicator");
 const btnPrev = document.getElementById("btnPrev");
 const btnNext = document.getElementById("btnNext");
+const pages = document.querySelectorAll('.page'); // Select all pages dynamically
 
-let totalPages = document.querySelectorAll('.page').length;
+let totalPages = pages.length;
 let pageWidth = window.innerWidth;
-
 let currentPage = 0;
-let startX = 0;
-let currentX = 0;
+
+// Swipe Variables
+let startX = 0, startY = 0, currentX = 0, currentY = 0;
 let startTime = 0;
 let isSwiping = false;
-let hideTimeout = null;
-let startY = 0;
-let currentY = 0;
-let gestureLocked = false;
+let gestureLocked = false; // true once we decide if it's scroll or swipe
 let isHorizontalSwipe = false;
-  
-function setTranslate(x){
-  container.style.transform = `translateX(${x}px)`;
+let hideTimeout = null;
+
+// Helper: Move container
+function setTranslate(x) {
+  // Use percentage for container width flexibility or pixel offset
+  container.style.transform = `translate3d(${x}px, 0, 0)`;
 }
 
-function updateDotIndicator(progress){
-  dotIndicator.style.left =
-    `${Math.min(Math.max(progress,0),totalPages-1)*23}px`;
+// Helper: Update Island Dots
+function updateDotIndicator(progress) {
+  // Clamp progress between 0 and totalPages - 1
+  const clamped = Math.min(Math.max(progress, 0), totalPages - 1);
+  // 23px is the distance between dots defined in CSS
+  dotIndicator.style.transform = `translateX(${clamped * 23}px)`;
 }
 
-function showIsland(){
+function showIsland() {
   clearTimeout(hideTimeout);
   island.classList.add("show");
-  hideTimeout = setTimeout(() => {
-    island.classList.remove("show");
-  }, 1000);
+  hideTimeout = setTimeout(() => island.classList.remove("show"), 1000);
 }
 
-function goToPage(page){
-  if(page < 0) page = 0;
-  if(page >= totalPages) page = totalPages - 1;
+function goToPage(page) {
+  if (page < 0) page = 0;
+  if (page >= totalPages) page = totalPages - 1;
+  
   currentPage = page;
-  container.style.transition =
-    "transform 0.45s cubic-bezier(.22,.61,.36,1)";
-  setTranslate(-currentPage*pageWidth);
+  
+  // Smooth transition
+  container.style.transition = "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+  
+  // Calculate offset based on viewport width
+  setTranslate(-currentPage * window.innerWidth);
   updateDotIndicator(currentPage);
   showIsland();
 }
 
-window.addEventListener('resize', ()=>{
+// Resize Handler
+window.addEventListener('resize', () => {
   pageWidth = window.innerWidth;
-  setTranslate(-currentPage*pageWidth);
+  // Remove transition to snap instantly on resize
+  container.style.transition = "none"; 
+  setTranslate(-currentPage * pageWidth);
 });
+
+// --- Touch Events ---
 
 container.addEventListener("touchstart", e => {
   clearTimeout(hideTimeout);
-
   startX = e.touches[0].clientX;
   startY = e.touches[0].clientY;
-
   currentX = startX;
   currentY = startY;
-
   startTime = Date.now();
-
   isSwiping = true;
   gestureLocked = false;
-  isHorizontalSwipe = false;
-
   island.classList.add("show");
+  
+  // Stop any current transition so we can drag manually
+  container.style.transition = "none";
 }, { passive: true });
 
 container.addEventListener("touchmove", e => {
@@ -696,46 +703,46 @@ container.addEventListener("touchmove", e => {
 
   currentX = e.touches[0].clientX;
   currentY = e.touches[0].clientY;
-
   const dx = currentX - startX;
   const dy = currentY - startY;
 
-  // Lock gesture direction once movement is clear
+  // Lock Gesture Direction
   if (!gestureLocked) {
+    // Threshold of 10px to determine intent
     if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
       gestureLocked = true;
+      // If X movement > Y movement, it's a swipe
       isHorizontalSwipe = Math.abs(dx) > Math.abs(dy);
     } else {
-      return; // wait until movement is meaningful
+      return; 
     }
   }
 
-  // Ignore vertical gestures
+  // If vertical scroll, let browser handle it
   if (!isHorizontalSwipe) return;
+
+  // Prevent default only if it is a horizontal swipe to stop page bounce
+  if (e.cancelable) e.preventDefault();
 
   let delta = dx;
 
-  if ((currentPage === 0 && delta > 0) ||
-      (currentPage === totalPages - 1 && delta < 0)) {
+  // Resistance effect at edges
+  if ((currentPage === 0 && delta > 0) || (currentPage === totalPages - 1 && delta < 0)) {
     delta *= 0.3;
-  } else {
-    delta *= 0.6;
   }
 
-  const offset = -currentPage * pageWidth + delta;
-  container.style.transition = "none";
-  setTranslate(offset);
-
-  const progress = currentPage - delta / pageWidth;
+  setTranslate((-currentPage * pageWidth) + delta);
+  
+  // Update island visually based on percentage
+  const progress = currentPage - (delta / pageWidth);
   updateDotIndicator(progress);
-}, { passive: true });
 
+}, { passive: false }); // Changed to false to allow preventDefault if needed
 
 container.addEventListener("touchend", () => {
   if (!isSwiping) return;
   isSwiping = false;
 
-  // If it wasn't a horizontal swipe, do nothing
   if (!isHorizontalSwipe) {
     island.classList.remove("show");
     return;
@@ -745,52 +752,53 @@ container.addEventListener("touchend", () => {
   const time = Date.now() - startTime;
   const velocity = Math.abs(distance / time);
 
-  if (
-    distance < -50 &&
-    (Math.abs(distance) > 80 || velocity > 0.5) &&
-    currentPage < totalPages - 1
-  ) {
-    currentPage++;
-  } else if (
-    distance > 50 &&
-    (Math.abs(distance) > 80 || velocity > 0.5) &&
-    currentPage > 0
-  ) {
-    currentPage--;
+  // Thresholds to change page
+  const minSwipeDist = 50; 
+  const minVelocity = 0.5;
+
+  if (distance < -minSwipeDist && (Math.abs(distance) > 80 || velocity > minVelocity)) {
+    if (currentPage < totalPages - 1) currentPage++;
+  } else if (distance > minSwipeDist && (Math.abs(distance) > 80 || velocity > minVelocity)) {
+    if (currentPage > 0) currentPage--;
   }
 
-  container.style.transition =
-    "transform 0.45s cubic-bezier(.22,.61,.36,1)";
-  setTranslate(-currentPage * pageWidth);
-  updateDotIndicator(currentPage);
-
-  hideTimeout = setTimeout(() => {
-    island.classList.remove("show");
-  }, 1000);
+  goToPage(currentPage);
 });
 
+// Desktop Navigation
+btnPrev.onclick = () => goToPage(currentPage - 1);
+btnNext.onclick = () => goToPage(currentPage + 1);
 
-btnPrev.onclick = () => currentPage > 0 && goToPage(currentPage - 1);
-btnNext.onclick = () => currentPage < totalPages - 1 && goToPage(currentPage + 1);
-
+// Initialize
 setTranslate(0);
 updateDotIndicator(0);
 
+/* ================================
+   2. COLLAPSE PANEL LOGIC
+   ================================ */
 document.querySelectorAll(".link-btn").forEach(btn => {
   btn.addEventListener('click', () => {
     const panel = btn.nextElementSibling;
     const isOpen = panel.classList.contains('open');
     
+    // Close all other panels
     document.querySelectorAll('.collapse-panel.open').forEach(p => {
-      if(p !== panel) p.classList.remove('open');
+      if(p !== panel) {
+        p.classList.remove('open');
+        // Update ARIA for accessibility
+        p.previousElementSibling.setAttribute('aria-expanded', 'false');
+      }
     }); 
+
+    // Toggle current
     panel.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', !isOpen);
   });
 });
 
-
-</script>
-<script>
+/* ================================
+   3. API & CODES LOGIC
+   ================================ */
 const REDEEM_URLS = {
   zzz: code => `https://zenless.hoyoverse.com/redemption?code=${code}`,
   genshin: code => `https://genshin.hoyoverse.com/en/gift?code=${code}`,
@@ -799,66 +807,80 @@ const REDEEM_URLS = {
 
 const codesContainer = document.getElementById('codes-container');
 const tabButtons = document.querySelectorAll('.tab-btn');
-
 let codesData = {};
 
-// Fetch codes from API
-fetch('https://db.hashblen.com/codes')
-  .then(res => res.json())
-  .then(data => {
-    codesData = data;
-    renderCodes('zzz'); // default tab
-  })
-  .catch(err => {
-    codesContainer.innerHTML = `<p class="loading">Failed to load codes.</p>`;
+// Fetch Logic
+async function fetchCodes() {
+  try {
+    const res = await fetch('https://db.hashblen.com/codes');
+    if (!res.ok) throw new Error("API Error");
+    codesData = await res.json();
+    renderCodes('zzz'); // Init default
+  } catch (err) {
+    codesContainer.innerHTML = `<div class="loading">Unable to load codes at this time.<br><small>Check connection</small></div>`;
     console.error(err);
-  });
+  }
+}
 
-// Handle tab switching
+// Tabs
 tabButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     tabButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    const game = btn.getAttribute('data-game');
-    renderCodes(game);
+    renderCodes(btn.getAttribute('data-game'));
   });
 });
 
-// Render codes for a game
 function renderCodes(game) {
   const codes = codesData[game];
   if(!codes || codes.length === 0){
-    codesContainer.innerHTML = `<p class="loading">No codes available.</p>`;
+    codesContainer.innerHTML = `<div class="loading">No active codes found.</div>`;
     return;
   }
 
-  codesContainer.innerHTML = codes.map(codeObj => `
+  codesContainer.innerHTML = codes.map(item => `
     <div class="code-card">
-  <div class="code-row">
-    <div class="code-text">${codeObj.code}</div>
-    <div class="buttons-group">
-      <button class="copy-btn" onclick="copyCode('${codeObj.code}')">COPY</button>
-      <button class="redeem-btn" onclick="redeemCode('${game}', '${codeObj.code}')">REDEEM</button>
+      <div class="code-row">
+        <div class="code-text">${item.code}</div>
+        <div class="buttons-group">
+          <button class="copy-btn" onclick="copyCode('${item.code}')">COPY</button>
+          <button class="redeem-btn" onclick="redeemCode('${game}', '${item.code}')">REDEEM</button>
+        </div>
+      </div>
+      <div class="code-desc">${item.description || 'No description'}</div>
     </div>
-  </div>
-  <div class="code-desc">${codeObj.description}</div>
-</div>
-
   `).join('');
 }
 
-// Copy code to clipboard
+// Better Copy Function (Fallback for non-HTTPS)
 function copyCode(code) {
-  navigator.clipboard.writeText(code).then(() => {
-    alert(`Copied: ${code}`);
-  });
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(code).then(() => alert(`Copied: ${code}`));
+  } else {
+    // Fallback logic
+    const textArea = document.createElement("textarea");
+    textArea.value = code;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      alert(`Copied: ${code}`);
+    } catch (err) {
+      alert('Failed to copy manually.');
+    }
+    document.body.removeChild(textArea);
+  }
 }
 
-// Open redeem URL
 function redeemCode(game, code) {
-  const url = REDEEM_URLS[game](code);
-  window.open(url, '_blank');
+  window.open(REDEEM_URLS[game](code), '_blank');
 }
+
+// Start
+fetchCodes();
 </script>
 
 </body>

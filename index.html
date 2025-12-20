@@ -243,8 +243,29 @@ html, body {
   color: #020617;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Update the .code-card class */
 .code-card {
-  background: white;
+  background: white; /* or your specific color */
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  
+  /* --- NEW ANIMATION PROPERTIES --- */
+  opacity: 0; /* Start invisible */
+  animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  /* 'forwards' keeps the element visible after animation ends */
 }
 
 .copy-btn.redeem-btn {
@@ -833,13 +854,23 @@ tabButtons.forEach(btn => {
 
 function renderCodes(game) {
   const codes = codesData[game];
+  
+  // 1. Clear container immediately to reset the view
+  codesContainer.innerHTML = '';
+
   if(!codes || codes.length === 0){
-    codesContainer.innerHTML = `<div class="loading">No active codes found.</div>`;
+    codesContainer.innerHTML = `<div class="loading" style="animation: fadeInUp 0.4s forwards;">No active codes found.</div>`;
     return;
   }
 
-  codesContainer.innerHTML = codes.map(item => `
-    <div class="code-card">
+  // 2. Generate HTML with dynamic animation delay
+  // We use the index 'i' to multiply the delay
+  codesContainer.innerHTML = codes.map((item, i) => {
+    // 1st item waits 0ms, 2nd waits 100ms, 3rd waits 200ms...
+    const delay = i * 100; 
+    
+    return `
+    <div class="code-card" style="animation-delay: ${delay}ms">
       <div class="code-row">
         <div class="code-text">${item.code}</div>
         <div class="buttons-group">
@@ -849,7 +880,7 @@ function renderCodes(game) {
       </div>
       <div class="code-desc">${item.description || 'No description'}</div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 // Better Copy Function (Fallback for non-HTTPS)

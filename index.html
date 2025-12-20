@@ -5,12 +5,10 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Smooth Swipe Island</title>
+<title>Smooth Swipe Island FIXED</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   body {
     margin: 0;
@@ -20,7 +18,6 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     touch-action: pan-y;
   }
 
-  /* Pages */
   .container {
     display: flex;
     width: 300vw;
@@ -42,7 +39,6 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
   .page2 { background: #1e3a8a; }
   .page3 { background: #064e3b; }
 
-  /* Linktree */
   .profile {
     width: 120px;
     height: 120px;
@@ -62,7 +58,6 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     font-weight: bold;
   }
 
-  /* Dynamic Island */
   .island {
     position: fixed;
     top: 12px;
@@ -80,9 +75,7 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     z-index: 999;
   }
 
-  .island.show {
-    opacity: 1;
-  }
+  .island.show { opacity: 1; }
 
   .dot {
     width: 8px;
@@ -109,14 +102,8 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     <button class="btn">YouTube</button>
     <button class="btn">Portfolio</button>
   </div>
-
-  <div class="page page2">
-    <h1>Page 2</h1>
-  </div>
-
-  <div class="page page3">
-    <h1>Page 3</h1>
-  </div>
+  <div class="page page2"><h1>Page 2</h1></div>
+  <div class="page page3"><h1>Page 3</h1></div>
 </div>
 
 <div class="island" id="island">
@@ -138,9 +125,9 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
   let hideTimeout;
 
   function updateDots() {
-    dots.forEach((dot, i) => {
-      dot.classList.toggle("active", i === currentPage);
-    });
+    dots.forEach((dot, i) =>
+      dot.classList.toggle("active", i === currentPage)
+    );
   }
 
   function setTranslate(x, animate = false) {
@@ -152,26 +139,19 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
 
   document.addEventListener("touchstart", e => {
     clearTimeout(hideTimeout);
-
     startX = e.touches[0].clientX;
     currentX = startX;
     startTime = Date.now();
     isSwiping = true;
-
     island.classList.add("show");
-    setTranslate(-currentPage * window.innerWidth, false);
+    setTranslate(-currentPage * innerWidth, false);
   });
 
   document.addEventListener("touchmove", e => {
     if (!isSwiping) return;
-
     currentX = e.touches[0].clientX;
     const delta = currentX - startX;
-
-    const offset =
-      -currentPage * window.innerWidth + delta * 0.6;
-
-    setTranslate(offset, false);
+    setTranslate(-currentPage * innerWidth + delta * 0.6, false);
   });
 
   document.addEventListener("touchend", () => {
@@ -182,16 +162,19 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     const time = Date.now() - startTime;
     const velocity = Math.abs(distance / time);
 
-    if ((distance < -80 || velocity > 0.5) && currentPage < 2) {
+    const swipeLeft = distance < -50;
+    const swipeRight = distance > 50;
+
+    if (swipeLeft && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage < 2) {
       currentPage++;
-    } else if ((distance > 80 || velocity > 0.5) && currentPage > 0) {
+    } 
+    else if (swipeRight && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage > 0) {
       currentPage--;
     }
 
-    setTranslate(-currentPage * window.innerWidth, true);
+    setTranslate(-currentPage * innerWidth, true);
     updateDots();
 
-    // ⏱ Delay 1 second before hiding island
     hideTimeout = setTimeout(() => {
       island.classList.remove("show");
     }, 1000);

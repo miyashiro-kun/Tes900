@@ -3,146 +3,219 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Swipe Pages</title>
+<title>Swipe Mobile App</title>
+
+<!-- Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
-    body {
-        margin: 0;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-        background: #111;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
 
-    .container {
-        display: flex;
-        width: 300vw;
-        height: 100vh;
-        transition: transform 0.3s ease;
-    }
+body {
+    overflow: hidden;
+    background: linear-gradient(135deg, #1abc9c, #3498db);
+}
 
-    .page {
-        width: 100vw;
-        height: 100vh;
-        flex-shrink: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+/* Swipe container */
+.container {
+    display: flex;
+    width: 300vw;
+    height: 100vh;
+    transition: transform 0.4s ease;
+}
 
-    .page1 { background: #1abc9c; }
-    .page2 { background: #3498db; color: white; }
-    .page3 { background: #9b59b6; color: white; }
+.page {
+    width: 100vw;
+    height: 100vh;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    /* Linktree Card */
-    .card {
-        background: white;
-        width: 85%;
-        max-width: 350px;
-        padding: 20px;
-        border-radius: 16px;
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
+/* Glass card */
+.card {
+    width: 85%;
+    max-width: 360px;
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    text-align: center;
+    color: white;
+    animation: fadeUp 0.8s ease;
+}
 
-    .card img {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 10px;
-    }
+/* Profile */
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    object-fit: cover;
+}
 
-    .card h2 {
-        margin: 10px 0 5px;
-    }
+h2 {
+    margin-top: 12px;
+}
 
-    .card p {
-        font-size: 14px;
-        color: #555;
-        margin-bottom: 20px;
-    }
+.bio {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
 
-    .link-btn {
-        display: block;
-        text-decoration: none;
-        background: #1abc9c;
-        color: white;
-        padding: 14px;
-        margin: 10px 0;
-        border-radius: 10px;
-        font-weight: bold;
-        transition: 0.2s;
-    }
+/* Social icons */
+.socials {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
 
-    .link-btn:hover {
-        background: #16a085;
-    }
+.socials a {
+    color: white;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.socials a:hover {
+    transform: scale(1.3);
+}
+
+/* Buttons */
+.link-btn {
+    display: block;
+    text-decoration: none;
+    color: white;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 12px;
+    font-weight: bold;
+    background: rgba(255,255,255,0.25);
+    transition: 0.3s;
+}
+
+.link-btn:hover {
+    background: white;
+    color: #111;
+    transform: scale(1.05);
+}
+
+/* Page 2 & 3 */
+.page2, .page3 {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* Dots */
+.dots {
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+}
+
+.dot.active {
+    background: white;
+}
+
+/* Animation */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 
 <body>
 
 <div class="container" id="container">
-    
-    <!-- Page 1 -->
-    <div class="page page1">
-        <div class="card">
-            <img src="https://via.placeholder.com/150" alt="Profile">
-            <h2>Your Name</h2>
-            <p>Web Developer | Designer</p>
 
-            <a href="#" class="link-btn">Instagram</a>
-            <a href="#" class="link-btn">Portfolio</a>
-            <a href="#" class="link-btn">Contact Me</a>
+    <!-- PAGE 1 -->
+    <div class="page">
+        <div class="card">
+            <img class="profile-img" src="https://via.placeholder.com/150" alt="Profile">
+            <h2>Your Name</h2>
+            <p class="bio">Web Developer • Designer • Creator</p>
+
+            <div class="socials">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+
+            <a class="link-btn" href="#">My Portfolio</a>
+            <a class="link-btn" href="#">YouTube Channel</a>
+            <a class="link-btn" href="#">Contact Me</a>
         </div>
     </div>
 
-    <!-- Page 2 -->
+    <!-- PAGE 2 -->
     <div class="page page2">
-        <h1>Page 2</h1>
+        About Page
     </div>
 
-    <!-- Page 3 -->
+    <!-- PAGE 3 -->
     <div class="page page3">
-        <h1>Page 3</h1>
+        Settings Page
     </div>
 
 </div>
 
+<!-- Page dots -->
+<div class="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+</div>
+
 <script>
-    let currentPage = 0;
-    const container = document.getElementById("container");
-    let startX = 0;
-    let isDragging = false;
+let currentPage = 0;
+const container = document.getElementById("container");
+const dots = document.querySelectorAll(".dot");
+let startX = 0;
 
-    document.addEventListener("touchstart", e => {
-        startX = e.touches[0].clientX;
-    });
+/* Touch */
+document.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+});
+document.addEventListener("touchend", e => {
+    handleSwipe(startX, e.changedTouches[0].clientX);
+});
 
-    document.addEventListener("touchend", e => {
-        let endX = e.changedTouches[0].clientX;
-        handleSwipe(startX, endX);
-    });
+/* Mouse */
+document.addEventListener("mousedown", e => startX = e.clientX);
+document.addEventListener("mouseup", e => handleSwipe(startX, e.clientX));
 
-    document.addEventListener("mousedown", e => {
-        isDragging = true;
-        startX = e.clientX;
-    });
+function handleSwipe(start, end) {
+    let diff = start - end;
+    if (diff > 50 && currentPage < 2) currentPage++;
+    if (diff < -50 && currentPage > 0) currentPage--;
+    updatePage();
+}
 
-    document.addEventListener("mouseup", e => {
-        if (!isDragging) return;
-        isDragging = false;
-        handleSwipe(startX, e.clientX);
-    });
-
-    function handleSwipe(start, end) {
-        let diff = start - end;
-
-        if (diff > 50 && currentPage < 2) currentPage++;
-        else if (diff < -50 && currentPage > 0) currentPage--;
-
-        container.style.transform = `translateX(-${currentPage * 100}vw)`;
-    }
+function updatePage() {
+    container.style.transform = `translateX(-${currentPage * 100}vw)`;
+    dots.forEach(dot => dot.classList.remove("active"));
+    dots[currentPage].classList.add("active");
+}
 </script>
 
 </body>

@@ -507,7 +507,9 @@ updateDotIndicator(0);
    ✅ FIXED FETCH (ONLY NEW PART)
    ================================ */
 
-fetch("https://api.ennead.cc/mihoyo/starrail/news/notices")
+fetch(
+  "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices"
+)
   .then(res => res.json())
   .then(data => {
 
@@ -516,21 +518,22 @@ fetch("https://api.ennead.cc/mihoyo/starrail/news/notices")
       return;
     }
 
+    // last notice in the array
     const lastNotice = data[data.length - 1];
 
-    if (!Array.isArray(lastNotice.banner) ||
-        lastNotice.banner.length === 0) {
-      console.warn("No banner in last notice");
+    if (!Array.isArray(lastNotice.banner) || lastNotice.banner.length === 0) {
+      console.warn("No banner found");
       return;
     }
 
+    // last banner inside banner array
     const lastBannerUrl =
       lastNotice.banner[lastNotice.banner.length - 1];
 
-    console.log("Banner loaded:", lastBannerUrl);
     document.getElementById("banner").src = lastBannerUrl;
   })
   .catch(err => console.error("Fetch error:", err));
+
 </script>
 
 

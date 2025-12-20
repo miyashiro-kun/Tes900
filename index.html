@@ -24,7 +24,7 @@ html, body {
   width:300vw;
   height:100vh;
   will-change: transform;
-  transition: transform 4.45s cubic-bezier(.22,.61,.36,1);
+  transition: transform 1.45s cubic-bezier(.22,.61,.36,1);
 }
 
 .page {
@@ -529,7 +529,7 @@ function goToPage(page){
   if(page >= totalPages) page = totalPages - 1;
   currentPage = page;
   container.style.transition =
-    "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+    "transform 1.45s cubic-bezier(.22,.61,.36,1)";
   setTranslate(-currentPage*pageWidth);
   updateDotIndicator(currentPage);
   showIsland();
@@ -586,7 +586,7 @@ document.addEventListener("touchend", ()=>{
   }
 
   container.style.transition =
-    "transform 4.45s cubic-bezier(.22,.61,.36,1)";
+    "transform 1.45s cubic-bezier(.22,.61,.36,1)";
   setTranslate(-currentPage*pageWidth);
   updateDotIndicator(currentPage);
 

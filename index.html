@@ -652,6 +652,18 @@ btnNext.onclick = () => currentPage < totalPages - 1 && goToPage(currentPage + 1
 setTranslate(0);
 updateDotIndicator(0);
 
+document.querySelectorAll(".link-btn").forEach(btn => {
+  btn.addEventListener('click', () => {
+    const panel = btn.nextElementSibling;
+    const isOpen = panel.classList.contains('open');
+    
+    document.querySelectorAll('.collapse-panel.open').forEach(p => {
+      if(p !== panel) p.classList.remove('open');
+    }); 
+    panel.classList.toggle('open', !isOpen);
+  });
+});
+
 /* ================================
    Page 1: Profile Banner (Star Rail)
    ================================ */

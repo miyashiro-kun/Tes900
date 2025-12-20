@@ -93,13 +93,12 @@ html, body {
   max-width: 100px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
   transition: background 0.3s;
   
 }
 
 .tab-btn.active {
-  background: #38bdf8;
+  background: #fad57f;
   color: #fff;
 }
 
@@ -257,7 +256,7 @@ html, body {
   background: linear-gradient(
     to bottom, 
     rgba(255, 255, 255, 1) 0%,   /* Top: Half-transparent black */
-    rgba(0, 0, 0, 0) 100%    /* Bottom: Fully transparent */
+    rgba(0, 0, 0, 0.2) 100%    /* Bottom: Fully transparent */
   );
   z-index: 1;
 }
@@ -465,8 +464,6 @@ html, body {
 }
 
 .code-text {
-  font-weight: 700;
-  letter-spacing: 0.5px;
   font-size: 0.95rem;
   word-break: break-all;
 }
@@ -477,8 +474,6 @@ html, body {
   border: none;
   border-radius: 999px;
   padding: 6px 14px;
-  font-size: 0.8rem;
-  font-weight: 700;
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -493,7 +488,6 @@ html, body {
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
-  font-weight: 600;
   cursor: pointer;
 }
 
@@ -557,7 +551,9 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+.title-font {
+    font-family: titleFont, impact;
+}
 </style>
 </head>
 <body>
@@ -567,38 +563,38 @@ body {
   <div class="page page1">
     <div class="linktree-card">
       <img src="https://awsimages.detik.net.id/community/media/visual/2022/02/17/bruce-leung-1_34.png" id="banner" alt="Banner Image" class="profile-photo" />
-      <h2 class="name">Eina Antaswari Kinanthi</h2>
-      <p class="desc">Senior UI/UX Designer with big dreams. 🚀</p>
-      <button class="btn-message">Message me</button>
+      <h2 class="name">Kodokkyun</h2>
+      <p class="desc">Wong Jowo tapi Gamer</p>
+      <button class="btn-message">Cek Akun Saya</button>
     </div>
     <div class="links">
       <!-- Each link-btn with collapse panel -->
       <div>
-        <button class="link-btn" aria-expanded="false"><span>🏀</span> My Dribbble</button>
+        <button class="link-btn" aria-expanded="false"><span>🏀</span> TikTok</button>
         <div class="collapse-panel">
-          <div>visit me</div>
+          <div>visit akun tiktok saya <br>jangan lupa follow ya 👌</div>
           <button class="visit-btn" onclick="alert('Dribbble clicked')">Go</button>
         </div>
       </div>
       <div>
-        <button class="link-btn" aria-expanded="false"><span>🎨</span> Freebies UI Kit</button>
+        <button class="link-btn" aria-expanded="false"><span>🎨</span> Saweria</button>
         <div class="collapse-panel">
-          <div>visit me</div>
-          <button class="visit-btn" onclick="alert('Freebies clicked')">Go</button>
+          <div>mau nyawer ? </div>
+          <button class="visit-btn" onclick="window.open('https://saweria.co/kodokkyunn99', '_blank')">Sawer Dong gan</button>
         </div>
       </div>
       <div>
-        <button class="link-btn" aria-expanded="false"><span>🔗</span> My Linkedin</button>
+        <button class="link-btn" aria-expanded="false"><span>🔗</span> Youtube</button>
         <div class="collapse-panel">
-          <div>visit me <br> everytime u wanted </div>
-          <button class="visit-btn" onclick="alert('Linkedin clicked')">Go</button>
+          <div>Belom ada channel <br> coming soon ges </div>
+          <button class="visit-btn" onclick="window.open('https://saweria.co/kodokkyunn99', '_blank')">Go</button>
         </div>
       </div>
       <div>
-        <button class="link-btn" aria-expanded="false"><span>📝</span> Just write my thoughts</button>
+        <button class="link-btn" aria-expanded="false"><span>📝</span> JOKI GAME</button>
         <div class="collapse-panel">
-          <div>visit me</div>
-          <button class="visit-btn" onclick="alert('Thoughts clicked')">Go</button>
+          <div>Open Jasa Joki Game <br>Kalau kamu ga ada waktu<br>buat maen game </div>
+          <button class="visit-btn" id="JOKINext">Cek harga</button>
         </div>
       </div>
     </div>
@@ -610,9 +606,9 @@ body {
 
   <!-- Tabs -->
   <div class="tabs">
-    <button class="tab-btn active" data-game="zzz">ZENLESS</button>
-    <button class="tab-btn" data-game="genshin">GENSHIN</button>
-    <button class="tab-btn" data-game="hsr">STAR RAIL</button>
+    <button class="tab-btn active title-font" data-game="zzz">ZENLESS</button>
+    <button class="tab-btn title-font" data-game="genshin">GENSHIN</button>
+    <button class="tab-btn title-font" data-game="hsr">STAR RAIL</button>
   </div>
 
   <!-- Codes container -->
@@ -649,6 +645,7 @@ const island = document.getElementById("island");
 const dotIndicator = document.getElementById("dot-indicator");
 const btnPrev = document.getElementById("btnPrev");
 const btnNext = document.getElementById("btnNext");
+const JOKINext = document.getElementById("JOKINext");
 const pages = document.querySelectorAll('.page'); // Select all pages dynamically
 
 let totalPages = pages.length;
@@ -794,6 +791,8 @@ container.addEventListener("touchend", () => {
 btnPrev.onclick = () => goToPage(currentPage - 1);
 btnNext.onclick = () => goToPage(currentPage + 1);
 
+JOKINext.onclick = () => goToPage(3);
+
 // Initialize
 setTranslate(0);
 updateDotIndicator(0);
@@ -835,9 +834,9 @@ const tabButtons = document.querySelectorAll('.tab-btn');
 let codesData = {};
 
 const BG_IMAGES = {
-  zzz: 'url("https://upload-os-bbs.hoyolab.com/upload/2024/11/08/0/71bdcb779866e7a6034f49eda93fa9b5_8983614859196853796.png")',
-  genshin: 'url("https://upload-os-bbs.hoyolab.com/upload/2024/11/07/0/b9ee93036e0f81e48ac3860b15d618ca_309313925233200111.jpeg")',
-  hsr: 'url("https://upload-os-bbs.hoyolab.com/upload/2024/11/04/fdbbe600df86fabb8d8a8bf16d3c73a5_1868708963400196407.png")'
+  zzz: 'url("https://images7.alphacoders.com/130/thumb-1920-1307267.jpg")',
+  genshin: 'url("https://images2.alphacoders.com/136/thumb-1920-1368840.jpeg")',
+  hsr: 'url("https://images3.alphacoders.com/136/thumb-1920-1362764.jpeg")'
 };
 
 // Fetch Logic
@@ -899,10 +898,10 @@ function renderCodes(game) {
     return `
     <div class="code-card" style="animation-delay: ${delay}ms">
       <div class="code-row">
-        <div class="code-text">${item.code}</div>
+        <div class="code-text title-font">${item.code}</div>
         <div class="buttons-group">
-          <button class="copy-btn" onclick="copyCode('${item.code}')">COPY</button>
-          <button class="redeem-btn" onclick="redeemCode('${game}', '${item.code}')">REDEEM</button>
+          <button class="copy-btn title-font" onclick="copyCode('${item.code}')">COPY</button>
+          <button class="redeem-btn title-font" onclick="redeemCode('${game}', '${item.code}')">REDEEM</button>
         </div>
       </div>
       <div class="code-desc">${item.description || 'No description'}</div>

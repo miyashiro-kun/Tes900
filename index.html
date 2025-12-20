@@ -3,219 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Swipe Mobile App</title>
-
-<!-- Icons -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<title>Swipe Island Dots</title>
 
 <style>
-* {
+  body {
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-}
-
-body {
     overflow: hidden;
-    background: linear-gradient(135deg, #1abc9c, #3498db);
-}
+    font-family: Arial, sans-serif;
+    background: black;
+  }
 
-/* Swipe container */
-.container {
+  /* Pages */
+  .container {
     display: flex;
     width: 300vw;
     height: 100vh;
     transition: transform 0.4s ease;
-}
+  }
 
-.page {
+  .page {
     width: 100vw;
     height: 100vh;
-    flex-shrink: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-}
-
-/* Glass card */
-.card {
-    width: 85%;
-    max-width: 360px;
-    padding: 25px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    text-align: center;
-    color: white;
-    animation: fadeUp 0.8s ease;
-}
-
-/* Profile */
-.profile-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 3px solid white;
-    object-fit: cover;
-}
-
-h2 {
-    margin-top: 12px;
-}
-
-.bio {
-    font-size: 14px;
-    opacity: 0.9;
-    margin-bottom: 15px;
-}
-
-/* Social icons */
-.socials {
-    display: flex;
     justify-content: center;
-    gap: 15px;
+    color: white;
+  }
+
+  .page1 { background: #020617; }
+  .page2 { background: #1e3a8a; }
+  .page3 { background: #064e3b; }
+
+  /* Linktree */
+  .profile {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: url("https://via.placeholder.com/300") center/cover;
+    border: 4px solid white;
     margin-bottom: 20px;
-}
+  }
 
-.socials a {
-    color: white;
-    font-size: 20px;
-    transition: 0.3s;
-}
-
-.socials a:hover {
-    transform: scale(1.3);
-}
-
-/* Buttons */
-.link-btn {
-    display: block;
-    text-decoration: none;
-    color: white;
+  .btn {
+    width: 220px;
     padding: 14px;
-    margin: 10px 0;
-    border-radius: 12px;
+    margin: 8px 0;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
     font-weight: bold;
-    background: rgba(255,255,255,0.25);
-    transition: 0.3s;
-}
+  }
 
-.link-btn:hover {
-    background: white;
-    color: #111;
-    transform: scale(1.05);
-}
-
-/* Page 2 & 3 */
-.page2, .page3 {
-    color: white;
-    font-size: 32px;
-    font-weight: bold;
-}
-
-/* Dots */
-.dots {
+  /* Island dots */
+  .island {
     position: fixed;
-    bottom: 20px;
-    width: 100%;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(10px);
+    padding: 10px 18px;
+    border-radius: 999px;
     display: flex;
-    justify-content: center;
     gap: 10px;
-}
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
 
-.dot {
-    width: 10px;
-    height: 10px;
+  .island.show {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    background: #666;
     border-radius: 50%;
-    background: rgba(255,255,255,0.4);
-}
+    transition: all 0.25s ease;
+  }
 
-.dot.active {
+  .dot.active {
+    width: 14px;
+    height: 14px;
     background: white;
-}
-
-/* Animation */
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+  }
 </style>
 </head>
 
 <body>
 
 <div class="container" id="container">
+  <div class="page page1">
+    <div class="profile"></div>
+    <button class="btn">Instagram</button>
+    <button class="btn">YouTube</button>
+    <button class="btn">Portfolio</button>
+  </div>
 
-    <!-- PAGE 1 -->
-    <div class="page">
-        <div class="card">
-            <img class="profile-img" src="https://via.placeholder.com/150" alt="Profile">
-            <h2>Your Name</h2>
-            <p class="bio">Web Developer • Designer • Creator</p>
+  <div class="page page2">
+    <h1>Page 2</h1>
+  </div>
 
-            <div class="socials">
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-github"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
-            </div>
-
-            <a class="link-btn" href="#">My Portfolio</a>
-            <a class="link-btn" href="#">YouTube Channel</a>
-            <a class="link-btn" href="#">Contact Me</a>
-        </div>
-    </div>
-
-    <!-- PAGE 2 -->
-    <div class="page page2">
-        About Page
-    </div>
-
-    <!-- PAGE 3 -->
-    <div class="page page3">
-        Settings Page
-    </div>
-
+  <div class="page page3">
+    <h1>Page 3</h1>
+  </div>
 </div>
 
-<!-- Page dots -->
-<div class="dots">
-    <div class="dot active"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
+<!-- Island Indicator -->
+<div class="island" id="island">
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
 </div>
 
 <script>
-let currentPage = 0;
-const container = document.getElementById("container");
-const dots = document.querySelectorAll(".dot");
-let startX = 0;
+  const container = document.getElementById("container");
+  const island = document.getElementById("island");
+  const dots = document.querySelectorAll(".dot");
 
-/* Touch */
-document.addEventListener("touchstart", e => {
+  let currentPage = 0;
+  let startX = 0;
+  let endX = 0;
+
+  function updateDots() {
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === currentPage);
+    });
+  }
+
+  document.addEventListener("touchstart", e => {
     startX = e.touches[0].clientX;
-});
-document.addEventListener("touchend", e => {
-    handleSwipe(startX, e.changedTouches[0].clientX);
-});
+    island.classList.add("show");
+  });
 
-/* Mouse */
-document.addEventListener("mousedown", e => startX = e.clientX);
-document.addEventListener("mouseup", e => handleSwipe(startX, e.clientX));
+  document.addEventListener("touchend", e => {
+    endX = e.changedTouches[0].clientX;
+    island.classList.remove("show");
+    handleSwipe();
+  });
 
-function handleSwipe(start, end) {
-    let diff = start - end;
-    if (diff > 50 && currentPage < 2) currentPage++;
-    if (diff < -50 && currentPage > 0) currentPage--;
-    updatePage();
-}
+  function handleSwipe() {
+    const distance = endX - startX;
 
-function updatePage() {
+    if (Math.abs(distance) < 50) return;
+
+    if (distance < 0 && currentPage < 2) currentPage++;
+    if (distance > 0 && currentPage > 0) currentPage--;
+
     container.style.transform = `translateX(-${currentPage * 100}vw)`;
-    dots.forEach(dot => dot.classList.remove("active"));
-    dots[currentPage].classList.add("active");
-}
+    updateDots();
+  }
 </script>
 
 </body>

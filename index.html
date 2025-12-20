@@ -1,55 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Liquid Tabs</title>
-    <link rel="stylesheet" href="Css/Style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swipe Pages</title>
+
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        display: flex;
+        width: 300vw; /* 3 pages */
+        height: 100vh;
+        transition: transform 0.3s ease;
+    }
+
+    .page {
+        width: 100vw;
+        height: 100vh;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32px;
+        color: white;
+    }
+
+    .page1 { background: #3498db; }
+    .page2 { background: #2ecc71; }
+    .page3 { background: #e74c3c; }
+</style>
 </head>
+
 <body>
 
-<div class="tabs">
-    <div class="indicator"></div>
-    <button class="tab active" onclick="changeTab(this, 'pages/page1.html')">Profil ku</button>
-    <button class="tab" onclick="changeTab(this, 'pages/page2.html')">Joki Game</button>
-    <button class="tab" onclick="changeTab(this, 'pages/page3.html')"> Redeem Code</button>
+<div class="container" id="container">
+    <div class="page page1">Page 1</div>
+    <div class="page page2">Page 2</div>
+    <div class="page page3">Page 3</div>
 </div>
 
-<div id="content"></div>
-
 <script>
-const indicator = document.querySelector(".indicator");
-const tabs = document.querySelectorAll(".tab");
+    let currentPage = 0;
+    const container = document.getElementById("container");
+    let startX = 0;
+    let isDragging = false;
 
-// Load first page by default
-loadPage("pages/page3.html");
+    // Touch events (mobile)
+    document.addEventListener("touchstart", e => {
+        startX = e.touches[0].clientX;
+    });
 
-function changeTab(tab, page) {
-    tabs.forEach(t => t.classList.remove("active"));
-    tab.classList.add("active");
+    document.addEventListener("touchend", e => {
+        let endX = e.changedTouches[0].clientX;
+        handleSwipe(startX, endX);
+    });
 
-    // Move liquid indicator
-    indicator.style.width = tab.offsetWidth + "px";
-    indicator.style.left = tab.offsetLeft + "px";
+    // Mouse events (desktop)
+    document.addEventListener("mousedown", e => {
+        isDragging = true;
+        startX = e.clientX;
+    });
 
-    loadPage(page);
-}
+    document.addEventListener("mouseup", e => {
+        if (!isDragging) return;
+        isDragging = false;
+        handleSwipe(startX, e.clientX);
+    });
 
-function loadPage(page) {
-    fetch(page)
-        .then(res => res.text())
-        .then(data => {
-            document.getElementById("content").innerHTML = data;
-        });
-}
+    function handleSwipe(start, end) {
+        let diff = start - end;
 
-// Set indicator position on load
-window.onload = () => {
-    const activeTab = document.querySelector(".tab.active");
-    indicator.style.width = activeTab.offsetWidth + "px";
-    indicator.style.left = activeTab.offsetLeft + "px";
-};
-    
-    
+        if (diff > 50 && currentPage < 2) {
+            currentPage++;
+        } else if (diff < -50 && currentPage > 0) {
+            currentPage--;
+        }
+
+        container.style.transform = `translateX(-${currentPage * 100}vw)`;
+    }
 </script>
+
 </body>
 </html>

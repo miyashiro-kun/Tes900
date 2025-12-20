@@ -87,7 +87,7 @@ html, body {
 .tab-btn {
   flex: 1;
   padding: 10px 0;
-  background: #e0e0e0;
+  background: #ffffff;
   border: none;
   width: 100px;
   max-width: 100px;
@@ -236,9 +236,36 @@ html, body {
 
 /* --- Page 2 and 3 --- */
 .page2 {
-  background: #f8fafc;
-  color: #0f172a;
-  width: 100%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease-in-out;
+  /* Ensure the page is black underneath so it fades to black */
+  background-color: black; 
+}
+
+/* The Overlay: This creates the 100% to 0% transparency fade */
+.page2::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Adjust rgba(0,0,0,0.5) to change the "half transparent" darkness */
+  background: linear-gradient(
+    to bottom, 
+    rgba(255, 255, 255, 1) 0%,   /* Top: Half-transparent black */
+    rgba(0, 0, 0, 0) 100%    /* Bottom: Fully transparent */
+  );
+  z-index: 1;
+}
+
+/* Keep the content (Title, Tabs, Cards) above the fade */
+.page2 > * {
+  position: relative;
+  z-index: 2;
 }
 
 .codes-section h3 {
@@ -280,7 +307,9 @@ html, body {
 
 
 .page-title {
-  font-size: 1.6rem;
+  font-size: 0.2rem;
+  width: 300px;
+  max-width: 50%;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -427,14 +456,6 @@ html, body {
 
 
 /* Code card style */
-.code-card {
-  background: rgba(255,255,255,0.08);
-  width: 600px;
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
 
 .code-row {
   display: flex;
@@ -585,7 +606,7 @@ body {
 
   <!-- Page 2 -->
   <div class="page page2">
-  <h2 class="page-title">Redeem Codes</h2>
+  <img src="https://i.ibb.co.com/TDQgJmdk/unnamed.png" class="page-title"/>
 
   <!-- Tabs -->
   <div class="tabs">
@@ -813,6 +834,12 @@ const codesContainer = document.getElementById('codes-container');
 const tabButtons = document.querySelectorAll('.tab-btn');
 let codesData = {};
 
+const BG_IMAGES = {
+  zzz: 'url("https://upload-os-bbs.hoyolab.com/upload/2024/11/08/0/71bdcb779866e7a6034f49eda93fa9b5_8983614859196853796.png")',
+  genshin: 'url("https://upload-os-bbs.hoyolab.com/upload/2024/11/07/0/b9ee93036e0f81e48ac3860b15d618ca_309313925233200111.jpeg")',
+  hsr: 'url("https://upload-os-bbs.hoyolab.com/upload/2024/11/04/fdbbe600df86fabb8d8a8bf16d3c73a5_1868708963400196407.png")'
+};
+
 // Fetch Logic
 async function fetchCodes() {
   try {
@@ -827,13 +854,30 @@ async function fetchCodes() {
 }
 
 // Tabs
+const page2Element = document.querySelector('.page2');
+
+// Update your existing tab click listener:
 tabButtons.forEach(btn => {
   btn.addEventListener('click', () => {
+    const game = btn.getAttribute('data-game');
+    if (BG_IMAGES[game]) {
+     page2Element.style.backgroundImage = BG_IMAGES[game];
+    }
+    // 1. Handle active tab state
     tabButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    renderCodes(btn.getAttribute('data-game'));
+    
+    // 2. Change the background image
+    if (BG_IMAGES[game]) {
+      page2Element.style.backgroundImage = BG_IMAGES[game];
+    }
+    
+    // 3. Render the codes
+    renderCodes(game);
   });
 });
+
+page2Element.style.backgroundImage = BG_IMAGES['zzz'];
 
 function renderCodes(game) {
   const codes = codesData[game];

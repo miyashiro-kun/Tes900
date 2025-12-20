@@ -24,8 +24,7 @@ html, body {
   width:300vw;
   height:100vh;
   will-change: transform;
-  transition: transform 0.45s cubic-bezier(.22,.61,.36,1);
-  touch-action: pan-y;
+  transition: transform 4.45s cubic-bezier(.22,.61,.36,1);
 }
 
 .page {
@@ -492,6 +491,10 @@ html, body {
 <button class="fab fab-right" id="btnNext" aria-label="Next page">&gt;</button>
 
 <script>
+/* ================================
+   Swipe Navigation
+   ================================ */
+
 const container = document.getElementById("container");
 const island = document.getElementById("island");
 const dotIndicator = document.getElementById("dot-indicator");
@@ -503,211 +506,125 @@ let pageWidth = window.innerWidth;
 
 let currentPage = 0;
 let startX = 0;
+let startY = 0;
 let currentX = 0;
 let startTime = 0;
 let isSwiping = false;
-let hideTimeout = null;
-let startY = 0;
-let currentY = 0;
-let gestureLocked = false;
 let isHorizontalSwipe = false;
-function setTranslate(x){
+let hideTimeout = null;
+
+function setTranslate(x) {
   container.style.transform = `translateX(${x}px)`;
 }
 
-function updateDotIndicator(progress){
+function updateDotIndicator(progress) {
   dotIndicator.style.left =
-    `${Math.min(Math.max(progress,0),totalPages-1)*23}px`;
+    `${Math.min(Math.max(progress, 0), totalPages - 1) * 23}px`;
 }
 
-function showIsland(){
+function showIsland() {
   clearTimeout(hideTimeout);
   island.classList.add("show");
-  hideTimeout = setTimeout(() => {
-    island.classList.remove("show");
-  }, 1000);
+  hideTimeout = setTimeout(() => island.classList.remove("show"), 1000);
 }
 
-function goToPage(page){
-  if(page < 0) page = 0;
-  if(page >= totalPages) page = totalPages - 1;
-  currentPage = page;
-  container.style.transition =
-    "transform 0.45s cubic-bezier(.22,.61,.36,1)";
-  setTranslate(-currentPage*pageWidth);
+function goToPage(page) {
+  currentPage = Math.max(0, Math.min(page, totalPages - 1));
+  container.style.transition = "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+  setTranslate(-currentPage * pageWidth);
   updateDotIndicator(currentPage);
   showIsland();
 }
 
-window.addEventListener('resize', ()=>{
+window.addEventListener("resize", () => {
   pageWidth = window.innerWidth;
-  setTranslate(-currentPage*pageWidth);
+  setTranslate(-currentPage * pageWidth);
 });
 
+/* Touch handling (horizontal only) */
 document.addEventListener("touchstart", e => {
-  clearTimeout(hideTimeout);
-
   startX = e.touches[0].clientX;
   startY = e.touches[0].clientY;
-
   currentX = startX;
-  currentY = startY;
-
   startTime = Date.now();
-
   isSwiping = true;
-  gestureLocked = false;
   isHorizontalSwipe = false;
-
   island.classList.add("show");
-}, { passive: true });
-
+});
 
 document.addEventListener("touchmove", e => {
   if (!isSwiping) return;
 
-  currentX = e.touches[0].clientX;
-  currentY = e.touches[0].clientY;
+  const dx = e.touches[0].clientX - startX;
+  const dy = e.touches[0].clientY - startY;
 
-  const dx = currentX - startX;
-  const dy = currentY - startY;
-
-  // Lock gesture direction once movement is clear
-  if (!gestureLocked) {
-    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
-      gestureLocked = true;
-      isHorizontalSwipe = Math.abs(dx) > Math.abs(dy);
-    } else {
-      return; // wait until movement is meaningful
+  if (!isHorizontalSwipe) {
+    if (Math.abs(dx) < Math.abs(dy)) {
+      isSwiping = false;
+      return; // vertical scroll wins
     }
+    isHorizontalSwipe = true;
   }
 
-  // Ignore vertical gestures
-  if (!isHorizontalSwipe) return;
+  e.preventDefault();
+  currentX = e.touches[0].clientX;
 
-  let delta = dx;
-
-  if ((currentPage === 0 && delta > 0) ||
-      (currentPage === totalPages - 1 && delta < 0)) {
-    delta *= 0.3;
-  } else {
-    delta *= 0.6;
-  }
-
+  let delta = dx * 0.6;
   const offset = -currentPage * pageWidth + delta;
+
   container.style.transition = "none";
   setTranslate(offset);
 
-  const progress = currentPage - delta / pageWidth;
-  updateDotIndicator(progress);
-}, { passive: true });
-
+  updateDotIndicator(currentPage - delta / pageWidth);
+}, { passive: false });
 
 document.addEventListener("touchend", () => {
-  if (!isSwiping) return;
-  isSwiping = false;
-
-  // If it wasn't a horizontal swipe, do nothing
-  if (!isHorizontalSwipe) {
-    island.classList.remove("show");
-    return;
-  }
+  if (!isHorizontalSwipe) return;
 
   const distance = currentX - startX;
-  const time = Date.now() - startTime;
-  const velocity = Math.abs(distance / time);
+  const velocity = Math.abs(distance / (Date.now() - startTime));
 
-  if (
-    distance < -50 &&
-    (Math.abs(distance) > 80 || velocity > 0.5) &&
-    currentPage < totalPages - 1
-  ) {
-    currentPage++;
-  } else if (
-    distance > 50 &&
-    (Math.abs(distance) > 80 || velocity > 0.5) &&
-    currentPage > 0
-  ) {
-    currentPage--;
-  }
+  if (distance < -80 || velocity > 0.5) currentPage++;
+  if (distance > 80 || velocity > 0.5) currentPage--;
 
-  container.style.transition =
-    "transform 0.45s cubic-bezier(.22,.61,.36,1)";
-  setTranslate(-currentPage * pageWidth);
-  updateDotIndicator(currentPage);
-
-  hideTimeout = setTimeout(() => {
-    island.classList.remove("show");
-  }, 1000);
+  goToPage(currentPage);
 });
 
-
-btnPrev.addEventListener('click', () => {
-  if(currentPage > 0) goToPage(currentPage - 1);
-});
-
-btnNext.addEventListener('click', () => {
-  if(currentPage < totalPages - 1) goToPage(currentPage + 1);
-});
-
-document.querySelectorAll('.link-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const panel = btn.nextElementSibling;
-    const isOpen = panel.classList.contains('open');
-
-    document.querySelectorAll('.collapse-panel.open').forEach(p => {
-      if(p !== panel) p.classList.remove('open');
-    });
-
-    panel.classList.toggle('open', !isOpen);
-  });
-});
+btnPrev.onclick = () => currentPage > 0 && goToPage(currentPage - 1);
+btnNext.onclick = () => currentPage < totalPages - 1 && goToPage(currentPage + 1);
 
 setTranslate(0);
 updateDotIndicator(0);
 
 /* ================================
-   ✅ FIXED FETCH (ONLY NEW PART)
-   ================================ */
-/* ================================
-   Banner fetch + safe cache
+   Page 1: Profile Banner (Star Rail)
    ================================ */
 
 const bannerImg = document.getElementById("banner");
-const CACHE_KEY = "hsr_banner_url";
+const PROFILE_CACHE_KEY = "hsr_profile_banner";
 
-// Load cached banner instantly (if exists)
-const cachedBanner = localStorage.getItem(CACHE_KEY);
-if (cachedBanner) {
-  bannerImg.src = cachedBanner;
-}
+const cachedProfile = localStorage.getItem(PROFILE_CACHE_KEY);
+if (cachedProfile) bannerImg.src = cachedProfile;
 
-// Fetch latest banner in background
 fetch("https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices")
   .then(res => res.json())
   .then(data => {
-    const lastNotice = data?.at(-1);
-    const banners = lastNotice?.banner || [];
-
-    // SAFE banner selection
-    // Prefer primary banner, fallback to last
-    const bannerUrl = banners[0] || banners.at(-1);
-
-    if (!bannerUrl) return;
-
-    // Update cache only if changed
-    if (bannerUrl !== cachedBanner) {
-      bannerImg.src = bannerUrl;
-      localStorage.setItem(CACHE_KEY, bannerUrl);
-    }
+    const notice = [...data].reverse().find(n => n.banner?.length);
+    const bannerUrl = notice?.banner?.[0];
+    if (!bannerUrl || bannerUrl === cachedProfile) return;
+    bannerImg.src = bannerUrl;
+    localStorage.setItem(PROFILE_CACHE_KEY, bannerUrl);
   })
-  .catch(err => console.error("Banner fetch error:", err));
-  
+  .catch(console.error);
+
+/* ================================
+   Shared Banner Loader (Page 2)
+   ================================ */
+
 function loadHoYoBanner({ key, api, target }) {
   const CACHE_KEY = `hoyo_banner_${key}`;
   const cached = localStorage.getItem(CACHE_KEY);
 
-  // Instant load from cache
   if (cached) {
     target.style.backgroundImage = `url(${cached})`;
   }
@@ -715,19 +632,35 @@ function loadHoYoBanner({ key, api, target }) {
   fetch(api)
     .then(res => res.json())
     .then(data => {
-      const notice = data?.at(-2);
-      const banners = notice?.banner || [];
-      const bannerUrl = banners[0] || banners.at(-1);
+      if (!Array.isArray(data)) return;
 
-      if (!bannerUrl) return;
+      let bannerUrl = null;
 
-      if (bannerUrl !== cached) {
-        target.style.backgroundImage = `url(${bannerUrl})`;
-        localStorage.setItem(CACHE_KEY, bannerUrl);
+      // ⭐ STAR RAIL = SAME AS PROFILE BANNER
+      if (key === "starrail") {
+        const notice = [...data].reverse().find(n => n.banner?.length);
+        bannerUrl = notice?.banner?.at(-1);
       }
+
+      // 🎮 GENSHIN / ZZZ (safe fallback)
+      else {
+        const notice = [...data].reverse().find(n => n.banner?.length);
+        const banners = notice?.banner || [];
+        bannerUrl = banners.at(-1) || banners[0];
+      }
+
+      if (!bannerUrl || bannerUrl === cached) return;
+
+      target.style.backgroundImage = `url(${bannerUrl})`;
+      localStorage.setItem(CACHE_KEY, bannerUrl);
     })
-    .catch(err => console.error(`Banner fetch error (${key}):`, err));
+    .catch(err => console.error(`Banner fetch error (${key})`, err));
 }
+
+
+/* ================================
+   Page 2: Codes Rendering
+   ================================ */
 
 const codesContainer = document.getElementById("codes-container");
 
@@ -735,28 +668,21 @@ fetch("https://db.hashblen.com/codes")
   .then(res => res.json())
   .then(data => {
     codesContainer.innerHTML = "";
-
-    Object.entries(data).forEach(([gameKey, codes]) => {
-      if (!Array.isArray(codes) || !codes.length) return;
-      renderSection(gameKey, codes);
+    Object.entries(data).forEach(([key, list]) => {
+      if (Array.isArray(list) && list.length) renderSection(key, list);
     });
   })
-  .catch(err => {
-    console.error(err);
-    codesContainer.innerHTML = "Failed to load codes.";
-  });
+  .catch(() => codesContainer.textContent = "Failed to load codes.");
 
 function renderSection(gameKey, list) {
   const section = document.createElement("div");
   section.className = "codes-section";
 
-  // Header
   const header = document.createElement("div");
   header.className = "section-header";
   header.innerHTML = `<h3>${formatTitle(gameKey)} Codes</h3>`;
   section.appendChild(header);
 
-  // Load banner dynamically
   const bannerApis = {
     zzz: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/zenless/news/notices",
     genshin: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/genshin/news/notices",
@@ -764,58 +690,40 @@ function renderSection(gameKey, list) {
   };
 
   if (bannerApis[gameKey]) {
-    loadHoYoBanner({
-      key: gameKey,
-      api: bannerApis[gameKey],
-      target: header
-    });
+    loadHoYoBanner({ key: gameKey, api: bannerApis[gameKey], target: header });
   }
 
-  // Cards
-  list
-    .sort((a, b) => b.added_at - a.added_at)
-    .forEach(item => {
-      const card = document.createElement("div");
-      card.className = "code-card";
-
-      card.innerHTML = `
-        <div class="code-row">
-          <div class="code-text">${item.code}</div>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <div class="code-desc">${item.description}</div>
-      `;
-
-      card.querySelector(".copy-btn").addEventListener("click", () => {
-        navigator.clipboard.writeText(item.code);
-        showCopied(card);
-      });
-
-      section.appendChild(card);
-    });
+  list.sort((a, b) => b.added_at - a.added_at).forEach(item => {
+    const card = document.createElement("div");
+    card.className = "code-card";
+    card.innerHTML = `
+      <div class="code-row">
+        <div class="code-text">${item.code}</div>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="code-desc">${item.description}</div>
+    `;
+    card.querySelector(".copy-btn").onclick = () => {
+      navigator.clipboard.writeText(item.code);
+      showCopied(card);
+    };
+    section.appendChild(card);
+  });
 
   codesContainer.appendChild(section);
 }
 
-
-
 function showCopied(card) {
   const btn = card.querySelector(".copy-btn");
-  const original = btn.textContent;
   btn.textContent = "Copied!";
-  setTimeout(() => (btn.textContent = original), 1200);
+  setTimeout(() => (btn.textContent = "Copy"), 1200);
 }
 
 function formatTitle(key) {
   return key.charAt(0).toUpperCase() + key.slice(1);
 }
-
-const sectionBanners = {
-  zzz: "https://example.com/zzz-banner.jpg",
-  genshin: "https://example.com/genshin-banner.jpg",
-  starrail: "https://example.com/starrail-banner.jpg"
-};
 </script>
+
 
 
 </body>

@@ -235,6 +235,7 @@ html, body {
 }
 
 .codes-section {
+  text-align: left;
   width: 100%;
   max-width: 420px;
   margin-bottom: 32px;
@@ -678,7 +679,11 @@ document.querySelectorAll(".link-btn").forEach(btn => {
 </script>
 <script>
 const API_URL = "https://db.hashblen.com/codes";
-
+const GAME_BANNERS = {
+  zzz: "https://example.com/zzz-banner.jpg",
+  genshin: "https://example.com/genshin-banner.jpg",
+  hsr: "https://example.com/hsr-banner.jpg"
+};
 const REDEEM_URLS = {
   zzz: code => `https://zenless.hoyoverse.com/redemption?code=${code}`,
   genshin: code => `https://genshin.hoyoverse.com/en/gift?code=${code}`,
@@ -704,7 +709,9 @@ function renderCodes(data) {
     section.className = "codes-section";
 
     section.innerHTML = `
-      <h3>${game.toUpperCase()}</h3>
+      <div class="section-header" style="background-image: url(...)">
+        <h3>${game.toUpperCase()}</h3>
+      </div>
     `;
 
     codes.forEach(item => {

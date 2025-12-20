@@ -529,7 +529,7 @@ fetch(
   .then(res => res.json())
   .then(data => {
     const lastNotice = data?.at(-1);
-    const bannerUrl = lastNotice?.banner?.at(-1);
+    const bannerUrl = lastNotice?.banner?.at(-2);
 
     if (!bannerUrl) return;
 

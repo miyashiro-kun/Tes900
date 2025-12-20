@@ -10,11 +10,12 @@
         margin: 0;
         overflow: hidden;
         font-family: Arial, sans-serif;
+        background: #111;
     }
 
     .container {
         display: flex;
-        width: 300vw; /* 3 pages */
+        width: 300vw;
         height: 100vh;
         transition: transform 0.3s ease;
     }
@@ -26,22 +27,86 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 32px;
-        color: white;
     }
 
-    .page1 { background: #3498db; }
-    .page2 { background: #2ecc71; }
-    .page3 { background: #e74c3c; }
+    .page1 { background: #1abc9c; }
+    .page2 { background: #3498db; color: white; }
+    .page3 { background: #9b59b6; color: white; }
+
+    /* Linktree Card */
+    .card {
+        background: white;
+        width: 85%;
+        max-width: 350px;
+        padding: 20px;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+
+    .card h2 {
+        margin: 10px 0 5px;
+    }
+
+    .card p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .link-btn {
+        display: block;
+        text-decoration: none;
+        background: #1abc9c;
+        color: white;
+        padding: 14px;
+        margin: 10px 0;
+        border-radius: 10px;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+    .link-btn:hover {
+        background: #16a085;
+    }
 </style>
 </head>
 
 <body>
 
 <div class="container" id="container">
-    <div class="page page1">Page 1</div>
-    <div class="page page2">Page 2</div>
-    <div class="page page3">Page 3</div>
+    
+    <!-- Page 1 -->
+    <div class="page page1">
+        <div class="card">
+            <img src="https://via.placeholder.com/150" alt="Profile">
+            <h2>Your Name</h2>
+            <p>Web Developer | Designer</p>
+
+            <a href="#" class="link-btn">Instagram</a>
+            <a href="#" class="link-btn">Portfolio</a>
+            <a href="#" class="link-btn">Contact Me</a>
+        </div>
+    </div>
+
+    <!-- Page 2 -->
+    <div class="page page2">
+        <h1>Page 2</h1>
+    </div>
+
+    <!-- Page 3 -->
+    <div class="page page3">
+        <h1>Page 3</h1>
+    </div>
+
 </div>
 
 <script>
@@ -50,7 +115,6 @@
     let startX = 0;
     let isDragging = false;
 
-    // Touch events (mobile)
     document.addEventListener("touchstart", e => {
         startX = e.touches[0].clientX;
     });
@@ -60,7 +124,6 @@
         handleSwipe(startX, endX);
     });
 
-    // Mouse events (desktop)
     document.addEventListener("mousedown", e => {
         isDragging = true;
         startX = e.clientX;
@@ -75,11 +138,8 @@
     function handleSwipe(start, end) {
         let diff = start - end;
 
-        if (diff > 50 && currentPage < 2) {
-            currentPage++;
-        } else if (diff < -50 && currentPage > 0) {
-            currentPage--;
-        }
+        if (diff > 50 && currentPage < 2) currentPage++;
+        else if (diff < -50 && currentPage > 0) currentPage--;
 
         container.style.transform = `translateX(-${currentPage * 100}vw)`;
     }

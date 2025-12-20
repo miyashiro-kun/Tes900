@@ -509,6 +509,30 @@ body {
     -ms-overflow-style: none; /* IE and Edge */
 }
 
+.container {
+  /* Change width: 300vw to generic width */
+  width: 100%; 
+  display: flex;
+  height: 100vh;
+  /* ... existing styles ... */
+}
+
+/* FIX 3: Styling for the API description */
+.code-desc {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* FIX 4: Ensure Link Tree buttons don't overflow on small screens */
+.link-btn {
+  /* existing styles */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 </style>
 </head>
 <body>

@@ -284,6 +284,41 @@ html, body {
   text-align: center;
 }
 
+.section-header {
+  position: relative;
+  height: 90px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-end;
+  padding: 14px 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  background-size: cover;
+  background-position: center;
+}
+
+.section-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.75),
+    rgba(0,0,0,0.25)
+  );
+}
+
+.section-header h3 {
+  position: relative;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  z-index: 1;
+}
+
+
+
 
 .page3 {
   background: #064e3b;
@@ -604,7 +639,7 @@ if (cachedBanner) {
 fetch("https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices")
   .then(res => res.json())
   .then(data => {
-    const lastNotice = data?.at(-2);
+    const lastNotice = data?.at(-1);
     const banners = lastNotice?.banner || [];
 
     // SAFE banner selection
@@ -620,6 +655,32 @@ fetch("https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/
     }
   })
   .catch(err => console.error("Banner fetch error:", err));
+  
+function loadHoYoBanner({ key, api, target }) {
+  const CACHE_KEY = `hoyo_banner_${key}`;
+  const cached = localStorage.getItem(CACHE_KEY);
+
+  // Instant load from cache
+  if (cached) {
+    target.style.backgroundImage = `url(${cached})`;
+  }
+
+  fetch(api)
+    .then(res => res.json())
+    .then(data => {
+      const notice = data?.at(-2);
+      const banners = notice?.banner || [];
+      const bannerUrl = banners[0] || banners.at(-1);
+
+      if (!bannerUrl) return;
+
+      if (bannerUrl !== cached) {
+        target.style.backgroundImage = `url(${bannerUrl})`;
+        localStorage.setItem(CACHE_KEY, bannerUrl);
+      }
+    })
+    .catch(err => console.error(`Banner fetch error (${key}):`, err));
+}
 
 const codesContainer = document.getElementById("codes-container");
 
@@ -630,7 +691,7 @@ fetch("https://db.hashblen.com/codes")
 
     Object.entries(data).forEach(([gameKey, codes]) => {
       if (!Array.isArray(codes) || !codes.length) return;
-      renderSection(formatTitle(gameKey), codes);
+      renderSection(gameKey, codes);
     });
   })
   .catch(err => {
@@ -638,13 +699,32 @@ fetch("https://db.hashblen.com/codes")
     codesContainer.innerHTML = "Failed to load codes.";
   });
 
-function renderSection(title, list) {
+function renderSection(gameKey, list) {
   const section = document.createElement("div");
   section.className = "codes-section";
 
-  section.innerHTML = `<h3>${title} Codes</h3>`;
+  // Header
+  const header = document.createElement("div");
+  header.className = "section-header";
+  header.innerHTML = `<h3>${formatTitle(gameKey)} Codes</h3>`;
+  section.appendChild(header);
 
-  // Optional: newest first
+  // Load banner dynamically
+  const bannerApis = {
+    zzz: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/zenless/news/notices",
+    genshin: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/genshin/news/notices",
+    starrail: "https://api.allorigins.win/raw?url=https://api.ennead.cc/mihoyo/starrail/news/notices"
+  };
+
+  if (bannerApis[gameKey]) {
+    loadHoYoBanner({
+      key: gameKey,
+      api: bannerApis[gameKey],
+      target: header
+    });
+  }
+
+  // Cards
   list
     .sort((a, b) => b.added_at - a.added_at)
     .forEach(item => {
@@ -670,6 +750,8 @@ function renderSection(title, list) {
   codesContainer.appendChild(section);
 }
 
+
+
 function showCopied(card) {
   const btn = card.querySelector(".copy-btn");
   const original = btn.textContent;
@@ -681,7 +763,11 @@ function formatTitle(key) {
   return key.charAt(0).toUpperCase() + key.slice(1);
 }
 
-
+const sectionBanners = {
+  zzz: "https://example.com/zzz-banner.jpg",
+  genshin: "https://example.com/genshin-banner.jpg",
+  starrail: "https://example.com/starrail-banner.jpg"
+};
 </script>
 
 

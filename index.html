@@ -5,112 +5,105 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Smooth Swipe Island + Elastic Edge</title>
+<title>Smooth Swipe Island + Link Tree Default</title>
 
 <style>
-  * { box-sizing: border-box; }
+* { box-sizing: border-box; }
 
-  body {
-    margin: 0;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    background: black;
-    touch-action: pan-y;
-  }
+body {
+  margin:0;
+  overflow:hidden;
+  font-family: Arial, sans-serif;
+  background:black;
+  touch-action: pan-y;
+}
 
-  .container {
-    display: flex;
-    width: 300vw;
-    height: 100vh;
-    will-change: transform;
-  }
+.container {
+  display:flex;
+  width:300vw;
+  height:100vh;
+  will-change: transform;
+}
 
-  .page {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-  }
+.page {
+  width:100vw;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:white;
+}
 
-  .page1 { background: #020617; }
-  .page2 { background: #1e3a8a; }
-  .page3 { background: #064e3b; }
+.page1 {background:#020617;}
+.page2 {background:#1e3a8a;}
+.page3 {background:#064e3b;}
 
-  .profile {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: url("https://via.placeholder.com/300") center/cover;
-    border: 4px solid white;
-    margin-bottom: 20px;
-  }
+.profile {
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:url("https://via.placeholder.com/300") center/cover;
+  border:4px solid white;
+  margin-bottom:20px;
+}
 
-  .btn {
-    width: 220px;
-    padding: 14px;
-    margin: 8px 0;
-    border-radius: 30px;
-    border: none;
-    font-size: 16px;
-    font-weight: bold;
-  }
+.btn {
+  width:220px;
+  padding:14px;
+  margin:8px 0;
+  border-radius:30px;
+  border:none;
+  font-size:16px;
+  font-weight:bold;
+}
 
-  .island {
-    position: fixed;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(14px);
-    padding: 10px 20px;
-    border-radius: 999px;
-    display: flex;
-    gap: 10px;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    pointer-events: none;
-    z-index: 999;
-  }
+.island {
+  position: fixed;
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(14px);
+  padding:10px 20px;
+  border-radius:999px;
+  display:flex;
+  gap:10px;
+  opacity:0;
+  transition:opacity 0.25s ease;
+  pointer-events:none;
+  z-index:999;
+}
 
-  .island.show { opacity: 1; }
+.island.show {opacity:1;}
 
-  .dot {
-    width: 8px;
-    height: 8px;
-    background: #666;
-    border-radius: 50%;
-    transition: all 0.25s ease;
-  }
+.dot-wrapper {
+  position: relative;
+  width: 60px;
+  height:14px;
+}
 
-  .dot.active {
-    width: 14px;
-    height: 14px;
-    background: white;
-  }
+.dot {
+  width:8px;
+  height:8px;
+  background:#666;
+  border-radius:50%;
+  position:absolute;
+  top:0;
+  transition:all 0.25s ease;
+}
 
-  .dot-wrapper {
-    position: relative;
-    width: 60px;
-    height: 14px;
-  }
-
-  .dot-indicator {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: white;
-    transition: left 0.25s ease;
-  }
-
+.dot-indicator {
+  position:absolute;
+  top:0;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:white;
+  transition:left 0.1s linear;
+}
 </style>
 </head>
-
 <body>
 
 <div class="container" id="container">
@@ -124,7 +117,6 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
   <div class="page page3"><h1>Page 3</h1></div>
 </div>
 
-<!-- Island with smooth moving dot -->
 <div class="island" id="island">
   <div class="dot-wrapper">
     <div class="dot" style="left:0;"></div>
@@ -135,90 +127,93 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
 </div>
 
 <script>
-  const container = document.getElementById("container");
-  const island = document.getElementById("island");
-  const dotIndicator = document.getElementById("dot-indicator");
+const container = document.getElementById("container");
+const island = document.getElementById("island");
+const dotIndicator = document.getElementById("dot-indicator");
 
-  const totalPages = 3;
-  const pageWidth = window.innerWidth;
-  const dotSpacing = 23; // distance between dots
-  let currentPage = 0;
-  let startX = 0;
-  let currentX = 0;
-  let startTime = 0;
-  let isSwiping = false;
-  let hideTimeout;
+const totalPages = 3;
+const pageWidth = window.innerWidth;
+const dotSpacing = 23;
 
-  function setTranslate(x, animate=false){
-    container.style.transition = animate 
-      ? "transform 0.45s cubic-bezier(.22,.61,.36,1)"
-      : "none";
-    container.style.transform = `translateX(${x}px)`;
+let currentPage = 0; // DEFAULT page = Link Tree (page1)
+let startX = 0;
+let currentX = 0;
+let startTime = 0;
+let isSwiping = false;
+let hideTimeout = null;
+
+// Set initial container position
+container.style.transform = `translateX(${-currentPage*pageWidth}px)`;
+
+// Dot helper
+function updateDotIndicator(progress){
+  const maxLeft = dotSpacing*(totalPages-1);
+  dotIndicator.style.left = `${Math.min(Math.max(progress,0),totalPages-1)*dotSpacing}px`;
+}
+
+document.addEventListener("touchstart", e=>{
+  clearTimeout(hideTimeout);
+  startX = e.touches[0].clientX;
+  currentX = startX;
+  startTime = Date.now();
+  isSwiping = true;
+  island.classList.add("show");
+});
+
+document.addEventListener("touchmove", e=>{
+  if(!isSwiping) return;
+  currentX = e.touches[0].clientX;
+  let delta = currentX - startX;
+
+  // Edge resistance
+  if((currentPage===0 && delta>0) || (currentPage===totalPages-1 && delta<0)){
+    delta *= 0.3;
+  } else {
+    delta *= 0.6;
   }
 
-  function updateDotIndicator(progress){
-    // progress = 0..1
-    const maxLeft = dotSpacing * (totalPages - 1);
-    dotIndicator.style.left = `${progress * maxLeft}px`;
+  // Move container
+  const offset = -currentPage*pageWidth + delta;
+  setTranslate(offset,false);
+
+  // Smooth dot
+  const progress = currentPage - delta/pageWidth;
+  updateDotIndicator(progress);
+});
+
+document.addEventListener("touchend", ()=>{
+  if(!isSwiping) return;
+  isSwiping = false;
+
+  const distance = currentX - startX;
+  const time = Date.now()-startTime;
+  const velocity = Math.abs(distance/time);
+
+  const swipeLeft = distance<-50;
+  const swipeRight = distance>50;
+
+  if(swipeLeft && (Math.abs(distance)>80 || velocity>0.5) && currentPage<totalPages-1){
+    currentPage++;
+  } else if(swipeRight && (Math.abs(distance)>80 || velocity>0.5) && currentPage>0){
+    currentPage--;
   }
 
-  document.addEventListener("touchstart", e => {
-    clearTimeout(hideTimeout);
-    startX = e.touches[0].clientX;
-    currentX = startX;
-    startTime = Date.now();
-    isSwiping = true;
-    island.classList.add("show");
-  });
-
-  document.addEventListener("touchmove", e => {
-    if(!isSwiping) return;
-    currentX = e.touches[0].clientX;
-    let delta = currentX - startX;
-
-    // 🔹 Edge resistance
-    if((currentPage === 0 && delta > 0) || (currentPage === totalPages-1 && delta < 0)){
-      delta *= 0.3; // resist at edges
-    } else {
-      delta *= 0.6; // normal swipe
-    }
-
-    setTranslate(-currentPage * pageWidth + delta, false);
-
-    // 🔹 Smooth dot
-    const progress = Math.min(Math.max(currentPage - delta / pageWidth, 0), totalPages-1);
-    updateDotIndicator(progress);
-  });
-
-  document.addEventListener("touchend", () => {
-    if(!isSwiping) return;
-    isSwiping = false;
-
-    const distance = currentX - startX;
-    const time = Date.now() - startTime;
-    const velocity = Math.abs(distance / time);
-
-    const swipeLeft = distance < -50;
-    const swipeRight = distance > 50;
-
-    if(swipeLeft && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage < totalPages-1){
-      currentPage++;
-    } else if(swipeRight && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage > 0){
-      currentPage--;
-    }
-
-    // Snap to page
-    setTranslate(-currentPage * pageWidth, true);
-    updateDotIndicator(currentPage);
-
-    hideTimeout = setTimeout(()=>{
-      island.classList.remove("show");
-    },1000);
-  });
-
-  // Initial dot position
+  // Snap
+  setTranslate(-currentPage*pageWidth,true);
   updateDotIndicator(currentPage);
-</script>
 
+  hideTimeout = setTimeout(()=>{
+    island.classList.remove("show");
+  },1000);
+});
+
+function setTranslate(x,animate=false){
+  container.style.transition = animate?"transform 0.45s cubic-bezier(.22,.61,.36,1)":"none";
+  container.style.transform = `translateX(${x}px)`;
+}
+
+// Initial dot
+updateDotIndicator(currentPage);
+</script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
-<title>Swipe Link Tree</title>
+<title>Swipe Link Tree with Collapse</title>
 <style>
 * { box-sizing: border-box; }
 
@@ -115,8 +115,10 @@ html, body {
 }
 
 .link-btn {
-  background: #ffe5f3;
-  border-radius: 20px;
+  width: 90vw;
+  max-width: 360px;
+  background: #ffffff;
+  border-radius: 10px;
   border: none;
   padding: 14px 20px;
   font-weight: 600;
@@ -129,10 +131,11 @@ html, body {
   color: #222;
   box-shadow: 0 4px 10px rgb(255 192 203 / 0.3);
   transition: background-color 0.3s ease;
-
+  margin-top: 13px;
   -webkit-tap-highlight-color: transparent;
   outline: none;
   user-select: none;
+  position: relative;
 }
 
 .link-btn:hover {
@@ -145,6 +148,57 @@ html, body {
   display: inline-block;
   width: 28px;
   text-align: center;
+}
+
+/* Collapse panel container */
+.collapse-panel {
+  overflow: hidden;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition:
+    max-height 0.35s ease,
+    padding-top 0.35s ease,
+    padding-bottom 0.35s ease;
+  padding-left: 14px;
+  margin-top: -13px;
+  color: #666;
+  font-size: 0.9rem;
+  background: #fff0f8;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgb(255 192 203 / 0.2);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.collapse-panel.open {
+  max-height: 90px; /* adjust if needed */
+  padding-top: 25px;
+  padding-bottom: 8px;
+}
+
+
+/* Visit button inside collapse */
+.collapse-panel button.visit-btn {
+  background: #ec1a8f;
+  color: white;
+  border: none;
+  border-radius: 18px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right:10px;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+}
+
+.collapse-panel button.visit-btn:hover {
+  background: #c2177d;
 }
 
 /* --- Page 2 and 3 --- */
@@ -198,8 +252,8 @@ html, body {
   background: #666;
   border-radius: 50%;
   position: absolute;
-  margin-top:3px;
   top: 0;
+  margin-top:3px;
   transition: all 0.25s ease;
 }
 
@@ -267,10 +321,35 @@ html, body {
       <button class="btn-message">Message me</button>
     </div>
     <div class="links">
-      <button class="link-btn"><span>🏀</span> My Dribbble</button>
-      <button class="link-btn"><span>🎨</span> Freebies UI Kit</button>
-      <button class="link-btn"><span>🔗</span> My Linkedin</button>
-      <button class="link-btn"><span>📝</span> Just write my thoughts</button>
+      <!-- Each link-btn with collapse panel -->
+      <div>
+        <button class="link-btn"><span>🏀</span> My Dribbble</button>
+        <div class="collapse-panel">
+          <div>visit me</div>
+          <button class="visit-btn" onclick="alert('Dribbble clicked')">Go</button>
+        </div>
+      </div>
+      <div>
+        <button class="link-btn"><span>🎨</span> Freebies UI Kit</button>
+        <div class="collapse-panel">
+          <div>visit me</div>
+          <button class="visit-btn" onclick="alert('Freebies clicked')">Go</button>
+        </div>
+      </div>
+      <div>
+        <button class="link-btn"><span>🔗</span> My Linkedin</button>
+        <div class="collapse-panel">
+          <div>visit me <br> everytime u wanted </div>
+          <button class="visit-btn" onclick="alert('Linkedin clicked')">Go</button>
+        </div>
+      </div>
+      <div>
+        <button class="link-btn"><span>📝</span> Just write my thoughts</button>
+        <div class="collapse-panel">
+          <div>visit me</div>
+          <button class="visit-btn" onclick="alert('Thoughts clicked')">Go</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -412,6 +491,26 @@ btnNext.addEventListener('click', () => {
   if(currentPage < totalPages - 1){
     goToPage(currentPage + 1);
   }
+});
+
+// Collapse animation logic
+document.querySelectorAll('.link-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const panel = btn.nextElementSibling;
+    const isOpen = panel.classList.contains('open');
+    
+    // Close all panels
+    document.querySelectorAll('.collapse-panel.open').forEach(p => {
+      if(p !== panel) p.classList.remove('open');
+    });
+
+    // Toggle current panel
+    if (isOpen) {
+      panel.classList.remove('open');
+    } else {
+      panel.classList.add('open');
+    }
+  });
 });
 
 // Initialize position and dot indicator

@@ -52,7 +52,7 @@ html, body {
 .linktree-card {
   background: #ffffff;
   border-radius: 20px;
-  padding: 25px 20px;
+  padding-bottom: 20px;
   width: 90vw;
   max-width: 360px;
   box-shadow: 0 8px 24px rgb(145, 184, 155 / 0.4);
@@ -63,10 +63,10 @@ html, body {
 }
 
 .profile-photo {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  border: 3px solid white;
+  width: 90vw;
+  max-width: 360px;
+  max-height: 150px;
+  border-radius: 20px 20px 0 0;
   object-fit: cover;
   margin-bottom: 15px;
 }
@@ -315,7 +315,7 @@ html, body {
   <!-- Page 1 Link Tree -->
   <div class="page page1">
     <div class="linktree-card">
-      <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile" class="profile-photo" />
+      <img id="banner" alt="Banner Image" class="profile-photo" />
       <h2 class="name">Eina Antaswari Kinanthi</h2>
       <p class="desc">Senior UI/UX Designer with big dreams. 🚀</p>
       <button class="btn-message">Message me</button>
@@ -396,7 +396,8 @@ function setTranslate(x){
 }
 
 function updateDotIndicator(progress){
-  dotIndicator.style.left = `${Math.min(Math.max(progress,0),totalPages-1)*23}px`;
+  dotIndicator.style.left =
+    `${Math.min(Math.max(progress,0),totalPages-1)*23}px`;
 }
 
 function showIsland(){
@@ -411,19 +412,18 @@ function goToPage(page){
   if(page < 0) page = 0;
   if(page >= totalPages) page = totalPages - 1;
   currentPage = page;
-  container.style.transition = "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+  container.style.transition =
+    "transform 0.45s cubic-bezier(.22,.61,.36,1)";
   setTranslate(-currentPage*pageWidth);
   updateDotIndicator(currentPage);
   showIsland();
 }
 
-// Update pageWidth on resize (responsive)
 window.addEventListener('resize', ()=>{
   pageWidth = window.innerWidth;
   setTranslate(-currentPage*pageWidth);
 });
 
-// Touch events for swipe mobile
 document.addEventListener("touchstart", e=>{
   clearTimeout(hideTimeout);
   startX = e.touches[0].clientX;
@@ -438,8 +438,8 @@ document.addEventListener("touchmove", e=>{
   currentX = e.touches[0].clientX;
   let delta = currentX - startX;
 
-  // Edge resistance
-  if((currentPage===0 && delta>0) || (currentPage===totalPages-1 && delta<0)){
+  if((currentPage===0 && delta>0) ||
+     (currentPage===totalPages-1 && delta<0)){
     delta *= 0.3;
   } else {
     delta *= 0.6;
@@ -449,7 +449,6 @@ document.addEventListener("touchmove", e=>{
   container.style.transition = "none";
   setTranslate(offset);
 
-  // Smooth dot
   const progress = currentPage - delta/pageWidth;
   updateDotIndicator(progress);
 });
@@ -462,16 +461,16 @@ document.addEventListener("touchend", ()=>{
   const time = Date.now()-startTime;
   const velocity = Math.abs(distance/time);
 
-  const swipeLeft = distance < -50;
-  const swipeRight = distance > 50;
-
-  if(swipeLeft && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage < totalPages - 1){
+  if(distance < -50 && (Math.abs(distance) > 80 || velocity > 0.5)
+     && currentPage < totalPages - 1){
     currentPage++;
-  } else if(swipeRight && (Math.abs(distance) > 80 || velocity > 0.5) && currentPage > 0){
+  } else if(distance > 50 && (Math.abs(distance) > 80 || velocity > 0.5)
+     && currentPage > 0){
     currentPage--;
   }
 
-  container.style.transition = "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+  container.style.transition =
+    "transform 0.45s cubic-bezier(.22,.61,.36,1)";
   setTranslate(-currentPage*pageWidth);
   updateDotIndicator(currentPage);
 
@@ -480,43 +479,60 @@ document.addEventListener("touchend", ()=>{
   },1000);
 });
 
-// Buttons for desktop navigation
 btnPrev.addEventListener('click', () => {
-  if(currentPage > 0){
-    goToPage(currentPage - 1);
-  }
+  if(currentPage > 0) goToPage(currentPage - 1);
 });
 
 btnNext.addEventListener('click', () => {
-  if(currentPage < totalPages - 1){
-    goToPage(currentPage + 1);
-  }
+  if(currentPage < totalPages - 1) goToPage(currentPage + 1);
 });
 
-// Collapse animation logic
 document.querySelectorAll('.link-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const panel = btn.nextElementSibling;
     const isOpen = panel.classList.contains('open');
-    
-    // Close all panels
+
     document.querySelectorAll('.collapse-panel.open').forEach(p => {
       if(p !== panel) p.classList.remove('open');
     });
 
-    // Toggle current panel
-    if (isOpen) {
-      panel.classList.remove('open');
-    } else {
-      panel.classList.add('open');
-    }
+    panel.classList.toggle('open', !isOpen);
   });
 });
 
-// Initialize position and dot indicator
 setTranslate(0);
 updateDotIndicator(0);
+
+/* ================================
+   ✅ FIXED FETCH (ONLY NEW PART)
+   ================================ */
+
+fetch("https://api.ennead.cc/mihoyo/starrail/news/notices")
+  .then(res => res.json())
+  .then(data => {
+
+    if (!Array.isArray(data) || data.length === 0) {
+      console.warn("No notices");
+      return;
+    }
+
+    const lastNotice = data[data.length - 1];
+
+    if (!Array.isArray(lastNotice.banner) ||
+        lastNotice.banner.length === 0) {
+      console.warn("No banner in last notice");
+      return;
+    }
+
+    const lastBannerUrl =
+      lastNotice.banner[lastNotice.banner.length - 1];
+
+    console.log("Banner loaded:", lastBannerUrl);
+    document.getElementById("banner").src = lastBannerUrl;
+  })
+  .catch(err => console.error("Fetch error:", err));
 </script>
+
 
 </body>
 </html>

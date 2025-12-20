@@ -89,12 +89,13 @@ html, body {
   padding: 10px 0;
   background: #e0e0e0;
   border: none;
-  width: 300px;
-  max-width: 200px;
+  width: 100px;
+  max-width: 100px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s;
+  
 }
 
 .tab-btn.active {
@@ -237,6 +238,7 @@ html, body {
 .page2 {
   background: #f8fafc;
   color: #0f172a;
+  width: 100%;
 }
 
 .codes-section h3 {
@@ -261,7 +263,10 @@ html, body {
   padding: 12px 16px;
   margin-bottom: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  
+
+  width: 90vw;       /* Uses viewport width */
+  max-width: 400px;  /* Prevents it from getting too wide on desktop */
+  box-sizing: border-box; /* Ensures padding doesn't add to width */
   /* --- NEW ANIMATION PROPERTIES --- */
   opacity: 0; /* Start invisible */
   animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
@@ -420,28 +425,6 @@ html, body {
   }
 }
 
-
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
-  justify-content: center;
-}
-
-.tab-btn {
-  padding: 8px 20px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: #f0f0f0;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.tab-btn.active {
-  background: #38bdf8;
-  color: #fff;
-  border-color: #38bdf8;
-}
 
 /* Code card style */
 .code-card {

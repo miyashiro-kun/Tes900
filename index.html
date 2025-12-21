@@ -475,11 +475,7 @@ html, body {
   right: 0;
   bottom: 0;
   /* Adjust rgba(0,0,0,0.5) to change the "half transparent" darkness */
-  background: linear-gradient(
-    to bottom, 
-    rgba(255, 255, 255, 1) 0%,   /* Top: Half-transparent black */
-    rgba(0, 0, 0, 0.2) 100%    /* Bottom: Fully transparent */
-  );
+
   z-index: 1;
 }
 
@@ -859,9 +855,10 @@ body {
   </div>
 
   <!-- Codes container -->
-  <div id="codes-container">
+  <div id="codes-container" style="padding-bottom:50px">
     <p class="loading">Loading codes...</p>
   </div>
+  
 </div>
 
 

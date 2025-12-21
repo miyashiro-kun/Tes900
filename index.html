@@ -20,16 +20,10 @@ html, body {
 
 .container {
   display:flex;
-  width: 400%; /* Total width for 3 pages */
+  width: 300%; /* Total width for 3 pages */
   height:100vh;
   will-change: transform;
   transition: transform 0.45s cubic-bezier(.22,.61,.36,1);
-}
-
-.page4 {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  color: white;
-  justify-content: center;
 }
 
 .page {
@@ -425,7 +419,7 @@ html, body {
         </button>
         <div class="modern-panel">
           <p>Gak ada waktu main? Serahin ke ahlinya!</p>
-          <button class="action-btn joki-btn-color" onclick="goToPage(4)">Lihat Pricelist</button>
+          <button class="action-btn joki-btn-color" onclick="goToPage(2)">Lihat Pricelist</button>
         </div>
       </div>
     </div>
@@ -444,18 +438,15 @@ html, body {
   </div>
 
   <div class="page page3">
+    <iframe src="https://kodokkyun-project.vercel.app/pages/joki.html" id="jokiIframe"></iframe>
   </div>
   
-  <div class="page page4">
-    <iframe src="https://kodokkyun-project.vercel.app/pages/joki.html" id="jokiIframe"></iframe>
-</div>
   
 
 </div>
 
 <div class="island" id="island">
   <div class="dot-wrapper">
-    <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
@@ -471,7 +462,7 @@ html, body {
 const container = document.getElementById("container");
 const island = document.getElementById("island");
 const dotIndicator = document.getElementById("dot-indicator");
-const totalPages = 4;
+const totalPages = 3;
 let currentPage = 0;
 let startX = 0, currentX = 0, isSwiping = false, hideTimeout;
 

@@ -77,42 +77,53 @@ html, body {
 
 .avatar-wrapper {
   position: relative;
-  width: 110px;
-  height: 110px;
+  width: 130px;
+  height: 130px;
   margin: 0 auto 15px;
+  padding: 4px;
+  background: linear-gradient(135deg, #22c55e, #38bdf8);
+  border-radius: 140px; /* Squircle */
 }
 
 .main-avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 35px; /* Squircle style ala iOS/Dribbble */
-  border: 4px solid white;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border-radius: 140px;
+  border: 4px solid #0f172a;
 }
 
-.online-indicator {
+.status-badge {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 18px;
-  height: 18px;
-  background: #22c55e;
-  border: 3px solid white;
-  border-radius: 50%;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(34, 197, 94, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  color: #4ade80;
+  padding: 2px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
 }
 
 .name-premium {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 800;
-  color: #1a2e1f;
-  margin: 0;
+  margin: 25px 0 5px;
+  background: linear-gradient(to bottom, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .tagline {
-  color: #64748b;
-  font-size: 0.95rem;
-  margin-top: 5px;
+  color: white;
+  padding: 10px 15px 10px 15px;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #22c55e, #38bdf8);
+  border-radius: 140px; /* Squircle */
 }
 
 /* Links List */
@@ -856,7 +867,7 @@ body {
     <style>
         .joki-master-container {
             /* Mencegah terpotong oleh header fixed website utama */
-            padding-top: 20px; 
+            padding-top: 0px; 
             position: relative;
             display: block;
             clear: both;
@@ -881,7 +892,7 @@ body {
             min-height: 200px;
             padding: 40px 20px; 
             background: linear-gradient(to bottom, rgba(12, 16, 29, 0.5), var(--joki-bg)), 
-                        url('https://images8.alphacoders.com/131/1311545.jpeg') center/cover;
+                        url('https://fastcdn.hoyoverse.com/content-v2/hkrpg/161539/f40835cbd720d841de83551695162970_9071788954763536383.png') center/cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -913,7 +924,7 @@ body {
             display: flex;
             align-items: center;
             gap: 12px;
-            color: var(--joki-blue);
+            color: white;
             text-transform: uppercase;
             font-size: 1.3rem;
             font-weight: bold;
@@ -922,7 +933,7 @@ body {
           background-position: left;
           background-repeat: no-repeat;
           background-size: 100%;
-          margin-bottom: 2px;
+          margin-bottom: 12px;
           margin-left: .1rem;
           margin-right: auto;
           padding-left: 35px;
@@ -948,13 +959,35 @@ body {
             display: flex;
             flex-direction: column;
             clip-path: polygon(0 0, 92% 0, 100% 10%, 100% 100%, 8% 100%, 0 90%);
+            transition: all 1.25s ease;
+            margin-top:12px ;
+        }
+        
+        .joki-card-new {
+            background: linear-gradient(to bottom, rgba(12, 16, 29, 0.5), var(--joki-bg)), 
+                        url('https://fastcdn.hoyoverse.com/content-v2/hkrpg/161539/f40835cbd720d841de83551695162970_9071788954763536383.png') center/cover;
+            
+            border: 1px solid var(--joki-border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            clip-path: polygon(0 0, 92% 0, 100% 10%, 100% 100%, 8% 100%, 0 90%);
+            transition: all 1.25s ease;
+            margin-top:12px ;
+        }
+        
+        .joki-card-new:hover {
+            border-color: var(--joki-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            transition: all 1.25s ease;
         }
         
         .joki-card:hover {
             border-color: var(--joki-gold);
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-            transition: all 0.25s ease;
+            transition: all 1.25s ease;
         }
 
         .joki-card-h3 {
@@ -973,8 +1006,7 @@ body {
         }
         
         .joki-category-desc{
-          
-          
+          margin-bottom: 10px;
           color: #e9e9e9;
         }
 
@@ -999,7 +1031,7 @@ body {
         @media (max-width: 480px) {
             .joki-master-container {
                 /* Tambahkan padding top jika header web aslimu tipe 'Sticky/Fixed' */
-                padding-top: 60px; 
+                padding-top: 0px; 
             }
             .joki-header {
                 min-height: 160px;
@@ -1114,7 +1146,7 @@ body {
                 <div class="joki-card-price">Cek Floor</div>
                 <button class="joki-btn" onclick="jokiPushOrder('Endgame Content', 'Tanya Floor')">Deploy</button>
             </div>
-            <div class="joki-card">
+            <div class="joki-card-new">
                 <h3 class="joki-card-h3">Main Story</h3>
                 <p class="joki-card-p">Selesaikan Story Mission yang panjang (tidak bisa skip).</p>
                 <div class="joki-card-price">Rp 50k - 200k</div>

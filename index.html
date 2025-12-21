@@ -3,119 +3,100 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
-<title>Kodokkyun | Link Tree</title>
+<title>Swipe Link Tree with Collapse</title>
 <style>
-/* --- CORE STYLES --- */
 * { box-sizing: border-box; }
 
 html, body {
   margin:0; padding:0;
   overflow:hidden;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background:black;
   height:100%;
   touch-action: pan-y;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Container & Pages */
 .container {
   display:flex;
-  width: 300%; /* Total width for 3 pages */
+  width:300vw;
   height:100vh;
   will-change: transform;
   transition: transform 0.45s cubic-bezier(.22,.61,.36,1);
+  touch-action: pan-y;
 }
 
 .page {
-  width: 100vw;
+  width:100%;
   height:100%;
   flex-shrink: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 5vh 20px;
+  padding: 5vh 3vw;
+  color: #222;
+  background: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
 }
 
-/* --- PAGE 1: REDESIGNED PREMIUM GLASS --- */
+/* --- Page 1: Link Tree --- */
+/* Container Page 1 */
 .page1 {
-    position: relative;
-    overflow: hidden; /* Prevent stars from showing outside page boundaries */
-    background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_mian_pc-sea.3870807c..jpeg) center / cover no-repeat;
-            background-color: #000; /* Fallback */
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  padding: 40px 20px !important;
 }
 
-#warpCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0; /* Put it behind everything */
-    pointer-events: none; /* Allow clicks to pass through to buttons */
-}
-
-/* Ensure all content in Page 1 sits ABOVE the canvas */
-.page1 > *:not(canvas) {
-    position: relative;
-    z-index: 1;
-}
-
+/* Profile Header */
 .profile-header {
   text-align: center;
-  margin-bottom: 40px;
-  margin-top: 20px;
+  margin-bottom: 35px;
 }
 
 .avatar-wrapper {
   position: relative;
-  width: 130px;
-  height: 130px;
+  width: 110px;
+  height: 110px;
   margin: 0 auto 15px;
-  padding: 4px;
-  background: linear-gradient(135deg, #22c55e, #38bdf8);
-  border-radius: 140px; /* Squircle */
 }
 
 .main-avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 140px;
-  border: 4px solid #0f172a;
+  border-radius: 35px; /* Squircle style ala iOS/Dribbble */
+  border: 4px solid white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-.status-badge {
+.online-indicator {
   position: absolute;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(34, 197, 94, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(34, 197, 94, 0.5);
-  color: #4ade80;
-  padding: 2px 12px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 1px;
+  bottom: 5px;
+  right: 5px;
+  width: 18px;
+  height: 18px;
+  background: #22c55e;
+  border: 3px solid white;
+  border-radius: 50%;
 }
 
 .name-premium {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 800;
-  margin: 15px 0 5px;
-  background: linear-gradient(to bottom, #fff, #94a3b8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #1a2e1f;
+  margin: 0;
 }
 
 .tagline {
-  color: #94a3b8;
-  font-size: 0.9rem;
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-top: 5px;
 }
 
+/* Links List */
 .links-container {
   width: 100%;
   max-width: 400px;
@@ -126,24 +107,23 @@ html, body {
 
 .modern-link {
   width: 100%;
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 22px;
-  padding: 18px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 20px;
+  padding: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: white;
-  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
 
-.modern-link:active {
-  transform: scale(0.97);
-  background: rgba(255, 255, 255, 0.08);
+.modern-link:hover {
+  transform: translateY(-3px);
+  background: #ffffff;
+  box-shadow: 0 12px 20px rgba(0,0,0,0.08);
 }
 
 .link-info {
@@ -153,25 +133,30 @@ html, body {
 }
 
 .icon-box {
-  width: 45px;
-  height: 45px;
+  width: 48px;
+  height: 48px;
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 1.4rem;
 }
 
+/* Icon Background Colors */
+.tiktok-bg { background: #fee2e2; }
+.saweria-bg { background: #fef3c7; }
+.joki-bg { background: #dcfce7; }
+
 .link-text {
+  display: flex;
+  flex-direction: column;
   text-align: left;
 }
 
 .link-title {
-  display: block;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1rem;
+  color: #1e293b;
 }
 
 .link-subtitle {
@@ -180,35 +165,25 @@ html, body {
 }
 
 .arrow-icon {
-  color: #475569;
+  color: #cbd5e1;
+  font-weight: bold;
   transition: transform 0.3s;
 }
 
+/* Modern Panel */
 .modern-panel {
-  text-align: center;
-  color:white;
   max-height: 0;
   overflow: hidden;
   transition: all 0.4s ease;
   padding: 0 16px;
-  background: rgba(255,255,255,0.02);
-  border-radius: 0 0 22px 22px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 0 0 20px 20px;
   margin-top: -10px;
-  border: 0px solid rgba(255,255,255,0.05);
 }
 
 .link-item.active .modern-panel {
-  max-height: 160px;
-  background: rgba(255,255,255,0.02);
-  backdrop-filter: blur(10px);
+  max-height: 150px;
   padding: 25px 16px 16px;
-  border-width: 0 1px 1px 1px;
-}
-
-.link-item.active .modern-link {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  background: rgba(255, 255, 255, 0.08);
 }
 
 .link-item.active .arrow-icon {
@@ -221,460 +196,947 @@ html, body {
   padding: 12px;
   border-radius: 12px;
   border: none;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
+  background: #1e293b;
   color: white;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  text-transform: uppercase;
-  font-size: 0.8rem;
 }
 
 .joki-btn-color {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  color: white !important;
+  background: #059669 !important;
 }
 
-/* --- PAGE 2 STYLES --- */
+/* Highlight Effect for Joki */
+.highlight .modern-link {
+  border: 2px solid #22c55e;
+}
+
+/* Link Tree Card */
+.linktree-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding-bottom: 20px;
+  width: 90vw;
+  max-width: 360px;
+  box-shadow: 0 8px 24px rgb(145, 184, 155 / 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.profile-photo {
+  width: 90vw;
+  max-width: 360px;
+  max-height: 150px;
+  border-radius: 20px 20px 0 0;
+  object-fit: cover;
+  margin-bottom: 15px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.profile-photo[src] {
+  opacity: 1;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  background: #ffffff;
+  border: none;
+  width: 100px;
+  max-width: 100px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  
+}
+
+.tab-btn.active {
+  background: #fad57f;
+  color: #fff;
+}
+
+
+.name {
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 0 0 6px 0;
+  text-align: center;
+}
+
+.desc {
+  font-size: 0.9rem;
+  color: #444;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.btn-message {
+  background: #ec1a8f;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 35px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+}
+
+.btn-message:hover {
+  background: #c2177d;
+}
+
+/* Link Buttons */
+.links {
+  width: 90vw;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.link-btn {
+  width: 90vw;
+  max-width: 360px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: none;
+  padding: 14px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #222;
+  box-shadow: 0 8px 24px rgb(145, 184, 155 / 0.4);
+  transition: background-color 0.3s ease;
+  margin-top: 13px;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+  position: relative;
+}
+
+.link-btn:hover {
+  background: #628c6d;
+}
+
+/* Icons for links using emoji placeholders */
+.link-btn span {
+  font-size: 1.2rem;
+  display: inline-block;
+  width: 28px;
+  text-align: center;
+}
+
+/* Collapse panel container */
+.collapse-panel {
+  overflow: hidden;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition:
+    max-height 0.35s ease,
+    padding-top 0.35s ease,
+    padding-bottom 0.35s ease;
+  padding-left: 14px;
+  margin-top: -13px;
+  color: #666;
+  font-size: 0.9rem;
+  background: #edfff2;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgb(145, 184, 155 / 0.4);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.collapse-panel.open {
+  max-height: 90px; /* adjust if needed */
+  padding-top: 25px;
+  padding-bottom: 8px;
+}
+
+
+/* Visit button inside collapse */
+.collapse-panel button.visit-btn {
+  background: #628c6d;
+  color: white;
+  border: none;
+  border-radius: 18px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right:10px;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+}
+
+.collapse-panel button.visit-btn:hover {
+  background: #789e82;
+}
+
+/* --- Page 2 and 3 --- */
 .page2 {
   position: relative;
   background-size: cover;
   background-position: center;
-  background-color: black;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease-in-out;
+  /* Ensure the page is black underneath so it fades to black */
+  background-color: black; 
 }
 
+/* The Overlay: This creates the 100% to 0% transparency fade */
 .page2::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(0,0,0,0.3) 100%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Adjust rgba(0,0,0,0.5) to change the "half transparent" darkness */
+  background: linear-gradient(
+    to bottom, 
+    rgba(255, 255, 255, 1) 0%,   /* Top: Half-transparent black */
+    rgba(0, 0, 0, 0.2) 100%    /* Bottom: Fully transparent */
+  );
   z-index: 1;
 }
 
-.page2 > * { position: relative; z-index: 2; }
-
-.page-title { width: 300px; max-width: 60%; margin-bottom: 20px; }
-
-.tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-
-.tab-btn {
-  padding: 10px 15px;
-  background: white;
-  border: none;
-  border-radius: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
+/* Keep the content (Title, Tabs, Cards) above the fade */
+.page2 > * {
+  position: relative;
+  z-index: 2;
 }
 
-.tab-btn.active { background: #fad57f; }
-
-.code-card {
-  background: white;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 12px;
-  width: 90vw;
-  max-width: 400px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  opacity: 0;
-  animation: fadeInUp 0.5s forwards;
+.codes-section h3 {
+  color: #020617;
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.code-row { display: flex; justify-content: space-between; align-items: center; }
-.code-text { font-weight: 800; font-size: 1.1rem; }
-.buttons-group { display: flex; gap: 8px; }
+/* Update the .code-card class */
+.code-card {
+  background: white; /* or your specific color */
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 
-.copy-btn, .redeem-btn {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
+  width: 90vw;       /* Uses viewport width */
+  max-width: 400px;  /* Prevents it from getting too wide on desktop */
+  box-sizing: border-box; /* Ensures padding doesn't add to width */
+  /* --- NEW ANIMATION PROPERTIES --- */
+  opacity: 0; /* Start invisible */
+  animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  /* 'forwards' keeps the element visible after animation ends */
+}
+
+.copy-btn.redeem-btn {
+  background: #22c55e;
+  color: #022c22;
+}
+
+
+.page-title {
+  font-size: 0.2rem;
+  width: 300px;
+  max-width: 50%;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+
+.loading {
+  opacity: 0.7;
+  text-align: center;
+}
+
+.section-header {
+  position: relative;
+  height: 120px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-end;
+  padding: 14px 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  background-size: cover;
+  background-position: center;
+}
+
+.section-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.75),
+    rgba(0,0,0,0.25)
+  );
+}
+
+.section-header h3 {
+  position: relative;
+  margin: 0;
+  font-size: 1.2rem;
   font-weight: 700;
-  font-size: 0.75rem;
-  cursor: pointer;
+  z-index: 1;
 }
-.copy-btn { background: #22c55e; color: white; }
-.redeem-btn { background: #38bdf8; color: #020617; }
 
-/* --- PAGE 3 STYLES --- */
-.page3 { background: #064e3b; padding: 0 !important; }
-#jokiIframe { width: 100%; height: 100%; border: none; }
 
-/* --- UI ELEMENTS --- */
+
+
+.page3 {
+  background: #064e3b;
+  justify-content: center;
+}
+
+/* Island dot indicator */
 .island {
   position: fixed;
-  top: 20px;
+  top: 2vh;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(10px);
-  padding: 10px 20px;
-  border-radius: 30px;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(14px);
+  padding: 1vh 3vw;
+  border-radius: 999px;
+  display: flex;
+  gap: 2vw;
   opacity: 0;
-  transition: opacity 0.3s;
-  z-index: 1000;
+  transition: opacity 0.25s ease;
   pointer-events: none;
-}
-.island.show { opacity: 1; }
-.dot-wrapper { position: relative; width: 60px; height: 10px; display: flex; gap: 12px; }
-.dot { width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%; }
-.dot-indicator {
-  position: absolute;
-  top: -2px; left: -2px;
-  width: 12px; height: 12px;
-  background: white;
-  border-radius: 50%;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 999;
 }
 
+.island.show {
+  opacity: 1;
+}
+
+.dot-wrapper {
+  position: relative;
+  width: 60px;
+  height: 14px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #666;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  margin-top:3px;
+  transition: all 0.25s ease;
+}
+
+.dot-indicator {
+  position: absolute;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  transition: left 0.1s linear;
+}
+
+/* FAB Buttons for desktop */
 .fab {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(5px);
+  background: rgba(255 255 255 / 0.2);
+  backdrop-filter: blur(10px);
   color: white;
   border: none;
-  width: 50px; height: 50px;
   border-radius: 50%;
-  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  font-size: 24px;
   cursor: pointer;
-  z-index: 1000;
   display: none;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
 }
-@media (min-width: 800px) { .fab { display: block; } }
-.fab-left { left: 20px; }
-.fab-right { right: 20px; }
 
-.title-font { font-family: 'Segoe UI Black', sans-serif; letter-spacing: -0.5px; }
-.loading { color: #64748b; margin-top: 20px; }
+.fab:hover {
+  background: rgba(255 255 255 / 0.4);
+}
+
+.fab-left {
+  left: 12px;
+}
+
+.fab-right {
+  right: 12px;
+}
+
+/* Show FAB on desktop */
+@media (min-width: 800px) {
+  .fab {
+    display: flex;
+  }
+}
+
+
+/* Code card style */
+
+.code-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.code-text {
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+.copy-btn {
+  background: #38bdf8;
+  color: #020617;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.buttons-group {
+  display: flex;
+  gap: 8px;
+}
+
+
+.copy-btn, .redeem-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.copy-btn {
+  background: #22c55e;
+  color: white;
+}
+
+.redeem-btn {
+  background: #38bdf8;
+  color: #020617;
+}
+
+.copy-btn:active, .redeem-btn:active {
+  transform: scale(0.95);
+}
+
+/* For Chrome, Safari, and Opera */
+.scrollable-element::-webkit-scrollbar {
+    display: none;
+}
+
+/* For Firefox */
+.scrollable-element {
+    scrollbar-width: none;
+}
+
+/* For Internet Explorer and Edge */
+.scrollable-element {
+    -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.container {
+  /* Change width: 300vw to generic width */
+  width: 100%; 
+  display: flex;
+  height: 100vh;
+  /* ... existing styles ... */
+}
+
+/* FIX 3: Styling for the API description */
+.code-desc {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* FIX 4: Ensure Link Tree buttons don't overflow on small screens */
+.link-btn {
+  /* existing styles */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.title-font {
+    font-family: titleFont, impact;
+}
 </style>
 </head>
 <body>
 
 <div class="container" id="container">
-  
+  <!-- Page 1 Link Tree -->
   <div class="page page1">
-    <canvas id="warpCanvas"></canvas>
-    <div class="profile-header">
-      <div class="avatar-wrapper">
-        <img src="https://awsimages.detik.net.id/community/media/visual/2022/02/17/bruce-leung-1_34.png" alt="Kodokkyun" class="main-avatar" />
-        <div class="status-badge">● ONLINE</div>
+  <div class="profile-header">
+    <div class="avatar-wrapper">
+      <img src="https://awsimages.detik.net.id/community/media/visual/2022/02/17/bruce-leung-1_34.png" alt="Profile" class="main-avatar" />
+      <div class="online-indicator"></div>
+    </div>
+    <h2 class="name-premium">Kodokkyun</h2>
+    <p class="tagline">Wong Jowo tapi Gamer • 🎮</p>
+  </div>
+
+  <div class="links-container">
+    <div class="link-item">
+      <button class="modern-link" onclick="togglePanel(this)">
+        <div class="link-info">
+          <div class="icon-box tiktok-bg">📱</div>
+          <div class="link-text">
+            <span class="link-title">TikTok</span>
+            <span class="link-subtitle">Konten Gaming & Hiburan</span>
+          </div>
+        </div>
+        <span class="arrow-icon">↓</span>
+      </button>
+      <div class="modern-panel">
+        <p>Mampir ke TikTok lur, konten seru tiap hari! 🙏</p>
+        <button class="action-btn" onclick="window.open('URL_TIKTOK_KAMU', '_blank')">Follow Yuk</button>
       </div>
-      <h2 class="name-premium">Kodokkyun</h2>
-      <p class="tagline">Wong Jowo tapi Gamer • 🎮</p>
     </div>
 
-    <div class="links-container">
-      <div class="link-item">
-        <button class="modern-link" onclick="togglePanel(this)">
-          <div class="link-info">
-            <div class="icon-box">📱</div>
-            <div class="link-text">
-              <span class="link-title">TikTok</span>
-              <span class="link-subtitle">Konten Gaming & Hiburan</span>
-            </div>
+    <div class="link-item">
+      <button class="modern-link" onclick="togglePanel(this)">
+        <div class="link-info">
+          <div class="icon-box saweria-bg">💸</div>
+          <div class="link-text">
+            <span class="link-title">Saweria</span>
+            <span class="link-subtitle">Support Creator Lokal</span>
           </div>
-          <span class="arrow-icon">▼</span>
-        </button>
-        <div class="modern-panel">
-          <p>Mampir ke TikTok lur, konten seru tiap hari! 🙏</p>
-          <button class="action-btn" onclick="window.open('URL_TIKTOK_KAMU', '_blank')">Follow Now</button>
         </div>
+        <span class="arrow-icon">↓</span>
+      </button>
+      <div class="modern-panel">
+        <p>Tip/Donasi untuk upgrade gear streaming. Suwun!</p>
+        <button class="action-btn" onclick="window.open('https://saweria.co/kodokkyunn99', '_blank')">Tip Saweria</button>
       </div>
+    </div>
 
-      <div class="link-item">
-        <button class="modern-link" onclick="togglePanel(this)">
-          <div class="link-info">
-            <div class="icon-box">💸</div>
-            <div class="link-text">
-              <span class="link-title">Saweria</span>
-              <span class="link-subtitle">Support Creator Lokal</span>
-            </div>
+    <div class="link-item highlight">
+      <button class="modern-link" onclick="togglePanel(this)">
+        <div class="link-info">
+          <div class="icon-box joki-bg">⚔️</div>
+          <div class="link-text">
+            <span class="link-title">Jasa Joki Game</span>
+            <span class="link-subtitle">Top-tier Rank Service</span>
           </div>
-          <span class="arrow-icon">▼</span>
-        </button>
-        <div class="modern-panel">
-          <p>Tip/Donasi untuk upgrade gear streaming. Suwun!</p>
-          <button class="action-btn" onclick="window.open('https://saweria.co/kodokkyunn99', '_blank')">Tip Saweria</button>
         </div>
-      </div>
-
-      <div class="link-item">
-        <button class="modern-link" onclick="togglePanel(this)">
-          <div class="link-info">
-            <div class="icon-box">⚔️</div>
-            <div class="link-text">
-              <span class="link-title">Jasa Joki Game</span>
-              <span class="link-subtitle">Top-tier Rank Service</span>
-            </div>
-          </div>
-          <span class="arrow-icon">▼</span>
-        </button>
-        <div class="modern-panel">
-          <p>Gak ada waktu main? Serahin ke ahlinya!</p>
-          <button class="action-btn joki-btn-color" onclick="goToPage(2)">Lihat Pricelist</button>
-        </div>
+        <span class="arrow-icon">↓</span>
+      </button>
+      <div class="modern-panel">
+        <p>Gak ada waktu push rank? Serahin ke ahlinya!</p>
+        <button class="action-btn joki-btn-color" id="JOKINext">Lihat Pricelist</button>
       </div>
     </div>
   </div>
-
-  <div class="page page2">
-    <img src="https://i.ibb.co.com/TDQgJmdk/unnamed.png" class="page-title" alt="Codes"/>
-    <div class="tabs">
-      <button class="tab-btn active title-font" data-game="zzz">ZZZ</button>
-      <button class="tab-btn title-font" data-game="genshin">GENSHIN</button>
-      <button class="tab-btn title-font" data-game="hsr">HSR</button>
-    </div>
-    <div id="codes-container">
-      <p class="loading">Fetching latest codes...</p>
-    </div>
-  </div>
-
-  <div class="page page3">
-    <iframe src="https://kodokkyun-project.vercel.app/pages/joki.html" id="jokiIframe"></iframe>
-  </div>
-  
-  
-
 </div>
 
+  <!-- Page 2 -->
+  <div class="page page2">
+  <img src="https://i.ibb.co.com/TDQgJmdk/unnamed.png" class="page-title"/>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active title-font" data-game="zzz">ZENLESS</button>
+    <button class="tab-btn title-font" data-game="genshin">GENSHIN</button>
+    <button class="tab-btn title-font" data-game="hsr">STAR RAIL</button>
+  </div>
+
+  <!-- Codes container -->
+  <div id="codes-container">
+    <p class="loading">Loading codes...</p>
+  </div>
+</div>
+
+
+  <!-- Page 3 -->
+  <div class="page page3"><iframe style="border-radius: 30px; width:100%;height:100%;" src="https://kodokkyun-project.vercel.app/pages/joki.html" id="jokiIframe" frameborder="0"></iframe></div>
+</div>
+
+<!-- Island dot indicator -->
 <div class="island" id="island">
   <div class="dot-wrapper">
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
+    <div class="dot" style="left:0;"></div>
+    <div class="dot" style="left:23px;"></div>
+    <div class="dot" style="left:46px;"></div>
     <div class="dot-indicator" id="dot-indicator"></div>
   </div>
 </div>
 
-<button class="fab fab-left" id="btnPrev">&lt;</button>
-<button class="fab fab-right" id="btnNext">&gt;</button>
+<!-- FAB Buttons -->
+<button class="fab fab-left" id="btnPrev" aria-label="Previous page">&lt;</button>
+<button class="fab fab-right" id="btnNext" aria-label="Next page">&gt;</button>
 
 <script>
-/* SWIPE LOGIC */
+/* ================================
+   1. SWIPE NAVIGATION LOGIC
+   ================================ */
 const container = document.getElementById("container");
 const island = document.getElementById("island");
 const dotIndicator = document.getElementById("dot-indicator");
-const totalPages = 3;
-let currentPage = 0;
-let startX = 0, currentX = 0, isSwiping = false, hideTimeout;
+const btnPrev = document.getElementById("btnPrev");
+const btnNext = document.getElementById("btnNext");
+const JOKINext = document.getElementById("JOKINext");
+const pages = document.querySelectorAll('.page'); // Select all pages dynamically
 
-function updateIsland(progress) {
+let totalPages = pages.length;
+let pageWidth = window.innerWidth;
+let currentPage = 0;
+
+// Swipe Variables
+let startX = 0, startY = 0, currentX = 0, currentY = 0;
+let startTime = 0;
+let isSwiping = false;
+let gestureLocked = false; // true once we decide if it's scroll or swipe
+let isHorizontalSwipe = false;
+let hideTimeout = null;
+
+// Helper: Move container
+function setTranslate(x) {
+  // Use percentage for container width flexibility or pixel offset
+  container.style.transform = `translate3d(${x}px, 0, 0)`;
+}
+
+// Helper: Update Island Dots
+function updateDotIndicator(progress) {
+  // Clamp progress between 0 and totalPages - 1
   const clamped = Math.min(Math.max(progress, 0), totalPages - 1);
-  dotIndicator.style.transform = `translateX(${clamped * 20}px)`; // 20px gap
+  // 23px is the distance between dots defined in CSS
+  dotIndicator.style.transform = `translateX(${clamped * 23}px)`;
 }
 
 function showIsland() {
   clearTimeout(hideTimeout);
   island.classList.add("show");
-  hideTimeout = setTimeout(() => island.classList.remove("show"), 1500);
+  hideTimeout = setTimeout(() => island.classList.remove("show"), 1000);
 }
 
 function goToPage(page) {
-  currentPage = Math.max(0, Math.min(page, totalPages - 1));
-  container.style.transition = "transform 0.5s cubic-bezier(.22,.61,.36,1)";
-  container.style.transform = `translate3d(-${currentPage * 100}vw, 0, 0)`;
-  updateIsland(currentPage);
+  if (page < 0) page = 0;
+  if (page >= totalPages) page = totalPages - 1;
+  
+  currentPage = page;
+  
+  // Smooth transition
+  container.style.transition = "transform 0.45s cubic-bezier(.22,.61,.36,1)";
+  
+  // Calculate offset based on viewport width
+  setTranslate(-currentPage * window.innerWidth);
+  updateDotIndicator(currentPage);
   showIsland();
 }
 
+// Resize Handler
+window.addEventListener('resize', () => {
+  pageWidth = window.innerWidth;
+  // Remove transition to snap instantly on resize
+  container.style.transition = "none"; 
+  setTranslate(-currentPage * pageWidth);
+});
+
+// --- Touch Events ---
+
 container.addEventListener("touchstart", e => {
+  clearTimeout(hideTimeout);
   startX = e.touches[0].clientX;
-  container.style.transition = "none";
+  startY = e.touches[0].clientY;
+  currentX = startX;
+  currentY = startY;
+  startTime = Date.now();
   isSwiping = true;
-  showIsland();
-}, {passive: true});
+  gestureLocked = false;
+  island.classList.add("show");
+  
+  // Stop any current transition so we can drag manually
+  container.style.transition = "none";
+}, { passive: true });
 
 container.addEventListener("touchmove", e => {
   if (!isSwiping) return;
-  currentX = e.touches[0].clientX;
-  let delta = currentX - startX;
-  
-  // Resistance
-  if ((currentPage === 0 && delta > 0) || (currentPage === totalPages - 1 && delta < 0)) delta *= 0.3;
-  
-  container.style.transform = `translate3d(calc(-${currentPage * 100}vw + ${delta}px), 0, 0)`;
-  updateIsland(currentPage - (delta / window.innerWidth));
-}, {passive: true});
 
-container.addEventListener("touchend", e => {
+  currentX = e.touches[0].clientX;
+  currentY = e.touches[0].clientY;
+  const dx = currentX - startX;
+  const dy = currentY - startY;
+
+  // Lock Gesture Direction
+  if (!gestureLocked) {
+    // Threshold of 10px to determine intent
+    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+      gestureLocked = true;
+      // If X movement > Y movement, it's a swipe
+      isHorizontalSwipe = Math.abs(dx) > Math.abs(dy);
+    } else {
+      return; 
+    }
+  }
+
+  // If vertical scroll, let browser handle it
+  if (!isHorizontalSwipe) return;
+
+  // Prevent default only if it is a horizontal swipe to stop page bounce
+  if (e.cancelable) e.preventDefault();
+
+  let delta = dx;
+
+  // Resistance effect at edges
+  if ((currentPage === 0 && delta > 0) || (currentPage === totalPages - 1 && delta < 0)) {
+    delta *= 0.3;
+  }
+
+  setTranslate((-currentPage * pageWidth) + delta);
+  
+  // Update island visually based on percentage
+  const progress = currentPage - (delta / pageWidth);
+  updateDotIndicator(progress);
+
+}, { passive: false }); // Changed to false to allow preventDefault if needed
+
+container.addEventListener("touchend", () => {
   if (!isSwiping) return;
   isSwiping = false;
-  let delta = currentX - startX;
-  if (Math.abs(delta) > 80) {
-    if (delta < 0 && currentPage < totalPages - 1) currentPage++;
-    else if (delta > 0 && currentPage > 0) currentPage--;
+
+  if (!isHorizontalSwipe) {
+    island.classList.remove("show");
+    return;
   }
+
+  const distance = currentX - startX;
+  const time = Date.now() - startTime;
+  const velocity = Math.abs(distance / time);
+
+  // Thresholds to change page
+  const minSwipeDist = 50; 
+  const minVelocity = 0.5;
+
+  if (distance < -minSwipeDist && (Math.abs(distance) > 80 || velocity > minVelocity)) {
+    if (currentPage < totalPages - 1) currentPage++;
+  } else if (distance > minSwipeDist && (Math.abs(distance) > 80 || velocity > minVelocity)) {
+    if (currentPage > 0) currentPage--;
+  }
+
   goToPage(currentPage);
 });
 
-document.getElementById("btnPrev").onclick = () => goToPage(currentPage - 1);
-document.getElementById("btnNext").onclick = () => goToPage(currentPage + 1);
+// Desktop Navigation
+btnPrev.onclick = () => goToPage(currentPage - 1);
+btnNext.onclick = () => goToPage(currentPage + 1);
 
-/* COLLAPSE LOGIC */
-function togglePanel(btn) {
-  const item = btn.parentElement;
-  const isActive = item.classList.contains('active');
-  document.querySelectorAll('.link-item').forEach(el => el.classList.remove('active'));
-  if (!isActive) item.classList.add('active');
-}
+JOKINext.onclick = () => goToPage(3);
 
-/* API LOGIC */
+// Initialize
+setTranslate(0);
+updateDotIndicator(0);
+
+/* ================================
+   2. COLLAPSE PANEL LOGIC
+   ================================ */
+document.querySelectorAll(".link-btn").forEach(btn => {
+  btn.addEventListener('click', () => {
+    const panel = btn.nextElementSibling;
+    const isOpen = panel.classList.contains('open');
+    
+    // Close all other panels
+    document.querySelectorAll('.collapse-panel.open').forEach(p => {
+      if(p !== panel) {
+        p.classList.remove('open');
+        // Update ARIA for accessibility
+        p.previousElementSibling.setAttribute('aria-expanded', 'false');
+      }
+    }); 
+
+    // Toggle current
+    panel.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', !isOpen);
+  });
+});
+
+/* ================================
+   3. API & CODES LOGIC
+   ================================ */
+const REDEEM_URLS = {
+  zzz: code => `https://zenless.hoyoverse.com/redemption?code=${code}`,
+  genshin: code => `https://genshin.hoyoverse.com/en/gift?code=${code}`,
+  hsr: code => `https://hsr.hoyoverse.com/gift?code=${code}`
+};
+
+const codesContainer = document.getElementById('codes-container');
+const tabButtons = document.querySelectorAll('.tab-btn');
+let codesData = {};
+
 const BG_IMAGES = {
   zzz: 'url("https://images7.alphacoders.com/130/thumb-1920-1307267.jpg")',
   genshin: 'url("https://images2.alphacoders.com/136/thumb-1920-1368840.jpeg")',
   hsr: 'url("https://images3.alphacoders.com/136/thumb-1920-1362764.jpeg")'
 };
-const REDEEM_URLS = {
-  zzz: c => `https://zenless.hoyoverse.com/redemption?code=${c}`,
-  genshin: c => `https://genshin.hoyoverse.com/en/gift?code=${c}`,
-  hsr: c => `https://hsr.hoyoverse.com/gift?code=${c}`
-};
 
-let codesData = {};
-const codesContainer = document.getElementById('codes-container');
-
+// Fetch Logic
 async function fetchCodes() {
   try {
     const res = await fetch('https://db.hashblen.com/codes');
+    if (!res.ok) throw new Error("API Error");
     codesData = await res.json();
-    renderCodes('zzz');
+    renderCodes('zzz'); // Init default
   } catch (err) {
-    codesContainer.innerHTML = '<p class="loading">Failed to load codes.</p>';
+    codesContainer.innerHTML = `<div class="loading">Unable to load codes at this time.<br><small>Check connection</small></div>`;
+    console.error(err);
   }
 }
 
+// Tabs
+const page2Element = document.querySelector('.page2');
+
+// Update your existing tab click listener:
+tabButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const game = btn.getAttribute('data-game');
+    if (BG_IMAGES[game]) {
+     page2Element.style.backgroundImage = BG_IMAGES[game];
+    }
+    // 1. Handle active tab state
+    tabButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // 2. Change the background image
+    if (BG_IMAGES[game]) {
+      page2Element.style.backgroundImage = BG_IMAGES[game];
+    }
+    
+    // 3. Render the codes
+    renderCodes(game);
+  });
+});
+
+page2Element.style.backgroundImage = BG_IMAGES['zzz'];
+
 function renderCodes(game) {
-  document.querySelector('.page2').style.backgroundImage = BG_IMAGES[game];
-  const codes = codesData[game] || [];
-  codesContainer.innerHTML = codes.map((item, i) => `
-    <div class="code-card" style="animation-delay: ${i * 100}ms">
+  const codes = codesData[game];
+  
+  // 1. Clear container immediately to reset the view
+  codesContainer.innerHTML = '';
+
+  if(!codes || codes.length === 0){
+    codesContainer.innerHTML = `<div class="loading" style="animation: fadeInUp 0.4s forwards;">No active codes found.</div>`;
+    return;
+  }
+
+  // 2. Generate HTML with dynamic animation delay
+  // We use the index 'i' to multiply the delay
+  codesContainer.innerHTML = codes.map((item, i) => {
+    // 1st item waits 0ms, 2nd waits 100ms, 3rd waits 200ms...
+    const delay = i * 100; 
+    
+    return `
+    <div class="code-card" style="animation-delay: ${delay}ms">
       <div class="code-row">
         <div class="code-text title-font">${item.code}</div>
         <div class="buttons-group">
-          <button class="copy-btn" onclick="copyCode('${item.code}')">COPY</button>
-          <button class="redeem-btn" onclick="window.open('${REDEEM_URLS[game](item.code)}', '_blank')">REDEEM</button>
+          <button class="copy-btn title-font" onclick="copyCode('${item.code}')">COPY</button>
+          <button class="redeem-btn title-font" onclick="redeemCode('${game}', '${item.code}')">REDEEM</button>
         </div>
       </div>
-      <div style="font-size:0.8rem; color:#64748b; margin-top:8px;">${item.description || 'Active Reward'}</div>
+      <div class="code-desc">${item.description || 'No description'}</div>
     </div>
-  `).join('') || '<p class="loading">No active codes.</p>';
+  `}).join('');
 }
 
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderCodes(btn.dataset.game);
-  };
-});
-
+// Better Copy Function (Fallback for non-HTTPS)
 function copyCode(code) {
-  navigator.clipboard.writeText(code).then(() => alert("Code Copied: " + code));
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(code).then(() => alert(`Copied: ${code}`));
+  } else {
+    // Fallback logic
+    const textArea = document.createElement("textarea");
+    textArea.value = code;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      alert(`Copied: ${code}`);
+    } catch (err) {
+      alert('Failed to copy manually.');
+    }
+    document.body.removeChild(textArea);
+  }
 }
 
+function redeemCode(game, code) {
+  window.open(REDEEM_URLS[game](code), '_blank');
+}
+
+function togglePanel(btn) {
+  const item = btn.parentElement;
+  const isActive = item.classList.contains('active');
+
+  // Tutup semua yang lain
+  document.querySelectorAll('.link-item').forEach(el => {
+    el.classList.remove('active');
+  });
+
+  // Toggle yang diklik
+  if (!isActive) {
+    item.classList.add('active');
+  }
+}
+
+// Start
 fetchCodes();
 </script>
- <script>
-        const canvas = document.getElementById('warpCanvas');
-        const ctx = canvas.getContext('2d');
 
-        let width, height, centerX, centerY;
-        let starCount = 600; // Lowered slightly for better visibility over image
-        let stars = [];
-        
-        let currentSpeed = 0.01;
-        let targetSpeed = 0.01;
-        const baseSpeed = 0.01;
-        const boostSpeed = 0.12;
-
-        function init() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            centerX = width / 2;
-            centerY = height / 2;
-            canvas.width = width;
-            canvas.height = height;
-
-            stars = [];
-            for (let i = 0; i < starCount; i++) {
-                stars.push({
-                    x: (Math.random() - 0.5) * width * 2,
-                    y: (Math.random() - 0.5) * height * 2,
-                    z: Math.random() * width,
-                    px: 0,
-                    py: 0
-                });
-            }
-        }
-
-        function update() {
-            currentSpeed += (targetSpeed - currentSpeed) * 0.05;
-
-            for (let i = 0; i < stars.length; i++) {
-                let s = stars[i];
-                s.px = (s.x / s.z) * (width / 2) + centerX;
-                s.py = (s.y / s.z) * (height / 2) + centerY;
-
-                s.z -= currentSpeed * width;
-
-                if (s.z <= 1) {
-                    s.z = width;
-                    s.x = (Math.random() - 0.5) * width * 2;
-                    s.y = (Math.random() - 0.5) * height * 2;
-                    s.px = (s.x / s.z) * (width / 2) + centerX;
-                    s.py = (s.y / s.z) * (height / 2) + centerY;
-                }
-            }
-        }
-
-        function draw() {
-            // IMPORTANT: Clear the canvas with clearRect instead of fillRect 
-            // so the background image remains visible.
-            ctx.clearRect(0, 0, width, height);
-
-            ctx.lineCap = 'round';
-
-            for (let i = 0; i < stars.length; i++) {
-                let s = stars[i];
-                let x = (s.x / s.z) * (width / 2) + centerX;
-                let y = (s.y / s.z) * (height / 2) + centerY;
-
-                // Opacity increases as stars get closer
-                let opacity = 1 - (s.z / width);
-                let weight = (1 - s.z / width) * 4;
-
-                // Light blue/white tint to match Honkai: Star Rail aesthetic
-                ctx.strokeStyle = `rgba(200, 230, 255, ${opacity})`;
-                ctx.lineWidth = weight;
-
-                ctx.beginPath();
-                ctx.moveTo(s.px, s.py);
-                ctx.lineTo(x, y);
-                ctx.stroke();
-            }
-
-            update();
-            requestAnimationFrame(draw);
-        }
-
-        window.addEventListener('resize', init);
-        window.addEventListener('mousedown', () => targetSpeed = boostSpeed);
-        window.addEventListener('mouseup', () => targetSpeed = baseSpeed);
-        
-        // Touch support
-        window.addEventListener('touchstart', (e) => { e.preventDefault(); targetSpeed = boostSpeed; });
-        window.addEventListener('touchend', () => targetSpeed = baseSpeed);
-
-        init();
-        draw();
-    </script>
 </body>
 </html>

@@ -46,57 +46,82 @@ html, body {
 /* --- Page 1: Link Tree --- */
 /* Container Page 1 */
 .page1 {
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  padding: 40px 20px !important;
+    position: relative;
+    overflow: hidden; /* Prevent stars from showing outside page boundaries */
+    background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_mian_pc-sea.3870807c..jpeg) center / cover no-repeat;
+            background-color: #000; /* Fallback */
 }
 
-/* Profile Header */
+#warpCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Put it behind everything */
+    pointer-events: none; /* Allow clicks to pass through to buttons */
+}
+
+/* Ensure all content in Page 1 sits ABOVE the canvas */
+.page1 > *:not(canvas) {
+    position: relative;
+    z-index: 1;
+}
+
 .profile-header {
   text-align: center;
-  margin-bottom: 35px;
+  margin-bottom: 40px;
+  margin-top: 20px;
 }
 
 .avatar-wrapper {
   position: relative;
-  width: 110px;
-  height: 110px;
+  width: 130px;
+  height: 130px;
   margin: 0 auto 15px;
+  padding: 4px;
+  background: linear-gradient(135deg, #22c55e, #38bdf8);
+  border-radius: 140px; /* Squircle */
 }
 
 .main-avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 35px; /* Squircle style ala iOS/Dribbble */
-  border: 4px solid white;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border-radius: 140px;
+  border: 4px solid #0f172a;
 }
 
-.online-indicator {
+.status-badge {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 18px;
-  height: 18px;
-  background: #22c55e;
-  border: 3px solid white;
-  border-radius: 50%;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(34, 197, 94, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  color: #4ade80;
+  padding: 2px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
 }
 
 .name-premium {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 800;
-  color: #1a2e1f;
-  margin: 0;
+  margin: 15px 0 5px;
+  background: linear-gradient(to bottom, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .tagline {
-  color: #64748b;
-  font-size: 0.95rem;
-  margin-top: 5px;
+  color: #94a3b8;
+  font-size: 0.9rem;
 }
 
-/* Links List */
 .links-container {
   width: 100%;
   max-width: 400px;
@@ -107,23 +132,24 @@ html, body {
 
 .modern-link {
   width: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.5);
-  border-radius: 20px;
-  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  transition: all 0.3s ease;
+  color: white;
+  outline: none;
 }
 
-.modern-link:hover {
-  transform: translateY(-3px);
-  background: #ffffff;
-  box-shadow: 0 12px 20px rgba(0,0,0,0.08);
+.modern-link:active {
+  transform: scale(0.97);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .link-info {
@@ -133,30 +159,25 @@ html, body {
 }
 
 .icon-box {
-  width: 48px;
-  height: 48px;
+  width: 45px;
+  height: 45px;
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Icon Background Colors */
-.tiktok-bg { background: #fee2e2; }
-.saweria-bg { background: #fef3c7; }
-.joki-bg { background: #dcfce7; }
-
 .link-text {
-  display: flex;
-  flex-direction: column;
   text-align: left;
 }
 
 .link-title {
+  display: block;
   font-weight: 700;
-  font-size: 1rem;
-  color: #1e293b;
+  font-size: 1.05rem;
 }
 
 .link-subtitle {
@@ -165,25 +186,35 @@ html, body {
 }
 
 .arrow-icon {
-  color: #cbd5e1;
-  font-weight: bold;
+  color: white;
   transition: transform 0.3s;
 }
 
-/* Modern Panel */
 .modern-panel {
+  text-align: center;
+  color:white;
   max-height: 0;
   overflow: hidden;
   transition: all 0.4s ease;
   padding: 0 16px;
-  background: rgba(255,255,255,0.4);
-  border-radius: 0 0 20px 20px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 0 0 22px 22px;
   margin-top: -10px;
+  border: 0px solid rgba(255,255,255,0.05);
 }
 
 .link-item.active .modern-panel {
-  max-height: 150px;
+  max-height: 160px;
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(10px);
   padding: 25px 16px 16px;
+  border-width: 0 1px 1px 1px;
+}
+
+.link-item.active .modern-link {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .link-item.active .arrow-icon {
@@ -196,19 +227,19 @@ html, body {
   padding: 12px;
   border-radius: 12px;
   border: none;
-  background: #1e293b;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
   color: white;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.8rem;
 }
 
 .joki-btn-color {
-  background: #059669 !important;
-}
-
-/* Highlight Effect for Joki */
-.highlight .modern-link {
-  border: 2px solid #22c55e;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  color: white !important;
 }
 
 /* Link Tree Card */
@@ -720,68 +751,69 @@ body {
 <div class="container" id="container">
   <!-- Page 1 Link Tree -->
   <div class="page page1">
-  <div class="profile-header">
-    <div class="avatar-wrapper">
-      <img src="https://awsimages.detik.net.id/community/media/visual/2022/02/17/bruce-leung-1_34.png" alt="Profile" class="main-avatar" />
-      <div class="online-indicator"></div>
+    <canvas id="warpCanvas"></canvas>
+    <div class="profile-header">
+      <div class="avatar-wrapper">
+        <img src="https://awsimages.detik.net.id/community/media/visual/2022/02/17/bruce-leung-1_34.png" alt="Kodokkyun" class="main-avatar" />
+        <div class="status-badge">● ONLINE</div>
+      </div>
+      <h2 class="name-premium">Kodokkyun</h2>
+      <p class="tagline">Wong Jowo tapi Gamer • 🎮</p>
     </div>
-    <h2 class="name-premium">Kodokkyun</h2>
-    <p class="tagline">Wong Jowo tapi Gamer • 🎮</p>
+
+    <div class="links-container">
+      <div class="link-item">
+        <button class="modern-link" onclick="togglePanel(this)">
+          <div class="link-info">
+            <div class="icon-box">📱</div>
+            <div class="link-text">
+              <span class="link-title">TikTok</span>
+              <span class="link-subtitle">Konten Gaming & Hiburan</span>
+            </div>
+          </div>
+          <span class="arrow-icon">▼</span>
+        </button>
+        <div class="modern-panel">
+          <p>Mampir ke TikTok lur, konten seru tiap hari! 🙏</p>
+          <button class="action-btn" onclick="window.open('URL_TIKTOK_KAMU', '_blank')">Follow Now</button>
+        </div>
+      </div>
+
+      <div class="link-item">
+        <button class="modern-link" onclick="togglePanel(this)">
+          <div class="link-info">
+            <div class="icon-box">💸</div>
+            <div class="link-text">
+              <span class="link-title">Saweria</span>
+              <span class="link-subtitle">Support Creator Lokal</span>
+            </div>
+          </div>
+          <span class="arrow-icon">▼</span>
+        </button>
+        <div class="modern-panel">
+          <p>Tip/Donasi untuk upgrade gear streaming. Suwun!</p>
+          <button class="action-btn" onclick="window.open('https://saweria.co/kodokkyunn99', '_blank')">Tip Saweria</button>
+        </div>
+      </div>
+
+      <div class="link-item">
+        <button class="modern-link" onclick="togglePanel(this)">
+          <div class="link-info">
+            <div class="icon-box">⚔️</div>
+            <div class="link-text">
+              <span class="link-title">Jasa Joki Game</span>
+              <span class="link-subtitle">Top-tier Rank Service</span>
+            </div>
+          </div>
+          <span class="arrow-icon">▼</span>
+        </button>
+        <div class="modern-panel">
+          <p>Gak ada waktu main? Serahin ke ahlinya!</p>
+          <button class="action-btn joki-btn-color" onclick="goToPage(4)">Lihat Pricelist</button>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="links-container">
-    <div class="link-item">
-      <button class="modern-link" onclick="togglePanel(this)">
-        <div class="link-info">
-          <div class="icon-box tiktok-bg">📱</div>
-          <div class="link-text">
-            <span class="link-title">TikTok</span>
-            <span class="link-subtitle">Konten Gaming & Hiburan</span>
-          </div>
-        </div>
-        <span class="arrow-icon">↓</span>
-      </button>
-      <div class="modern-panel">
-        <p>Mampir ke TikTok lur, konten seru tiap hari! 🙏</p>
-        <button class="action-btn" onclick="window.open('URL_TIKTOK_KAMU', '_blank')">Follow Yuk</button>
-      </div>
-    </div>
-
-    <div class="link-item">
-      <button class="modern-link" onclick="togglePanel(this)">
-        <div class="link-info">
-          <div class="icon-box saweria-bg">💸</div>
-          <div class="link-text">
-            <span class="link-title">Saweria</span>
-            <span class="link-subtitle">Support Creator Lokal</span>
-          </div>
-        </div>
-        <span class="arrow-icon">↓</span>
-      </button>
-      <div class="modern-panel">
-        <p>Tip/Donasi untuk upgrade gear streaming. Suwun!</p>
-        <button class="action-btn" onclick="window.open('https://saweria.co/kodokkyunn99', '_blank')">Tip Saweria</button>
-      </div>
-    </div>
-
-    <div class="link-item highlight">
-      <button class="modern-link" onclick="togglePanel(this)">
-        <div class="link-info">
-          <div class="icon-box joki-bg">⚔️</div>
-          <div class="link-text">
-            <span class="link-title">Jasa Joki Game</span>
-            <span class="link-subtitle">Top-tier Rank Service</span>
-          </div>
-        </div>
-        <span class="arrow-icon">↓</span>
-      </button>
-      <div class="modern-panel">
-        <p>Gak ada waktu push rank? Serahin ke ahlinya!</p>
-        <button class="action-btn joki-btn-color" id="JOKINext">Lihat Pricelist</button>
-      </div>
-    </div>
-  </div>
-</div>
 
   <!-- Page 2 -->
   <div class="page page2">
@@ -1137,6 +1169,99 @@ function togglePanel(btn) {
 // Start
 fetchCodes();
 </script>
+ <script>
+        const canvas = document.getElementById('warpCanvas');
+        const ctx = canvas.getContext('2d');
 
+        let width, height, centerX, centerY;
+        let starCount = 600; // Lowered slightly for better visibility over image
+        let stars = [];
+        
+        let currentSpeed = 0.01;
+        let targetSpeed = 0.01;
+        const baseSpeed = 0.01;
+        const boostSpeed = 0.12;
+
+        function init() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            centerX = width / 2;
+            centerY = height / 2;
+            canvas.width = width;
+            canvas.height = height;
+
+            stars = [];
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: (Math.random() - 0.5) * width * 2,
+                    y: (Math.random() - 0.5) * height * 2,
+                    z: Math.random() * width,
+                    px: 0,
+                    py: 0
+                });
+            }
+        }
+
+        function update() {
+            currentSpeed += (targetSpeed - currentSpeed) * 0.05;
+
+            for (let i = 0; i < stars.length; i++) {
+                let s = stars[i];
+                s.px = (s.x / s.z) * (width / 2) + centerX;
+                s.py = (s.y / s.z) * (height / 2) + centerY;
+
+                s.z -= currentSpeed * width;
+
+                if (s.z <= 1) {
+                    s.z = width;
+                    s.x = (Math.random() - 0.5) * width * 2;
+                    s.y = (Math.random() - 0.5) * height * 2;
+                    s.px = (s.x / s.z) * (width / 2) + centerX;
+                    s.py = (s.y / s.z) * (height / 2) + centerY;
+                }
+            }
+        }
+
+        function draw() {
+            // IMPORTANT: Clear the canvas with clearRect instead of fillRect 
+            // so the background image remains visible.
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.lineCap = 'round';
+
+            for (let i = 0; i < stars.length; i++) {
+                let s = stars[i];
+                let x = (s.x / s.z) * (width / 2) + centerX;
+                let y = (s.y / s.z) * (height / 2) + centerY;
+
+                // Opacity increases as stars get closer
+                let opacity = 1 - (s.z / width);
+                let weight = (1 - s.z / width) * 4;
+
+                // Light blue/white tint to match Honkai: Star Rail aesthetic
+                ctx.strokeStyle = `rgba(200, 230, 255, ${opacity})`;
+                ctx.lineWidth = weight;
+
+                ctx.beginPath();
+                ctx.moveTo(s.px, s.py);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+
+            update();
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', init);
+        window.addEventListener('mousedown', () => targetSpeed = boostSpeed);
+        window.addEventListener('mouseup', () => targetSpeed = baseSpeed);
+        
+        // Touch support
+        window.addEventListener('touchstart', (e) => { e.preventDefault(); targetSpeed = boostSpeed; });
+        window.addEventListener('touchend', () => targetSpeed = baseSpeed);
+
+        init();
+        draw();
+    </script>
 </body>
 </html>

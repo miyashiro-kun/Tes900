@@ -953,29 +953,69 @@ body {
         }
 
         .joki-card {
-            background: var(--joki-panel);
-            border: 1px solid var(--joki-border);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            clip-path: polygon(0 0, 92% 0, 100% 10%, 100% 100%, 8% 100%, 0 90%);
-            transition: all 1.25s ease;
-            margin-top:12px ;
-        }
-        
-        .joki-card-new {
-            background: linear-gradient(to bottom, rgba(12, 16, 29, 0.5), var(--joki-bg)), 
+    background: var(--joki-panel);
+    border: 1px solid var(--joki-border);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: 0.3s;
+    
+    /* Ukuran lengkungan gigitan */
+    --bite-size: 25px;
+
+    /* Teknik Masking untuk membuat potongan melengkung ke dalam */
+    mask: 
+        radial-gradient(var(--bite-size) at 100% 0, #0000 98%, #000) 100% 0 / 100% 100% no-repeat,
+        radial-gradient(var(--bite-size) at 0 100%, #0000 98%, #000) 0 100% / 100% 100% no-repeat;
+    mask-composite: intersect;
+    
+    /* Prefix untuk browser Chrome/Safari/Edge */
+    -webkit-mask: 
+        radial-gradient(var(--bite-size) at 100% 0, #0000 98%, #000),
+        radial-gradient(var(--bite-size) at 0 100%, #0000 98%, #000);
+    -webkit-mask-composite: destination-in;
+
+    /* Mencegah card menciut di mobile portrait */
+    min-height: 200px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 12px ;
+}
+
+.joki-card-new {
+    background: linear-gradient(to bottom, rgba(12, 16, 29, 0.5), var(--joki-bg)), 
                         url('https://fastcdn.hoyoverse.com/content-v2/hkrpg/161539/f40835cbd720d841de83551695162970_9071788954763536383.png') center/cover;
             
-            border: 1px solid var(--joki-border);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            clip-path: polygon(0 0, 92% 0, 100% 10%, 100% 100%, 8% 100%, 0 90%);
-            transition: all 1.25s ease;
-            margin-top:12px ;
-        }
-        
+    border: 1px solid var(--joki-border);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: 0.3s;
+    
+    /* Ukuran lengkungan gigitan */
+    --bite-size: 25px;
+
+    /* Teknik Masking untuk membuat potongan melengkung ke dalam */
+    mask: 
+        radial-gradient(var(--bite-size) at 100% 0, #0000 98%, #000) 100% 0 / 100% 100% no-repeat,
+        radial-gradient(var(--bite-size) at 0 100%, #0000 98%, #000) 0 100% / 100% 100% no-repeat;
+    mask-composite: intersect;
+    
+    /* Prefix untuk browser Chrome/Safari/Edge */
+    -webkit-mask: 
+        radial-gradient(var(--bite-size) at 100% 0, #0000 98%, #000),
+        radial-gradient(var(--bite-size) at 0 100%, #0000 98%, #000);
+    -webkit-mask-composite: destination-in;
+
+    /* Mencegah card menciut di mobile portrait */
+    min-height: 200px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 12px ;
+}
+
         .joki-card-new:hover {
             border-color: var(--joki-gold);
             transform: translateY(-5px);

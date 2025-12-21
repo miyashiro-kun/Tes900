@@ -462,7 +462,8 @@ html, body {
   background-repeat: no-repeat;
   transition: background-image 0.5s ease-in-out;
   /* Ensure the page is black underneath so it fades to black */
-  background-color: black; 
+  background-color: rgba(0, 0, 0, 0.3); /* The color to blend in */
+    background-blend-mode: darken;
     padding: 5vh 3vw;
 }
 
@@ -502,7 +503,8 @@ html, body {
 
 /* Update the .code-card class */
 .code-card {
-  background: white; /* or your specific color */
+  background: rgba(255,255,255,0.3);
+  backdrop-filter: blur(14px);/* or your specific color */
   border-radius: 12px;
   padding: 12px 16px;
   margin-bottom: 12px;
@@ -575,6 +577,7 @@ html, body {
 
 .page3 {
   background: #064e3b;
+  margin-left: -1px;
 }
 
 /* Island dot indicator */
@@ -678,6 +681,7 @@ html, body {
 }
 
 .code-text {
+  color: white;
   font-size: 0.95rem;
   word-break: break-all;
 }
@@ -1424,7 +1428,7 @@ let codesData = {};
 const BG_IMAGES = {
   zzz: 'url("https://images7.alphacoders.com/130/thumb-1920-1307267.jpg")',
   genshin: 'url("https://images2.alphacoders.com/136/thumb-1920-1368840.jpeg")',
-  hsr: 'url("https://images3.alphacoders.com/136/thumb-1920-1362764.jpeg")'
+  hsr: 'url("https://i.ibb.co.com/VYZ3w3wB/Fyreflies-are-such-magical-creatures-aren-t-they-They-may-throw-themselves-at-a-flame-or-sudden-ups.png")'
 };
 
 // Fetch Logic

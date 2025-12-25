@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
 <title>Swipe Link Tree with Collapse</title>
+<script src="https://kit.fontawesome.com/424261530c.js" crossorigin="anonymous"></script>
 <style>
 * { box-sizing: border-box; 
   -webkit-tap-highlight-color: transparent;
@@ -791,58 +792,50 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
 
 <div class="radial-menu-layer">
   <div class="menu-wrapper" id="triggerZone">
-    <div class="hold-button"></div>
-    <div class="menu-dim" id="menuDim"></div>
+      <div class="hold-button"></div>
+      <div class="menu-dim" id="menuDim"></div>
     <div class="menu-container" id="menuContainer">
-      <div class="circular-ring">
+    <div class="circular-ring">
         
-        <svg viewBox="0 0 100 100" class="svg-layer">
-          <defs>
-            <pattern id="bg-0" patternUnits="userSpaceOnUse" width="100" height="100" viewBox="0 0 100 100">
-              <image href="https://upload-os-bbs.hoyolab.com/upload/2025/04/26/17138284/5a93dc391f3b7ab8a57721215b3c9f52_4027212106678723316.jpeg" 
-                     x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" style="opacity: 0.1;" 
-                     transform="rotate(0, 50, 50)" />
-            </pattern>
-            
-            <pattern id="bg-1" patternUnits="userSpaceOnUse" width="100" height="100" viewBox="0 0 100 100">
-              <image href="https://upload-os-bbs.hoyolab.com/upload/2025/12/18/40c87fe8a6548c21de076781b94df199_2934583448842527997.jpg" 
-                     x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" style="opacity: 0.1;" 
-                     transform="rotate(-72, 50, 50)" />
-            </pattern>
-            
-            <pattern id="bg-2" patternUnits="userSpaceOnUse" width="100" height="100" viewBox="0 0 100 100">
-              <image href="https://upload-os-bbs.hoyolab.com/upload/2025/12/18/40c87fe8a6548c21de076781b94df199_2934583448842527997.jpg" 
-                     x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" style="opacity: 0.1;" 
-                     transform="rotate(-144, 50, 50)" />
-            </pattern>
-            
-            <pattern id="bg-3" patternUnits="userSpaceOnUse" width="100" height="100" viewBox="0 0 100 100">
-              <image href="https://upload-os-bbs.hoyolab.com/upload/2025/12/18/40c87fe8a6548c21de076781b94df199_2934583448842527997.jpg" 
-                     x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" style="opacity: 0.1;" 
-                     transform="rotate(-216, 50, 50)" />
-            </pattern>
-            
-            <pattern id="bg-4" patternUnits="userSpaceOnUse" width="100" height="100" viewBox="0 0 100 100">
-              <image href="https://upload-os-bbs.hoyolab.com/upload/2025/12/18/40c87fe8a6548c21de076781b94df199_2934583448842527997.jpg" 
-                     x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" style="opacity: 0.8;" 
-                     transform="rotate(-288, 50, 50);background-size:fill" />
-            </pattern>
-          </defs>
+      <div style="display: flex;justify-content: center; /* Centers horizontally */
+  align-items: center;">
+        <div class="pathlogo" style="width:47%;height:47%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
+  align-items: center;"></div>  
+  
+  <div class="pathlogo2" style="width:105%;height:105%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
+  align-items: center;"></div>  
+      <svg viewBox="0 0 100 100" class="svg-layer">
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 0; --bg: #00000099" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 1; --bg: #00000088" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 2; --bg: #00000077" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 3; --bg: #00000066" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 4; --bg: #00000055" />
+      </svg>
+      
+      </div>
 
-          <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 0; stroke: url(#bg-0);" />
-          <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 1; stroke: url(#bg-1);" />
-          <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 2; stroke: url(#bg-2);" />
-          <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 3; stroke: url(#bg-3);" />
-          <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 4; stroke: url(#bg-4);" />
-        </svg>
-
-        <div class="content-node" style="--angle: 18deg;"><span class="icon">🏠</span><span class="label">Profile</span></div>
-        <div class="content-node" style="--angle: 90deg;"><span class="icon">✒️</span><span class="label">Code Redem</span></div>
-        <div class="content-node" style="--angle: 162deg;"><span class="icon">🔔</span><span class="label">Joki</span></div>
-        <div class="content-node" style="--angle: 234deg;"><span class="icon">📷</span><span class="label">News</span></div>
-        <div class="content-node" style="--angle: 306deg;"><span class="icon">🗑️</span><span class="label">Patches</span></div>
+      <div class="content-node" style="--angle: 18deg;">
+        <span class="icon"><i class="fa-solid fa-user" style="color: #ffffff;"></i></span>
+        <span class="label">Profile</span>
+      </div>
+      <div class="content-node" style="--angle: 90deg;">
+        <span class="icon"><i class="fa-solid fa-keyboard" style="color: #ffffff;"></i></span>
+        <span class="label">Code Redem</span>
+      </div>
+      <div class="content-node" style="--angle: 162deg;">
+        <span class="icon"><i class="fa-solid fa-gamepad" style="color: #ffffff;"></i></span>
+        <span class="label">Joki</span>
+      </div>
+      <div class="content-node" style="--angle: 234deg;">
+        <span class="icon"><i class="fa-solid fa-tv" style="color: #ffffff;"></i></span>
+        <span class="label">News</span>
+      </div>
+      <div class="content-node" style="--angle: 306deg;">
+        <span class="icon" style="margin-left:-15px;"><i class="fa-solid fa-newspaper" style="color: #ffffff;"></i>️</span>
+        <span class="label" style="margin-left:-15px;">Patches</span>
       </div>
     </div>
+  </div>
   </div>
 </div>
 
@@ -851,71 +844,104 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
     --menu-size: 380px;
     --content-radius: 135px; 
   }
-  .menu-dim {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.52);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 1s ease;
-    z-index: 4000;
-    backdrop-filter: blur(5px);
-  }
-  .menu-dim.active { opacity: 1; pointer-events: auto; }
-  .menu-wrapper {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 68px;
-    height: 68px;
-    z-index: 5000;
-    pointer-events: auto;
-  }
-  .menu-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.7);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease, transform 1s ease;
-    z-index: 5000;
-  }
-  .menu-container.active {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-    pointer-events: auto;
-  }
+.menu-dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52); /* 🔥 90% dim */
+  opacity: 0;
+  pointer-events: none;
+  transition: all 1s ease;
+  z-index: 4000;
+  backdrop-filter: blur(5px);
+}
+
+.menu-dim.active {
+  opacity: 1;
+  pointer-events: auto; /* supaya klik luar bisa nutup */
+}
+.menu-wrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 68px;
+  height: 68px;
+  z-index: 5000;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+.pathlogo{
+    background:
+    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    url("https://gamebrott.com/wp-content/uploads/2023/08/image-47.png");
+     background-size: cover;
+    background-position: center;
+}
+.hold-button {
+  width: 0%;
+  height: 0%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.0);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+  /* Initial hidden state */
+.menu-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 1s ease;
+  z-index: 5000;
+}
+
+.menu-container.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+  
+}
+
+
+.menu-container:not(.active) {
+  pointer-events: none;
+}
   .circular-ring {
     position: relative;
     width: var(--menu-size);
     height: var(--menu-size);
+    
   }
+
   .svg-layer {
     width: 100%;
     height: 100%;
     transform: rotate(-108deg);
     overflow: visible;
   }
-  .ring-slice {
-  fill: none;
-  stroke-width: 24; 
-  stroke-dasharray: 47.75 238.76;
-  
-  /* Use rotate on the individual elements based on --i */
-  transform: rotate(calc(var(--i) * 72deg));
-  transform-origin: center;
-  
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  stroke-opacity: 1; 
-}
 
-.ring-slice:hover {
-  stroke-width: 28;
-  filter: brightness(1.4);
-}
+  .ring-slice {
+    fill: none;
+    stroke: var(--bg);
+    stroke-width: 24;
+    stroke-dasharray: 47.75 238.76;
+    transform-origin: center;
+    transform: rotate(calc(var(--i) * 72deg));
+    backdrop-filter: blur(55px);
+      -webkit-backdrop-filter: blur(55px);
+    transition: stroke-width 0.3s ease, filter 0.3s ease;
+    cursor: pointer;
+    
+  }
+
+  .ring-slice:hover {
+    stroke-width: 28;
+    filter: brightness(1.15);
+    
+  }
+
   .content-node {
     position: absolute;
     top: 50%;
@@ -935,7 +961,14 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
       calc(var(--content-radius) * sin(var(--angle) - 90deg))
     );
   }
+  .content-node:hover {
+    transform: scale(0.9)!important;
+  }
+  
   .icon { font-size: 28px; margin-bottom: 2px; }
+  .icon:hover {
+    transform: scale(2) !important;
+  }
   .label {
     font-size: 7px;
     color: white;
@@ -1777,7 +1810,7 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
                 <h3 class="joki-card-h3">Chrysos Awoo Championship</h3>
                 <p class="joki-card-p">Ngelarin Event Bulanan Sabung Kocheng</p>
                 
-                <div class="joki-card-price">Rp 25.000</div>
+                <div class="joki-card-price">Rp 10.000</div>
                 
                 <button class="joki-btn" onclick="jokiPushOrder('Chrysos Awoo Championship', 'Rp 25.000')">Deploy</button>
             </div>

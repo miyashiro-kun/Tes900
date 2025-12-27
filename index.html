@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
-<title>Swipe Link Tree with Collapse</title>
+<title>KODOK PAGE</title>
 <script src="https://kit.fontawesome.com/424261530c.js" crossorigin="anonymous"></script>
 <style>
 * { box-sizing: border-box; 
@@ -111,6 +111,7 @@ html, body {
     overflow: hidden; /* Prevent stars from showing outside page boundaries */
     background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_mian_pc-sea.3870807c..jpeg) center / cover no-repeat;
             background-color: #000; /* Fallback */
+            background-attachment: fixed;
 }
 
 #warpCanvas {
@@ -120,9 +121,10 @@ html, body {
     width: 100%;
     height: 100%;
     z-index: 0; /* Put it behind everything */
-    pointer-events: none; /* Allow clicks to pass through to buttons */
+    background: radial-gradient(circle at center, #000b1a 0%, #000 60%); 
+    mix-blend-mode: screen;
+    pointer-events: none;
 }
-
 /* Ensure all content in Page 1 sits ABOVE the canvas */
 .page1 > *:not(canvas) {
     position: relative;
@@ -137,20 +139,67 @@ html, body {
 
 .avatar-wrapper {
   position: relative;
-  width: 130px;
-  height: 130px;
+  width: 150px;
+  height: 150px;
   margin: 0 auto 15px;
-  padding: 4px;
-  background: linear-gradient(135deg, #22c55e, #38bdf8);
-  border-radius: 140px; /* Squircle */
+  padding: 3px;
+  background: #0f172a; /* Matches your border color */
+  border-radius: 130px; /* Squircle base */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* The Animated Laser Beam */
+.avatar-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent, 
+    #22c55e, 
+    #38bdf8, 
+    transparent 30%
+  );
+  animation: laserRotate 2s linear infinite;
+}
+
+/* The "Glow" Filter Layer */
+.avatar-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 130px;
+  box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.5);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .main-avatar {
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
   object-fit: cover;
-  border-radius: 140px;
+  border-radius: 128px; /* Slightly smaller than wrapper */
   border: 4px solid #0f172a;
+  z-index: 1;
+  /* Filter to make the avatar feel part of the scene */
+  filter: contrast(1.1) brightness(0.9);
+  transition: filter 0.3s ease;
+}
+
+/* Hover Wow: The "Power Up" */
+.avatar-wrapper:hover .main-avatar {
+  filter: contrast(1.2) brightness(1.2);
+}
+
+.avatar-wrapper:hover::before {
+  animation-duration: 0.8s; /* Spins faster on hover */
+}
+
+@keyframes laserRotate {
+  100% { transform: rotate(360deg); }
 }
 
 .status-badge {
@@ -216,26 +265,49 @@ html, body {
   color: white;
 }
 
-.modern-link:active {
-  transform: scale(0.97);
-  background: rgba(255, 255, 255, 0.08);
-  color: black;
+* { 
+  -webkit-tap-highlight-color: transparent !important; 
 }
 
 .modern-link:hover {
-  transform: translateY(-3px);
-  background: #ffffff;
+  background: rgba(0,0,0,0.5);
   box-shadow: 0 12px 20px rgba(0,0,0,0.08);
-  color: black;
+  -webkit-tap-highlight-color: transparent !important; 
 
 }
+* {
+  /* Disable the blue box highlight on mobile (Chrome/Safari) */
+  -webkit-tap-highlight-color: transparent !important;
+  
+  /* Disable the dotted border on click (Firefox) */
+  outline: none !important;
+}
 
-.modern-link:active :hover {
-  transform: translateY(-3px);
-  background: #ffffff;
-  box-shadow: 0 12px 20px rgba(0,0,0,0.08);
-  color: black;
+/* Specifically for buttons and links in Firefox */
+button::-moz-focus-inner,
+a::-moz-focus-inner {
+  border: 0;
+}
 
+/* Prevent text selection while clicking/dragging (good for UI) */
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.modern-link:hover .link-text {
+  background: linear-gradient(135deg, #22c55e, #38bdf8); !important; /* Forces the text to stay white even on hover */
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent; Forces the text to stay white even on hover */
+}
+
+.modern-link:active .link-text:hover {
+   background: linear-gradient(135deg, #22c55e, #38bdf8); !important; /* Forces the text to stay white even on hover */
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
 }
 
 
@@ -257,9 +329,9 @@ html, body {
 }
 
 /* Icon Background Colors */
-.tiktok-bg { background: #fee2e2; }
-.saweria-bg { background: #fef3c7; }
-.joki-bg { background: #dcfce7; }
+.tiktok-bg { background: rgba(0,0,0,0.4); border-radius:15px; }
+.saweria-bg { background: rgba(85, 130, 86 , 0.4); border-radius:15px; }
+.joki-bg { background: rgba(37, 38, 92 , 0.4);border-radius:15px; }
 
 .link-text {
   display: flex;
@@ -789,7 +861,14 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
 </style>
 </head>
 <body>
-
+<svg style="visibility: hidden; position: absolute;" width="0" height="0">
+  <filter id="liquid">
+    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="3" seed="1">
+      <animate attributeName="baseFrequency" dur="10s" values="0.01 0.01;0.05 0.05;0.01 0.01" repeatCount="indefinite" />
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" scale="50" />
+  </filter>
+</svg>
 <div class="radial-menu-layer">
   <div class="menu-wrapper" id="triggerZone">
       <div class="hold-button"></div>
@@ -798,16 +877,33 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
     <div class="circular-ring">
         
       <div style="display: flex;justify-content: center; /* Centers horizontally */
-  align-items: center;backdrop-filter: blur(8px);border-radius:100%;">
+  align-items: center;">
         <div class="pathlogo" style="width:47%;height:47%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
   align-items: center;"></div>  
-
+  
+  <div class="pathlogo2" style="width:105%;height:105%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
+  align-items: center;">
+      
+  <svg id="svg" width="210" height="210" viewBox="0 0 200 200">
+  <circle
+    id="arc"
+    cx="100"
+    cy="100"
+    r="80"
+    fill="none"
+    stroke="#fff"
+    stroke-width="10"
+    stroke-dasharray="100 400"
+    transform="rotate(-90 100 100)"
+  />
+</svg>
+  </div>  
       <svg viewBox="0 0 100 100" class="svg-layer">
         <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 0; --bg: #00000099" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 1; --bg: #00000088" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 2; --bg: #00000077" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 3; --bg: #00000066" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 4; --bg: #00000055" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 1; --bg: #00000099" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 2; --bg: #00000099" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 3; --bg: #00000099" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 4; --bg: #00000099" />
       </svg>
       
       </div>
@@ -850,6 +946,7 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
   pointer-events: none;
   transition: all 1s ease;
   z-index: 4000;
+  backdrop-filter: blur(5px);
 }
 
 .menu-dim.active {
@@ -867,7 +964,11 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
   touch-action: manipulation;
 }
 .pathlogo{
-    backdrop-filter: blur(8px);
+    background:
+    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    url("https://gamebrott.com/wp-content/uploads/2023/08/image-47.png");
+     background-size: cover;
+    background-position: center;
 }
 .hold-button {
   width: 0%;
@@ -924,13 +1025,15 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
     transform: rotate(calc(var(--i) * 72deg));
     backdrop-filter: blur(55px);
       -webkit-backdrop-filter: blur(55px);
-    transition: stroke-width 0.3s ease, filter 0.3s ease;
+    transition: stroke-width 0.7s ease, filter 0.3s ease;
     cursor: pointer;
     
   }
 
   .ring-slice:hover {
-    stroke-width: 28;
+    stroke-width: 26;
+    stroke: rgba(255, 255, 255, 0.5);
+    transition: all 1.5 ease;
     filter: brightness(1.15);
     
   }
@@ -970,7 +1073,49 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
   }
 </style>
+<script>
+const arc = document.getElementById("arc");
+const svg = document.getElementById("svg");
 
+// Shared function to handle the rotation logic
+function updateRotation(clientX, clientY) {
+  const rect = svg.getBoundingClientRect();
+
+  // center of the SVG
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // position relative to center
+  const dx = clientX - cx;
+  const dy = clientY - cy;
+
+  // angle in degrees
+  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+  // rotate arc to face the pointer
+  arc.setAttribute(
+    "transform",
+    `rotate(${angle - 40} 100 100)`
+  );
+}
+
+// 1. Desktop Mouse Movement
+document.addEventListener("mousemove", (e) => {
+  updateRotation(e.clientX, e.clientY);
+});
+
+// 2. Mobile Touch Movement (Follows finger)
+document.addEventListener("touchmove", (e) => {
+  const touch = e.touches[0];
+  updateRotation(touch.clientX, touch.clientY);
+}, { passive: true });
+
+// 3. Mobile Touch Start (Snaps to finger immediately on touch)
+document.addEventListener("touchstart", (e) => {
+  const touch = e.touches[0];
+  updateRotation(touch.clientX, touch.clientY);
+}, { passive: true });
+</script>
 <script>
   /* =============================
      ELEMENT REFERENCES
@@ -978,7 +1123,17 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
   const menu = document.getElementById('menuContainer');
   const dim = document.getElementById('menuDim');
   const slices = document.querySelectorAll('.ring-slice');
-
+    
+    
+  const LOGO_BGS = [
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-44.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-45.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-46.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-47.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-48.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-49.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-43.png"
+];    
   /* =============================
      CONFIG
   ============================== */
@@ -1008,34 +1163,62 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
   }
 
   function showMenu() {
+      
+      const randomBg = LOGO_BGS[Math.floor(Math.random() * LOGO_BGS.length)];
+  
+  // 2. Select the pathlogo element
+  const logoElement = document.querySelector('.pathlogo');
+  
+  // 3. Apply the new background (keeping your linear-gradient overlay if needed)
+  if (logoElement) {
+    logoElement.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("${randomBg}")`;
+  }
     menu.classList.add('active');
-    dim.classList.add('active');
-    menuOpen = true;
-  }
+  dim.classList.add('active');
+  // Prevent clicking items behind the menu while it's open
+  document.querySelector('.page1').style.pointerEvents = 'none';
+  menuOpen = true;
+}
+  
 
-  function hideMenu() {
-    menu.classList.remove('active');
-    dim.classList.remove('active');
-    menuOpen = false;
-  }
+ function hideMenu() {
+  // --- REMOVE LIQUID FROM CANVAS ---
+  const canvas = document.getElementById('warpCanvas');
+  if (canvas) canvas.style.filter = 'none';
+
+  menu.classList.remove('active');
+  dim.classList.remove('active');
+  document.querySelector('.page1').style.pointerEvents = 'auto';
+  menuOpen = false;
+}
 
   /* =============================
      HOLD TO OPEN
   ============================== */
   function startHold(e) {
-    if (menuOpen) return;
-    if (!inCenterZone(e.clientX, e.clientY)) return;
+  if (menuOpen) return;
+  if (!inCenterZone(e.clientX, e.clientY)) return;
 
-    holding = true;
-    holdTimer = setTimeout(() => {
-      if (holding) showMenu();
-    }, HOLD_DELAY);
-  }
+  // --- TRIGGER LIQUID ON CANVAS ONLY ---
+  const canvas = document.getElementById('warpCanvas');
+  if (canvas) canvas.style.filter = 'url(#liquid)';
+  
+  holding = true;
+  holdTimer = setTimeout(() => {
+    if (holding) showMenu();
+  }, HOLD_DELAY);
+}
 
-  function cancelHold() {
-    holding = false;
-    clearTimeout(holdTimer);
+function cancelHold() {
+  holding = false;
+  clearTimeout(holdTimer);
+  
+  // Remove effect if user lets go before menu opens
+  if (!menuOpen) {
+    const canvas = document.getElementById('warpCanvas');
+    if (canvas) canvas.style.filter = 'none';
   }
+}
 
   /* =============================
      EVENTS
@@ -1053,23 +1236,31 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
      SLICE CLICK -> NAVIGATE
   ============================== */
   slices.forEach((slice, index) => {
-    slice.addEventListener('click', (e) => {
-      e.stopPropagation();
-      goToPage(index); // profile = 0
-      hideMenu();
-    });
+  slice.addEventListener('click', (e) => {
+    e.stopPropagation();
+    // Map the slices to your actual page order
+    // index 0=Profile(Page1), 1=Code(Page2), 2=Joki(Page3), etc.
+    goToPage(index); 
+    hideMenu();
   });
+});
 
   /* =============================
      NAVIGATION (ADJUST TO YOUR APP)
   ============================== */
   function goToPage(index) {
-    console.log('GO TO PAGE:', index);
-
-    // contoh:
-    // swiper.slideTo(index);
-    // scrollContainer.scrollTo({ left: index * innerWidth });
-  }
+    const container = document.getElementById('container');
+    const width = window.innerWidth;
+    
+    // Smooth scroll the container to the selected page
+    container.scrollTo({
+        left: index * width,
+        behavior: 'smooth'
+    });
+    
+    // Optional: Update your island dots if you have them
+    updateDots(index);
+}
 </script>
 
 
@@ -1083,28 +1274,33 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
 
 <div class="container" id="container">
   <!-- Page 1 Link Tree -->
+  
+  
+  
   <div class="page page1">
   <canvas id="warpCanvas"></canvas>
+  
     <div class="profile-header">
       <div class="avatar-wrapper">
-        <img src="https://awsimages.detik.net.id/community/media/visual/2022/02/17/bruce-leung-1_34.png" alt="Kodokkyun" class="main-avatar" />
-        <div class="status-badge">● ONLINE</div>
+        <img src="https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/915f70b8620adc7442ef2ba97c06435f~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=14579&refresh_token=0143ed60&x-expires=1767002400&x-signature=GsWT9xKoJOaJGVnUAj9mmWTeZnM%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=my" alt="Kodokkyun" class="main-avatar" />
+        
       </div>
+      <div class="status-badge">● ONLINE</div>
       <h2 class="name-premium">Kodokkyun</h2>
-      <p class="tagline">Wong Jowo tapi Gamer • 🎮</p>
+      <p class="tagline">Wong Jowo tapi Gamer • <i class="fa-regular fa-chess-king fa-shake" style="color: #ffffff;"></i></p>
     </div>
 
   <div class="links-container">
     <div class="link-item">
       <button class="modern-link" onclick="togglePanel(this)">
         <div class="link-info">
-          <div class="icon-box tiktok-bg">📱</div>
+          <div class="icon-box tiktok-bg"><i class="fa-brands fa-tiktok fa-bounce" style="color: #ffffff;"></i></div>
           <div class="link-text">
             <span class="link-title">TikTok</span>
             <span class="link-subtitle">Konten Gaming & Hiburan</span>
           </div>
         </div>
-        <span class="arrow-icon">↓</span>
+        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
       </button>
       <div class="modern-panel">
         <p>Mampir ke TikTok lur, konten seru tiap hari! 🙏</p>
@@ -1115,13 +1311,13 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
     <div class="link-item">
       <button class="modern-link" onclick="togglePanel(this)">
         <div class="link-info">
-          <div class="icon-box saweria-bg">💸</div>
+          <div class="icon-box saweria-bg"><i class="fa-solid fa-circle-dollar-to-slot fa-flip" style="color: #ffffff;"></i></div>
           <div class="link-text">
             <span class="link-title">Saweria</span>
             <span class="link-subtitle">Support Creator Lokal</span>
           </div>
         </div>
-        <span class="arrow-icon">↓</span>
+        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
       </button>
       <div class="modern-panel">
         <p>Tip/Donasi untuk upgrade gear streaming. Suwun!</p>
@@ -1132,13 +1328,13 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
     <div class="link-item highlight">
       <button class="modern-link" onclick="togglePanel(this)">
         <div class="link-info">
-          <div class="icon-box joki-bg">⚔️</div>
+          <div class="icon-box joki-bg"><i class="fa-solid fa-khanda fa-beat" style="color: #ffffff;"></i></div>
           <div class="link-text">
             <span class="link-title">Jasa Joki Game</span>
             <span class="link-subtitle">Top-tier Rank Service</span>
           </div>
         </div>
-        <span class="arrow-icon">↓</span>
+        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
       </button>
       <div class="modern-panel">
         <p>Gak ada waktu maen? Serahin ke ahlinya!</p>
@@ -3008,98 +3204,216 @@ function togglePanel(btn) {
 fetchCodes();
 </script>
  <script>
-        const canvas = document.getElementById('warpCanvas');
-        const ctx = canvas.getContext('2d');
+const canvas = document.getElementById('warpCanvas');
+const ctx = canvas.getContext('2d');
 
-        let width, height, centerX, centerY;
-        let starCount = 600; // Lowered slightly for better visibility over image
-        let stars = [];
+let width, height, centerX, centerY;
+let stars = [];
+let constellations = [];
+const starCount = 180; 
+const baseSpeed = 1.5;
+const boostSpeed = 17;
+let speed = baseSpeed;
+let targetSpeed = baseSpeed;
+
+let portal = {
+    z: 0,
+    maxZ: 0,
+    color: '0, 100, 255',
+    activeOpacity: 0
+};
+
+const patterns = {
+    "Aries": [{x:-10,y:0}, {x:0,y:-5}, {x:10,y:5}, {x:15,y:15}],
+    "Taurus": [{x:-20,y:-20}, {x:-10,y:-10}, {x:0,y:0}, {x:10,y:-10}, {x:20,y:-20}, {x:0,y:15}, {x:-5,y:25}],
+    "Gemini": [{x:-10,y:-20}, {x:-10,y:20}, {x:10,y:20}, {x:10,y:-20}, {x:-10,y:-20}],
+    "Cancer": [{x:0,y:0}, {x:0,y:-15}, {x:-15,y:10}, {x:15,y:10}],
+    "Leo": [{x:20,y:10}, {x:10,y:20}, {x:-10,y:20}, {x:-20,y:10}, {x:-15,y:-5}, {x:-5,y:-15}, {x:5,y:-5}],
+    "Virgo": [{x:0,y:0}, {x:-10,y:15}, {x:10,y:15}, {x:20,y:0}, {x:10,y:-15}, {x:-15,y:-5}],
+    "Libra": [{x:0,y:-20}, {x:-15,y:0}, {x:0,y:20}, {x:15,y:0}, {x:0,y:-20}],
+    "Scorpio": [{x:20,y:-15}, {x:10,y:-10}, {x:0,y:0}, {x:-5,y:10}, {x:-15,y:15}, {x:-20,y:5}],
+    "Sagittarius": [{x:-10,y:10}, {x:10,y:10}, {x:10,y:-10}, {x:-10,y:-10}, {x:-20,y:0}, {x:0,y:20}],
+    "Capricorn": [{x:-20,y:-10}, {x:0,y:15}, {x:20,y:-10}, {x:5,y:-20}, {x:-20,y:-10}],
+    "Aquarius": [{x:-20,y:10}, {x:-10,y:0}, {x:0,y:10}, {x:10,y:0}, {x:20,y:10}],
+    "Pisces": [{x:-20,y:-20}, {x:0,y:0}, {x:20,y:0}, {x:10,y:20}]
+};
+
+const colors = ['rgba(130, 200, 255,', 'rgba(100, 255, 230,', 'rgba(255, 255, 255,', 'rgba(180, 150, 255,'];
+const portalPalette = ['0, 100, 255', '0, 255, 150', '200, 50, 255', '255, 100, 50'];
+
+class Constellation {
+    constructor() { this.reset(); }
+    reset() {
+        this.z = width + Math.random() * width;
+        this.x = (Math.random() - 0.5) * width * 0.6;
+        this.y = (Math.random() - 0.5) * height * 0.6;
+        const keys = Object.keys(patterns);
+        this.points = patterns[keys[Math.floor(Math.random() * keys.length)]];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+    }
+    update() {
+        this.z -= speed;
+        if (this.z <= 0) this.reset();
+    }
+    draw() {
+        let scale = (width / 2) / this.z;
+        let opacity = Math.min(1, (1 - this.z / width) * 2.5);
         
-        let currentSpeed = 0.001;
-        let targetSpeed = 0.001;
-        const baseSpeed = 0.001;
-        const boostSpeed = 0.12;
+        if (this.z < width) {
+            ctx.save();
+            ctx.lineWidth = 1.2 * scale;
+            ctx.strokeStyle = this.color + (opacity * 0.4) + ')';
+            ctx.shadowBlur = 5 * scale;
+            ctx.shadowColor = this.color + '0.5)';
+            
+            ctx.beginPath();
+            this.points.forEach((p, i) => {
+                let px = (this.x + p.x) * scale + centerX;
+                let py = (this.y + p.y) * scale + centerY;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            });
+            ctx.stroke();
 
-        function init() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            centerX = width / 2;
-            centerY = height / 2;
-            canvas.width = width;
-            canvas.height = height;
-
-            stars = [];
-            for (let i = 0; i < starCount; i++) {
-                stars.push({
-                    x: (Math.random() - 0.5) * width * 2,
-                    y: (Math.random() - 0.5) * height * 2,
-                    z: Math.random() * width,
-                    px: 0,
-                    py: 0
-                });
-            }
-        }
-
-        function update() {
-            currentSpeed += (targetSpeed - currentSpeed) * 0.05;
-
-            for (let i = 0; i < stars.length; i++) {
-                let s = stars[i];
-                s.px = (s.x / s.z) * (width / 2) + centerX;
-                s.py = (s.y / s.z) * (height / 2) + centerY;
-
-                s.z -= currentSpeed * width;
-
-                if (s.z <= 1) {
-                    s.z = width;
-                    s.x = (Math.random() - 0.5) * width * 2;
-                    s.y = (Math.random() - 0.5) * height * 2;
-                    s.px = (s.x / s.z) * (width / 2) + centerX;
-                    s.py = (s.y / s.z) * (height / 2) + centerY;
-                }
-            }
-        }
-
-        function draw() {
-            // IMPORTANT: Clear the canvas with clearRect instead of fillRect 
-            // so the background image remains visible.
-            ctx.clearRect(0, 0, width, height);
-
-            ctx.lineCap = 'round';
-
-            for (let i = 0; i < stars.length; i++) {
-                let s = stars[i];
-                let x = (s.x / s.z) * (width / 2) + centerX;
-                let y = (s.y / s.z) * (height / 2) + centerY;
-
-                // Opacity increases as stars get closer
-                let opacity = 1 - (s.z / width);
-                let weight = (1 - s.z / width) * 4;
-
-                // Light blue/white tint to match Honkai: Star Rail aesthetic
-                ctx.strokeStyle = `rgba(200, 230, 255, ${opacity})`;
-                ctx.lineWidth = weight;
-
+            this.points.forEach((p) => {
+                let px = (this.x + p.x) * scale + centerX;
+                let py = (this.y + p.y) * scale + centerY;
+                ctx.fillStyle = this.color + opacity + ')';
                 ctx.beginPath();
-                ctx.moveTo(s.px, s.py);
-                ctx.lineTo(x, y);
-                ctx.stroke();
-            }
-
-            update();
-            requestAnimationFrame(draw);
+                ctx.arc(px, py, 2.5 * scale, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
         }
+    }
+}
 
-        window.addEventListener('resize', init);
-        window.addEventListener('mousedown', () => targetSpeed = boostSpeed);
-        window.addEventListener('mouseup', () => targetSpeed = baseSpeed);
+function init() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    centerX = width / 2;
+    centerY = height / 2;
+    portal.maxZ = width;
+    portal.z = portal.maxZ; 
+    stars = [];
+    for (let i = 0; i < starCount; i++) {
+        stars.push({
+            x: Math.random() * width - centerX,
+            y: Math.random() * height - centerY,
+            z: Math.random() * width,
+            px: 0, py: 0,
+            color: colors[Math.floor(Math.random() * colors.length)]
+        });
+    }
+    constellations = Array.from({length: 8}, () => new Constellation());
+}
+
+function update() {
+    speed += (targetSpeed - speed) * 0.1;
+    if (targetSpeed === boostSpeed) portal.activeOpacity += (1 - portal.activeOpacity) * 0.05;
+    else portal.activeOpacity += (0 - portal.activeOpacity) * 0.1;
+
+    stars.forEach(s => {
+        s.z -= speed;
+        if (s.z <= 0) { s.z = width; s.x = Math.random() * width - centerX; s.y = Math.random() * height - centerY; s.px = 0; s.py = 0; }
+    });
+    constellations.forEach(c => c.update());
+    portal.z -= speed * 0.5;
+    if (portal.z <= 0) {
+        portal.z = portal.maxZ; 
+        portal.color = portalPalette[Math.floor(Math.random() * portalPalette.length)];
+    }
+}
+
+function draw() {
+    // Increase clear alpha slightly for smoother trails on high-refresh monitors
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.fillRect(0, 0, width, height);
+
+    let portalScale = (portal.maxZ / (portal.z + 1)); 
+    let portalRadius = portalScale * 20; 
+    let finalOpacity = Math.min(1, (portal.maxZ - portal.z) / (portal.maxZ * 0.2)) * Math.min(1, portal.z / 200) * portal.activeOpacity;
+
+    // 1. Draw Portal (Simplified Gradient)
+    if (finalOpacity > 0.01) {
+        const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, portalRadius);
+        grad.addColorStop(0, 'rgba(0, 0, 0, 1)'); 
+        grad.addColorStop(0.5, `rgba(${portal.color}, ${0.4 * finalOpacity})`); 
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0)'); 
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, portalRadius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // 2. Draw Stars (Optimized: No shadowBlur)
+    stars.forEach(s => {
+        let x = (s.x / s.z) * (width / 2) + centerX;
+        let y = (s.y / s.z) * (height / 2) + centerY;
+        if (s.px !== 0) {
+            let op = 1 - (s.z / width);
+            
+            // FAKE BLOOM: Draw a thick faint line behind the star
+            ctx.globalAlpha = op * 0.3;
+            ctx.strokeStyle = s.color + '1)';
+            ctx.lineWidth = op * 8; // The "glow" width
+            ctx.beginPath(); ctx.moveTo(s.px, s.py); ctx.lineTo(x, y); ctx.stroke();
+            
+            // THE CORE: Draw the bright center
+            ctx.globalAlpha = op;
+            ctx.lineWidth = op * 2;
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+        }
+        s.px = x; s.py = y;
+    });
+
+    // 3. Draw Constellations (Optimized)
+    constellations.forEach(c => {
+        let scale = (width / 2) / c.z;
+        let opacity = Math.min(1, (1 - c.z / width) * 2.5);
         
-        // Touch support
-        window.addEventListener('touchstart', (e) => { e.preventDefault(); targetSpeed = boostSpeed; });
-        window.addEventListener('touchend', () => targetSpeed = baseSpeed);
+        if (c.z < width) {
+            ctx.save();
+            // Connecting Lines
+            ctx.lineWidth = 1 * scale;
+            ctx.strokeStyle = c.color + (opacity * 0.3) + ')';
+            ctx.beginPath();
+            c.points.forEach((p, i) => {
+                let px = (c.x + p.x) * scale + centerX;
+                let py = (c.y + p.y) * scale + centerY;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            });
+            ctx.stroke();
 
-        init();
-        draw();
-    </script>
+            // Constellation Stars
+            c.points.forEach((p) => {
+                let px = (c.x + p.x) * scale + centerX;
+                let py = (c.y + p.y) * scale + centerY;
+                ctx.fillStyle = c.color + opacity + ')';
+                ctx.beginPath();
+                ctx.arc(px, py, 2 * scale, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
+        }
+    });
+
+    update();
+    requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', init);
+window.addEventListener('mousedown', () => targetSpeed = boostSpeed);
+window.addEventListener('mouseup', () => targetSpeed = baseSpeed);
+window.addEventListener('touchstart', (e) => { e.preventDefault(); targetSpeed = boostSpeed; });
+window.addEventListener('touchend', () => targetSpeed = baseSpeed);
+
+init();
+draw();
+</script>
 </body>
 </html>

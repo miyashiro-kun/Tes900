@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
 <title>KODOK PAGE</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/jsm/loaders/GLTFLoader.js"></script>
 <script src="https://kit.fontawesome.com/424261530c.js" crossorigin="anonymous"></script>
 <style>
 * { box-sizing: border-box; 
@@ -26,9 +28,6 @@ html, body {
 }
 
 /* Container & Pages */
-.container {
-  
-}
 
 .page {
   width:100%;
@@ -265,9 +264,7 @@ html, body {
   color: white;
 }
 
-* { 
-  -webkit-tap-highlight-color: transparent !important; 
-}
+
 
 .modern-link:hover {
   background: rgba(0,0,0,0.5);
@@ -276,12 +273,13 @@ html, body {
 
 }
 * {
-  /* Disable the blue box highlight on mobile (Chrome/Safari) */
-  -webkit-tap-highlight-color: transparent !important;
-  
-  /* Disable the dotted border on click (Firefox) */
-  outline: none !important;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  outline: none;
 }
+
 
 /* Specifically for buttons and links in Firefox */
 button::-moz-focus-inner,
@@ -296,14 +294,14 @@ a::-moz-focus-inner {
   user-select: none;
 }
 .modern-link:hover .link-text {
-  background: linear-gradient(135deg, #22c55e, #38bdf8); !important; /* Forces the text to stay white even on hover */
+  background: linear-gradient(135deg, #22c55e, #38bdf8); /* Forces the text to stay white even on hover */
     -webkit-background-clip: text;
             background-clip: text;
     -webkit-text-fill-color: transparent; Forces the text to stay white even on hover */
 }
 
 .modern-link:active .link-text:hover {
-   background: linear-gradient(135deg, #22c55e, #38bdf8); !important; /* Forces the text to stay white even on hover */
+   background: linear-gradient(135deg, #22c55e, #38bdf8); /* Forces the text to stay white even on hover */
     -webkit-background-clip: text;
             background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -439,10 +437,6 @@ a::-moz-focus-inner {
   margin-bottom: 16px;
 }
 
-.extra-tilt2 {
-  display: inline-block; /* Required for transform to work */
-  transform: skewX(-15deg); /* Negative degrees tilt to the right */
-}
 
 .tab-btn {
   flex: 1;
@@ -506,7 +500,11 @@ a::-moz-focus-inner {
   gap: 15px;
 }
 
+
 .link-btn {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   width: 90vw;
   max-width: 360px;
   background: #ffffff;
@@ -858,86 +856,6 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
   background: rgba(255,255,255,0.0);
 }
 
-</style>
-</head>
-<body>
-<svg style="visibility: hidden; position: absolute;" width="0" height="0">
-  <filter id="liquid">
-    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="3" seed="1">
-      <animate attributeName="baseFrequency" dur="10s" values="0.01 0.01;0.05 0.05;0.01 0.01" repeatCount="indefinite" />
-    </feTurbulence>
-    <feDisplacementMap in="SourceGraphic" scale="50" />
-  </filter>
-</svg>
-<div class="radial-menu-layer">
-  <div class="menu-wrapper" id="triggerZone">
-      <div class="hold-button"></div>
-      <div class="menu-dim" id="menuDim"></div>
-    <div class="menu-container" id="menuContainer">
-    <div class="circular-ring">
-        
-      <div style="display: flex;justify-content: center; /* Centers horizontally */
-  align-items: center;">
-        <div class="pathlogo" style="width:47%;height:47%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
-  align-items: center;"></div>  
-  
-  <div class="pathlogo2" style="width:105%;height:105%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
-  align-items: center;">
-      
-  <svg id="svg" width="210" height="210" viewBox="0 0 200 200">
-  <circle
-    id="arc"
-    cx="100"
-    cy="100"
-    r="80"
-    fill="none"
-    stroke="#fff"
-    stroke-width="10"
-    stroke-dasharray="100 400"
-    transform="rotate(-90 100 100)"
-  />
-</svg>
-  </div>  
-      <svg viewBox="0 0 100 100" class="svg-layer">
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 0; --bg: #00000099" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 1; --bg: #00000099" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 2; --bg: #00000099" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 3; --bg: #00000099" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 4; --bg: #00000099" />
-      </svg>
-      
-      </div>
-
-      <div class="content-node" style="--angle: 18deg;">
-        <span class="icon"><i class="fa-solid fa-user" style="color: #ffffff;"></i></span>
-        <span class="label">Profile</span>
-      </div>
-      <div class="content-node" style="--angle: 90deg;">
-        <span class="icon"><i class="fa-solid fa-keyboard" style="color: #ffffff;"></i></span>
-        <span class="label">Code Redem</span>
-      </div>
-      <div class="content-node" style="--angle: 162deg;">
-        <span class="icon"><i class="fa-solid fa-gamepad" style="color: #ffffff;"></i></span>
-        <span class="label">Joki</span>
-      </div>
-      <div class="content-node" style="--angle: 234deg;">
-        <span class="icon"><i class="fa-solid fa-tv" style="color: #ffffff;"></i></span>
-        <span class="label">News</span>
-      </div>
-      <div class="content-node" style="--angle: 306deg;">
-        <span class="icon" style="margin-left:-15px;"><i class="fa-solid fa-newspaper" style="color: #ffffff;"></i>️</span>
-        <span class="label" style="margin-left:-15px;">Patches</span>
-      </div>
-    </div>
-  </div>
-  </div>
-</div>
-
-<style>
-  :root {
-    --menu-size: 380px;
-    --content-radius: 135px; 
-  }
 .menu-dim {
   position: fixed;
   inset: 0;
@@ -1072,281 +990,7 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
     text-transform: uppercase;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
   }
-</style>
-<script>
-const arc = document.getElementById("arc");
-const svg = document.getElementById("svg");
-
-// Shared function to handle the rotation logic
-function updateRotation(clientX, clientY) {
-  const rect = svg.getBoundingClientRect();
-
-  // center of the SVG
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
-
-  // position relative to center
-  const dx = clientX - cx;
-  const dy = clientY - cy;
-
-  // angle in degrees
-  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-
-  // rotate arc to face the pointer
-  arc.setAttribute(
-    "transform",
-    `rotate(${angle - 40} 100 100)`
-  );
-}
-
-// 1. Desktop Mouse Movement
-document.addEventListener("mousemove", (e) => {
-  updateRotation(e.clientX, e.clientY);
-});
-
-// 2. Mobile Touch Movement (Follows finger)
-document.addEventListener("touchmove", (e) => {
-  const touch = e.touches[0];
-  updateRotation(touch.clientX, touch.clientY);
-}, { passive: true });
-
-// 3. Mobile Touch Start (Snaps to finger immediately on touch)
-document.addEventListener("touchstart", (e) => {
-  const touch = e.touches[0];
-  updateRotation(touch.clientX, touch.clientY);
-}, { passive: true });
-</script>
-<script>
-  /* =============================
-     ELEMENT REFERENCES
-  ============================== */
-  const menu = document.getElementById('menuContainer');
-  const dim = document.getElementById('menuDim');
-  const slices = document.querySelectorAll('.ring-slice');
-    
-    
-  const LOGO_BGS = [
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-44.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-45.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-46.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-47.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-48.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-49.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-43.png"
-];    
-  /* =============================
-     CONFIG
-  ============================== */
-  const HOLD_DELAY = 700;
-  const CENTER_ZONE = { width: 0.35, height: 0.35 };
-
-  /* =============================
-     STATE
-  ============================== */
-  let holdTimer = null;
-  let holding = false;
-  let menuOpen = false;
-
-  /* =============================
-     HELPERS
-  ============================== */
-  function inCenterZone(x, y) {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-
-    return (
-      x >= w * (0.5 - CENTER_ZONE.width / 2) &&
-      x <= w * (0.5 + CENTER_ZONE.width / 2) &&
-      y >= h * (0.5 - CENTER_ZONE.height / 2) &&
-      y <= h * (0.5 + CENTER_ZONE.height / 2)
-    );
-  }
-
-  function showMenu() {
-      
-      const randomBg = LOGO_BGS[Math.floor(Math.random() * LOGO_BGS.length)];
-  
-  // 2. Select the pathlogo element
-  const logoElement = document.querySelector('.pathlogo');
-  
-  // 3. Apply the new background (keeping your linear-gradient overlay if needed)
-  if (logoElement) {
-    logoElement.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("${randomBg}")`;
-  }
-    menu.classList.add('active');
-  dim.classList.add('active');
-  // Prevent clicking items behind the menu while it's open
-  document.querySelector('.page1').style.pointerEvents = 'none';
-  menuOpen = true;
-}
-  
-
- function hideMenu() {
-  // --- REMOVE LIQUID FROM CANVAS ---
-  const canvas = document.getElementById('warpCanvas');
-  if (canvas) canvas.style.filter = 'none';
-
-  menu.classList.remove('active');
-  dim.classList.remove('active');
-  document.querySelector('.page1').style.pointerEvents = 'auto';
-  menuOpen = false;
-}
-
-  /* =============================
-     HOLD TO OPEN
-  ============================== */
-  function startHold(e) {
-  if (menuOpen) return;
-  if (!inCenterZone(e.clientX, e.clientY)) return;
-
-  // --- TRIGGER LIQUID ON CANVAS ONLY ---
-  const canvas = document.getElementById('warpCanvas');
-  if (canvas) canvas.style.filter = 'url(#liquid)';
-  
-  holding = true;
-  holdTimer = setTimeout(() => {
-    if (holding) showMenu();
-  }, HOLD_DELAY);
-}
-
-function cancelHold() {
-  holding = false;
-  clearTimeout(holdTimer);
-  
-  // Remove effect if user lets go before menu opens
-  if (!menuOpen) {
-    const canvas = document.getElementById('warpCanvas');
-    if (canvas) canvas.style.filter = 'none';
-  }
-}
-
-  /* =============================
-     EVENTS
-  ============================== */
-  window.addEventListener('pointerdown', startHold, { passive: true });
-  window.addEventListener('pointerup', cancelHold);
-  window.addEventListener('pointercancel', cancelHold);
-
-  /* =============================
-     CLOSE ON DIM CLICK
-  ============================== */
-  dim.addEventListener('click', hideMenu);
-
-  /* =============================
-     SLICE CLICK -> NAVIGATE
-  ============================== */
-  slices.forEach((slice, index) => {
-  slice.addEventListener('click', (e) => {
-    e.stopPropagation();
-    // Map the slices to your actual page order
-    // index 0=Profile(Page1), 1=Code(Page2), 2=Joki(Page3), etc.
-    goToPage(index); 
-    hideMenu();
-  });
-});
-
-  /* =============================
-     NAVIGATION (ADJUST TO YOUR APP)
-  ============================== */
-  function goToPage(index) {
-    const container = document.getElementById('container');
-    const width = window.innerWidth;
-    
-    // Smooth scroll the container to the selected page
-    container.scrollTo({
-        left: index * width,
-        behavior: 'smooth'
-    });
-    
-    // Optional: Update your island dots if you have them
-    updateDots(index);
-}
-</script>
-
-
-
-
-
-
-
-
-
-
-<div class="container" id="container">
-  <!-- Page 1 Link Tree -->
-  
-  
-  
-  <div class="page page1">
-  <canvas id="warpCanvas"></canvas>
-  
-    <div class="profile-header">
-      <div class="avatar-wrapper">
-        <img src="https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/915f70b8620adc7442ef2ba97c06435f~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=14579&refresh_token=0143ed60&x-expires=1767002400&x-signature=GsWT9xKoJOaJGVnUAj9mmWTeZnM%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=my" alt="Kodokkyun" class="main-avatar" />
-        
-      </div>
-      <div class="status-badge">● ONLINE</div>
-      <h2 class="name-premium">Kodokkyun</h2>
-      <p class="tagline">Wong Jowo tapi Gamer • <i class="fa-regular fa-chess-king fa-shake" style="color: #ffffff;"></i></p>
-    </div>
-
-  <div class="links-container">
-    <div class="link-item">
-      <button class="modern-link" onclick="togglePanel(this)">
-        <div class="link-info">
-          <div class="icon-box tiktok-bg"><i class="fa-brands fa-tiktok fa-bounce" style="color: #ffffff;"></i></div>
-          <div class="link-text">
-            <span class="link-title">TikTok</span>
-            <span class="link-subtitle">Konten Gaming & Hiburan</span>
-          </div>
-        </div>
-        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
-      </button>
-      <div class="modern-panel">
-        <p>Mampir ke TikTok lur, konten seru tiap hari! 🙏</p>
-        <button class="action-btn" onclick="window.open('https://www.tiktok.com/@kodok.kyun?_r=1&_t=ZS-92Pj7eRBXST', '_blank')">Follow Yuk</button>
-      </div>
-    </div>
-
-    <div class="link-item">
-      <button class="modern-link" onclick="togglePanel(this)">
-        <div class="link-info">
-          <div class="icon-box saweria-bg"><i class="fa-solid fa-circle-dollar-to-slot fa-flip" style="color: #ffffff;"></i></div>
-          <div class="link-text">
-            <span class="link-title">Saweria</span>
-            <span class="link-subtitle">Support Creator Lokal</span>
-          </div>
-        </div>
-        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
-      </button>
-      <div class="modern-panel">
-        <p>Tip/Donasi untuk upgrade gear streaming. Suwun!</p>
-        <button class="action-btn" onclick="window.open('https://saweria.co/kodokkyunn99', '_blank')">Tip Saweria</button>
-      </div>
-    </div>
-
-    <div class="link-item highlight">
-      <button class="modern-link" onclick="togglePanel(this)">
-        <div class="link-info">
-          <div class="icon-box joki-bg"><i class="fa-solid fa-khanda fa-beat" style="color: #ffffff;"></i></div>
-          <div class="link-text">
-            <span class="link-title">Jasa Joki Game</span>
-            <span class="link-subtitle">Top-tier Rank Service</span>
-          </div>
-        </div>
-        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
-      </button>
-      <div class="modern-panel">
-        <p>Gak ada waktu maen? Serahin ke ahlinya!</p>
-        <button class="action-btn joki-btn-color" id="JOKINext">Lihat Pricelist</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="page" id="page2">
-  <style>
-    #page2 {
+  #page2 {
       min-height: 100vh;
       width: 100%;
       background-size: cover;
@@ -1494,141 +1138,7 @@ function cancelHold() {
       font-size: 0.8rem;
       opacity: 0.7;
     }
-  </style>
-
-  <div class="content">
-    <div class="header-logo-container">
-      <img id="game-logo-header" src="" alt="Logo" class="animate-logo">
-    </div>
-
-    <div class="tabs-v2 e-tilt">
-      <button class="tab-btn-v2 active" data-game="zenless">ZZZ</button>
-      <button class="tab-btn-v2" data-game="genshinimpact">GENSHIN</button>
-      <button class="tab-btn-v2" data-game="starrail">HSR</button>
-      <button class="tab-btn-v2" data-game="hi3rd">HI3rd</button>
-    </div>
-
-    <div id="codes-container-v2">
-      <div class="loading-v2">INITIALIZING...</div>
-    </div>
-
-    <div style="height: 100px;"></div> 
-  </div>
-
-  <script>
-    (function() {
-      const APIS = {
-        zenless: 'https://kodokkyun-project.vercel.app/api/zzcode',
-        genshinimpact: 'https://kodokkyun-project.vercel.app/api/gscd',
-        starrail: 'https://kodokkyun-project.vercel.app/api/stcode',
-        hi3rd: 'https://kodokkyun-project.vercel.app/api/hicode'
-      };
-
-      const BGS = {
-        zenless: 'https://images7.alphacoders.com/130/thumb-1920-1307267.jpg',
-        genshinimpact: 'https://fastcdn.hoyoverse.com/content-v2/hk4e/159337/54b493f799071cf2050b919305288d5d_7897117480191368973.jpg',
-        starrail: 'https://i.ibb.co.com/VYZ3w3wB/Fyreflies-are-such-magical-creatures-aren-t-they-They-may-throw-themselves-at-a-flame-or-sudden-ups.png',
-        hi3rd: 'https://fastcdn.hoyoverse.com/content-v2/plat/101533/6fbf8271438e536e58169ac01efb0a84_723492315779207397.jpg'
-      };
-
-      const CODELOGO = {
-        zenless: 'https://i.ibb.co.com/JFcGnZvK/f3.png',
-        genshinimpact: 'https://i.ibb.co.com/Nn3J5SnW/1rf.png',
-        starrail: 'https://i.ibb.co.com/TDQgJmdk/unnamed.png',
-        hi3rd: 'https://i.ibb.co.com/tTGpYmcr/ewq.png'
-      };
-
-      // Konfigurasi Link Redeem Otomatis
-      const REDEEM_CONFIG = {
-        zenless: code => `https://zenless.hoyoverse.com/redemption?code=${code}`,
-        genshinimpact: code => `https://genshin.hoyoverse.com/en/gift?code=${code}`,
-        starrail: code => `https://hsr.hoyoverse.com/gift?code=${code}`,
-        hi3rd: code => `https://honkaiimpact3.hoyoverse.com/global/en/home?code=${code}` 
-      };
-
-      async function loadCodes(game) {
-        const container = document.getElementById('codes-container-v2');
-        const pg2 = document.getElementById('page2');
-        const logoImg = document.getElementById('game-logo-header');
-        
-        logoImg.classList.remove('animate-logo');
-        logoImg.src = CODELOGO[game];
-        pg2.style.backgroundImage = `url('${BGS[game]}')`;
-        
-        void logoImg.offsetWidth; 
-        logoImg.classList.add('animate-logo');
-        
-        container.innerHTML = '<div class="loading-v2">LOADING CODES...</div>';
-
-        try {
-          const res = await fetch(APIS[game]);
-          const data = await res.json();
-          container.innerHTML = '';
-
-          if (data.active && data.active.length > 0) {
-            data.active.forEach((item, index) => {
-              const rewardList = item.rewards.join(', ');
-              const card = document.createElement('div');
-              card.className = 'redeem-card-v2 reveal-card';
-              card.style.animationDelay = `${index * 0.1}s`;
-              
-              // Membuat link redeem khusus untuk kode ini
-              const finalRedeemUrl = REDEEM_CONFIG[game](item.code);
-              
-              card.innerHTML = `
-                <div class="redeem-header-v2">
-                  <span class="code-v2">${item.code}</span>
-                  <div class="btn-group-v2">
-                    <button class="btn-v2 btn-copy-v2" onclick="copyAction('${item.code}', this)">COPY</button>
-                    <button class="btn-v2 btn-redeem-v2" onclick="window.open('${finalRedeemUrl}', '_blank')">REDEEM</button>
-                  </div>
-                </div>
-                <div class="reward-v2" style="font-size:0.85rem; color:#aaa; border-top:1px solid rgba(255,255,255,0.05); padding-top:8px;">
-                  <strong>Rewards:</strong> ${rewardList}
-                </div>
-              `;
-              container.appendChild(card);
-            });
-          } else {
-            container.innerHTML = '<div class="loading-v2">NO ACTIVE CODES FOUND</div>';
-          }
-        } catch (e) {
-          container.innerHTML = '<div class="loading-v2" style="color:#f87171">CONNECTION ERROR</div>';
-        }
-      }
-
-      document.querySelectorAll('.tab-btn-v2').forEach(btn => {
-        btn.addEventListener('click', function() {
-          if(this.classList.contains('active')) return;
-          document.querySelectorAll('.tab-btn-v2').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          loadCodes(this.dataset.game);
-        });
-      });
-
-      window.copyAction = function(text, btn) {
-        navigator.clipboard.writeText(text);
-        const originalText = btn.innerText;
-        btn.innerText = 'COPIED!';
-        btn.style.background = '#059669';
-        setTimeout(() => {
-          btn.innerText = originalText;
-          btn.style.background = '#6366f1';
-        }, 1000);
-      };
-
-      loadCodes('zenless');
-    })();
-  </script>
-</div>
-
-
-  <!-- Page 3 -->
-  <div class="page page3">
-  
-  <div class="joki-master-container">
-    <style>
-        .joki-master-container {
+    .joki-master-container {
             /* Mencegah terpotong oleh header fixed website utama */
             padding-top: 0px; 
             position: relative;
@@ -1955,7 +1465,866 @@ function cancelHold() {
     width: 100%;
     margin: 5px;
 }
-    </style>
+
+
+        .gc-container {
+            padding: 10px;
+            color: #fff;
+            max-width: 100%;
+            touch-action: pan-x pan-y !important; 
+        }
+
+        /* TAB BUTTONS */
+        .gc-tabs {
+            display: flex;
+            width: 100%;
+            gap: 6px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .gc-tab-btn {
+            flex: 1;
+            width: 200px;
+            padding: 10px 5px;
+            border: 1px solid var(--border);
+            background: var(--glass);
+            color: #fff;
+            border-radius: 7px;
+            font-weight: bold;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gc-tab-btn.active[data-game="genshin"] { background: var(--accent); color: #000; border-color: var(--accent); }
+        .gc-tab-btn.active[data-game="hsr"] { background: var(--hsr-accent); color: #000; border-color: var(--hsr-accent); }
+        .gc-tab-btn.active[data-game="zzz"] { background: var(--zzz-accent); color: #000; border-color: var(--zzz-accent); }
+        .gc-tab-btn.active[data-game="hi3"] { background: var(--hi3-accent); color: #000; border-color: var(--hi3-accent); }
+
+        .gc-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 20px 0 10px;
+            text-transform: uppercase;
+            border-left: 3px solid var(--accent);
+            padding-left: 10px;
+        }
+        /* Specific Glow Colors based on the active tab */
+.gc-tab-btn.active[data-game="genshin"] ~ .gc-content .e-card:hover { 
+    box-shadow: 0 0 20px rgba(255, 211, 105, 0.4); 
+    border-color: #ffd369; 
+    transition: all 0.3s ease;
+}
+.gc-tab-btn.active[data-game="hsr"] ~ .gc-content .e-card:hover { 
+    box-shadow: 0 0 20px rgba(105, 211, 255, 0.4); 
+    border-color: #69d3ff; 
+    transition: all 0.3s ease;
+}
+.gc-tab-btn.active[data-game="zzz"] ~ .gc-content .e-card:hover { 
+    box-shadow: 0 0 20px rgba(157, 255, 105, 0.4); 
+    border-color: #9dff69; 
+    transition: all 0.3s ease;
+}
+        .banner-row { display: flex; flex-direction: column; gap: 12px; padding-bottom: 10px; }
+        .b-card { width: 100%; background: linear-gradient(135deg, #1a1a1a, #000); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+        .b-head { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; }
+        .b-icons { display: flex; gap: 5px; flex-wrap: wrap; }
+        .m-icon { width: 45px; height: 45px; border-radius: 8px; background: var(--glass); border: 1px solid var(--border); object-fit: cover;}
+
+        .e-grid { display: flex; flex-direction: column; gap: 15px; transition: all 2.3s ease; }
+            
+            .e-card {text-decoration: none !important;
+    transition: all 2.3s ease;
+    position: relative;
+    overflow: hidden;
+    border : solid 1px #fff;
+    border-radius: 10px;/* Needed for the shimmer effect */
+}
+
+.e-thumb{width: 100%;
+        object-fit: cover;
+        background-size: cover;
+        background-position: center;
+}
+.e-card:hover {
+    transform: translateY(-15px) scale(1.05) rotateX(8deg) rotateY(-5deg) !important; 
+    transition: all 4.4s ease !important;
+    z-index: 10;
+    border-color: #38bdf8; /* Uses your theme blue */
+    box-shadow: 
+        0 0 20px rgba(56, 189, 248, 0.4), /* Outer Glow */
+        0 25px 50px rgba(0, 0, 0, 0.7);
+    filter: brightness(1.1);
+}
+
+/* The "Shimmer" Flash effect */
+.e-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    background: linear-gradient(
+        to right, 
+        rgba(255,255,255,0) 0%, 
+        rgba(255,255,255,0.3) 50%, 
+        rgba(255,255,255,0) 100%
+    );
+    transform: rotate(30deg);
+    transition: all 1.4s ease !important;
+}
+
+.e-card:hover::after {
+    left: 120%;
+    transition: all 1.4s ease !important;
+}
+
+/* Efek saat ditekan (untuk mobile) */
+.e-card:active {
+    transform: scale(0.97);
+    transition: all 1.4s ease;
+}
+        .e-date {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            font-weight: 800;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .e-name {color: #ffffff !important; text-decoration: none !important; font-weight: bold; font-size: 1rem; margin-bottom: 5px; line-height: 1.2; }
+        .e-desc { font-size: 0.82rem; color: #ccc; line-height: 1.4; margin-bottom: 10px; }
+        .e-name a, a.e-name {
+    color: inherit;
+    text-decoration: none !important;
+}
+        .r-row {
+            display: flex; gap: 8px; background: rgba(0,0,0,0.4);
+            padding: 8px; border-radius: 8px; overflow-x: auto;
+        }
+        .r-item { display: flex; flex-direction: column; align-items: center; min-width: 35px; }
+        .r-img { width: 25px; height: 25px; object-fit: contain; }
+        .r-amt { font-size: 0.6rem; color: var(--accent); }
+        .calendar-content{padding-bottom:50px;}
+        .loader { text-align: center; padding: 50px; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px;}
+    
+   /* =========================================================
+   MASONRY EVENT GRID – RESPONSIVE (PORTRAIT + LANDSCAPE)
+   ========================================================= */
+
+/* Base (Portrait / Mobile) */
+.page5 .e-grid {
+    display: block;
+    column-count: 1;
+    column-gap: 14px;
+    transition: all 2.3s ease;
+}
+
+/* Landscape phones */
+@media (orientation: landscape) and (min-width: 480px) {
+    .page5 .e-grid {
+        column-count: 2;
+        transition: all 2.3s ease;
+    }
+}
+
+/* Tablets / large landscape / desktop */
+@media (orientation: landscape) and (min-width: 900px) {
+    .page5 .e-grid {
+        column-count: 3;
+        transition: all 2.3s ease;
+    }
+}
+
+/* Masonry card rules */
+.page5 .e-card {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 14px;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    transition: all 2.3s ease;
+}
+
+/* Optional: reduce vertical bulk in landscape */
+@media (orientation: landscape) {
+    .page5 .e-body {
+        padding: 10px;
+    }
+
+    .page5 .e-desc {
+        font-size: 0.78rem;
+        line-height: 1.35;
+    }
+}
+
+/* Optional: smooth appearance */
+.page5 .e-card {
+    animation: masonryFade 0.35s ease both;
+    transition: all 3.3s ease;
+}
+
+@keyframes masonryFade {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Wider landscape (tablets / foldables / desktop landscape) */
+@media (min-width: 900px) and (orientation: landscape) {
+    .page5 .e-grid {
+        grid-template-columns: repeat(3, 1fr);
+        transition: all 0.3s ease;
+    }
+}
+:root {
+        --sr-blue: #007bff;
+        --sr-accent: #f29d38;
+        --sr-bg-card: rgba(255, 255, 255, 0.08);
+        --sr-border: rgba(255, 255, 255, 0.15);
+        --menu-size: 380px;
+        --content-radius: 135px; 
+        --accent: #ffd369;
+        --hsr-accent: #69d3ff;
+        --zzz-accent: #9dff69; 
+        --hi3-accent: #ff85d0;
+        --glass: rgba(255, 255, 255, 0.08);
+        --border: rgba(255, 255, 255, 0.15);
+      }
+
+      #game-downloader-container {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        width: 100%;
+      }
+    
+    .extra-tilt2 {
+  display: inline-block; /* Required for transform to work */
+  transform: skewX(-15deg); /* Negative degrees tilt to the right */
+}
+      /* Game Selector Tabs */
+      .resource-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 25px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      /* TRANSITION LOGIC */
+      .content-fade {
+        transition: opacity 0.4s ease-in-out, transform 0.4s ease-out;
+        opacity: 1;
+      }
+      .content-fade.is-hidden {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      /* Banner Container */
+      .resource-banner {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 1000px;
+        aspect-ratio: 16 / 9;
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        background: transparent;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      }
+
+      .slide-layer {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        z-index: 1;
+        object-fit: cover;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .slide-layer.active {
+        opacity: 1;
+        z-index: 2;
+      }
+
+      .resource-banner-content {
+        position: absolute;
+        bottom: 0; left: 0; width: 100%;
+        z-index: 10;
+        padding: 20px;
+        background: linear-gradient(transparent, rgba(0,0,0,0.85));
+        pointer-events: none;
+      }
+
+      .resource-banner-content h1 { margin: 0; font-size: 20px; color: #fff; text-transform: uppercase; }
+      .resource-banner-content h2 { margin: 5px 0 0; font-size: 13px; color: var(--sr-accent); font-weight: 400; border:none;}
+
+      /* Tilted UI Tags */
+      .type-tag { 
+        position: absolute; 
+        top: 0; right: 0; 
+        font-size: 9px; 
+        padding: 4px 12px; 
+        background: rgba(0,0,0,0.7); 
+        border-bottom-left-radius: 10px; 
+        color: #fff; 
+        text-transform: uppercase;
+        font-style: italic; /* Tilt Effect */
+        font-weight: bold;
+        transform: skewX(-15deg); /* Tilt Effect */
+        border-left: 3px solid var(--sr-accent);
+      }
+
+      /* Package Grid Layout */
+      .resource-section { margin-top: 30px; color: white; }
+      .resource-section h2 { border-bottom: 1px solid var(--sr-border); padding-bottom: 10px; font-size: 1.1rem; }
+      .package-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 15px;}
+      
+      .package-item {
+        background: var(--sr-bg-card);
+        border: 1px solid var(--sr-border);
+        border-radius: 10px;
+        padding: 20px 15px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .package-item .title { font-size: 13px; font-weight: bold; margin-bottom: 10px; color: #fff; overflow-wrap: anywhere; line-height: 1.4; }
+      .package-item .size { font-size: 11px; color: #aaa; margin-bottom: 15px; font-style: italic; }
+      
+      .dl-link {
+        background: var(--sr-blue);
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        padding: 10px;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      
+      /* Animation for Page 5 content */
+@keyframes eventReveal {
+  0% { 
+    opacity: 0; 
+    transform: translateY(20px); 
+    filter: blur(10px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+    filter: blur(0);
+  }
+}
+
+/* Apply this class to trigger the animation */
+.reveal-content #event-list, 
+.reveal-content #banner-section {
+  animation: eventReveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Optional: Stagger the items for a better feel */
+#event-list > div {
+    opacity: 0;
+}
+.reveal-content #event-list > div {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+</style>
+</head>
+<body>
+<svg style="visibility: hidden; position: absolute;" width="0" height="0">
+  <filter id="liquid">
+    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="3" seed="1">
+      <animate attributeName="baseFrequency" dur="10s" values="0.01 0.01;0.05 0.05;0.01 0.01" repeatCount="indefinite" />
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" scale="50" />
+  </filter>
+</svg>
+<div class="radial-menu-layer">
+  <div class="menu-wrapper" id="triggerZone">
+      <div class="hold-button"></div>
+      <div class="menu-dim" id="menuDim"></div>
+    <div class="menu-container" id="menuContainer">
+    <div class="circular-ring">
+        
+      <div style="display: flex;justify-content: center; /* Centers horizontally */
+  align-items: center;">
+        <div class="pathlogo" style="width:47%;height:47%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
+  align-items: center;"></div>  
+  
+  <div class="pathlogo2" style="width:105%;height:105%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
+  align-items: center;">
+      
+  <svg id="svg" width="210" height="210" viewBox="0 0 200 200">
+  <circle
+    id="arc"
+    cx="100"
+    cy="100"
+    r="80"
+    fill="none"
+    stroke="#fff"
+    stroke-width="10"
+    stroke-dasharray="100 400"
+    transform="rotate(-90 100 100)"
+  />
+</svg>
+  </div>  
+      <svg viewBox="0 0 100 100" class="svg-layer">
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 0; --bg: #00000099" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 1; --bg: #00000099" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 2; --bg: #00000099" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 3; --bg: #00000099" />
+        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 4; --bg: #00000099" />
+      </svg>
+      
+      </div>
+
+      <div class="content-node" style="--angle: 18deg;">
+        <span class="icon"><i class="fa-solid fa-user" style="color: #ffffff;"></i></span>
+        <span class="label">Profile</span>
+      </div>
+      <div class="content-node" style="--angle: 90deg;">
+        <span class="icon"><i class="fa-solid fa-keyboard" style="color: #ffffff;"></i></span>
+        <span class="label">Code Redem</span>
+      </div>
+      <div class="content-node" style="--angle: 162deg;">
+        <span class="icon"><i class="fa-solid fa-gamepad" style="color: #ffffff;"></i></span>
+        <span class="label">Joki</span>
+      </div>
+      <div class="content-node" style="--angle: 234deg;">
+        <span class="icon"><i class="fa-solid fa-tv" style="color: #ffffff;"></i></span>
+        <span class="label">News</span>
+      </div>
+      <div class="content-node" style="--angle: 306deg;">
+        <span class="icon" style="margin-left:-15px;"><i class="fa-solid fa-newspaper" style="color: #ffffff;"></i>️</span>
+        <span class="label" style="margin-left:-15px;">Patches</span>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<script>
+const arc = document.getElementById("arc");
+const svg = document.getElementById("svg");
+
+// Shared function to handle the rotation logic
+function updateRotation(clientX, clientY) {
+  const rect = svg.getBoundingClientRect();
+
+  // center of the SVG
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // position relative to center
+  const dx = clientX - cx;
+  const dy = clientY - cy;
+
+  // angle in degrees
+  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+  // rotate arc to face the pointer
+  arc.setAttribute(
+    "transform",
+    `rotate(${angle - 40} 100 100)`
+  );
+}
+
+// 1. Desktop Mouse Movement
+document.addEventListener("mousemove", (e) => {
+  updateRotation(e.clientX, e.clientY);
+});
+
+// 2. Mobile Touch Movement (Follows finger)
+document.addEventListener("touchmove", (e) => {
+  const touch = e.touches[0];
+  updateRotation(touch.clientX, touch.clientY);
+}, { passive: true });
+
+// 3. Mobile Touch Start (Snaps to finger immediately on touch)
+document.addEventListener("touchstart", (e) => {
+  const touch = e.touches[0];
+  updateRotation(touch.clientX, touch.clientY);
+}, { passive: true });
+</script>
+<script>
+  /* =============================
+     ELEMENT REFERENCES
+  ============================== */
+  const menu = document.getElementById('menuContainer');
+  const dim = document.getElementById('menuDim');
+  const slices = document.querySelectorAll('.ring-slice');
+    
+    
+  const LOGO_BGS = [
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-44.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-45.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-46.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-47.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-48.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-49.png",
+  "https://gamebrott.com/wp-content/uploads/2023/08/image-43.png"
+];    
+  /* =============================
+     CONFIG
+  ============================== */
+  const HOLD_DELAY = 700;
+  const CENTER_ZONE = { width: 0.35, height: 0.35 };
+
+  /* =============================
+     STATE
+  ============================== */
+  let holdTimer = null;
+  let holding = false;
+  let menuOpen = false;
+
+  /* =============================
+     HELPERS
+  ============================== */
+  function inCenterZone(x, y) {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    return (
+      x >= w * (0.5 - CENTER_ZONE.width / 2) &&
+      x <= w * (0.5 + CENTER_ZONE.width / 2) &&
+      y >= h * (0.5 - CENTER_ZONE.height / 2) &&
+      y <= h * (0.5 + CENTER_ZONE.height / 2)
+    );
+  }
+
+  function showMenu() {
+      
+      const randomBg = LOGO_BGS[Math.floor(Math.random() * LOGO_BGS.length)];
+  
+  // 2. Select the pathlogo element
+  const logoElement = document.querySelector('.pathlogo');
+  
+  // 3. Apply the new background (keeping your linear-gradient overlay if needed)
+  if (logoElement) {
+    logoElement.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("${randomBg}")`;
+  }
+    menu.classList.add('active');
+  dim.classList.add('active');
+  // Prevent clicking items behind the menu while it's open
+  document.querySelector('.page1').style.pointerEvents = 'none';
+  menuOpen = true;
+}
+  
+
+ function hideMenu() {
+  // --- REMOVE LIQUID FROM CANVAS ---
+  const canvas = document.getElementById('warpCanvas');
+  if (canvas) canvas.style.filter = 'none';
+
+  menu.classList.remove('active');
+  dim.classList.remove('active');
+  document.querySelector('.page1').style.pointerEvents = 'auto';
+  menuOpen = false;
+}
+
+  /* =============================
+     HOLD TO OPEN
+  ============================== */
+  function startHold(e) {
+  if (menuOpen) return;
+  if (!inCenterZone(e.clientX, e.clientY)) return;
+
+  // --- TRIGGER LIQUID ON CANVAS ONLY ---
+  const canvas = document.getElementById('warpCanvas');
+  if (canvas) canvas.style.filter = 'url(#liquid)';
+  
+  holding = true;
+  holdTimer = setTimeout(() => {
+    if (holding) showMenu();
+  }, HOLD_DELAY);
+}
+
+function cancelHold() {
+  holding = false;
+  clearTimeout(holdTimer);
+  
+  // Remove effect if user lets go before menu opens
+  if (!menuOpen) {
+    const canvas = document.getElementById('warpCanvas');
+    if (canvas) canvas.style.filter = 'none';
+  }
+}
+
+  /* =============================
+     EVENTS
+  ============================== */
+  window.addEventListener('pointerdown', startHold, { passive: true });
+  window.addEventListener('pointerup', cancelHold);
+  window.addEventListener('pointercancel', cancelHold);
+
+  /* =============================
+     CLOSE ON DIM CLICK
+  ============================== */
+  dim.addEventListener('click', hideMenu);
+
+  /* =============================
+     SLICE CLICK -> NAVIGATE
+  ============================== */
+  slices.forEach((slice, index) => {
+  slice.addEventListener('click', (e) => {
+    e.stopPropagation();
+    // Map the slices to your actual page order
+    // index 0=Profile(Page1), 1=Code(Page2), 2=Joki(Page3), etc.
+    goToPage(index); 
+    hideMenu();
+  });
+});
+
+  /* =============================
+     NAVIGATION (ADJUST TO YOUR APP)
+  ============================== */
+  function goToPage(index) {
+    const container = document.getElementById('container');
+    const width = window.innerWidth;
+    
+    // Smooth scroll the container to the selected page
+    container.scrollTo({
+        left: index * width,
+        behavior: 'smooth'
+    });
+    
+    // Optional: Update your island dots if you have them
+    updateDots(index);
+}
+</script>
+
+<div class="container" id="container">
+  <!-- Page 1 Link Tree -->
+  
+  
+  
+  <div class="page page1">
+  <canvas id="warpCanvas"></canvas>
+  <div id="threeContainer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;"></div>
+    <div class="profile-header">
+      <div class="avatar-wrapper">
+        <img src="https://i.ibb.co.com/zhRNLbFN/915f70b8620adc7442ef2ba97c06435f-tplv-tiktokx-cropcenter-1080-1080.jpg" alt="Kodokkyun" class="main-avatar" />
+        
+      </div>
+      <div class="status-badge">● ONLINE</div>
+      <h2 class="name-premium">Kodokkyun</h2>
+      <p class="tagline">Wong Jowo tapi Gamer • <i class="fa-regular fa-chess-king fa-shake" style="color: #ffffff;"></i></p>
+    </div>
+
+  <div class="links-container">
+    <div class="link-item">
+      <button class="modern-link" onclick="togglePanel(this)">
+        <div class="link-info">
+          <div class="icon-box tiktok-bg"><i class="fa-brands fa-tiktok fa-bounce" style="color: #ffffff;"></i></div>
+          <div class="link-text">
+            <span class="link-title">TikTok</span>
+            <span class="link-subtitle">Konten Gaming & Hiburan</span>
+          </div>
+        </div>
+        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
+      </button>
+      <div class="modern-panel">
+        <p>Mampir ke TikTok lur, konten seru tiap hari! 🙏</p>
+        <button class="action-btn" onclick="window.open('https://www.tiktok.com/@kodok.kyun?_r=1&_t=ZS-92Pj7eRBXST', '_blank')">Follow Yuk</button>
+      </div>
+    </div>
+
+    <div class="link-item">
+      <button class="modern-link" onclick="togglePanel(this)">
+        <div class="link-info">
+          <div class="icon-box saweria-bg"><i class="fa-solid fa-circle-dollar-to-slot fa-flip" style="color: #ffffff;"></i></div>
+          <div class="link-text">
+            <span class="link-title">Saweria</span>
+            <span class="link-subtitle">Support Creator Lokal</span>
+          </div>
+        </div>
+        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
+      </button>
+      <div class="modern-panel">
+        <p>Tip/Donasi untuk upgrade gear streaming. Suwun!</p>
+        <button class="action-btn" onclick="window.open('https://saweria.co/kodokkyunn99', '_blank')">Tip Saweria</button>
+      </div>
+    </div>
+
+    <div class="link-item highlight">
+      <button class="modern-link" onclick="togglePanel(this)">
+        <div class="link-info">
+          <div class="icon-box joki-bg"><i class="fa-solid fa-khanda fa-beat" style="color: #ffffff;"></i></div>
+          <div class="link-text">
+            <span class="link-title">Jasa Joki Game</span>
+            <span class="link-subtitle">Top-tier Rank Service</span>
+          </div>
+        </div>
+        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
+      </button>
+      <div class="modern-panel">
+        <p>Gak ada waktu maen? Serahin ke ahlinya!</p>
+        <button class="action-btn joki-btn-color" id="JOKINext">Lihat Pricelist</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page2">
+
+  <div class="content">
+    <div class="header-logo-container">
+      <img id="game-logo-header" src="" alt="Logo" class="animate-logo">
+    </div>
+
+    <div class="tabs-v2 e-tilt">
+      <button class="tab-btn-v2 active" data-game="zenless">ZZZ</button>
+      <button class="tab-btn-v2" data-game="genshinimpact">GENSHIN</button>
+      <button class="tab-btn-v2" data-game="starrail">HSR</button>
+      <button class="tab-btn-v2" data-game="hi3rd">HI3rd</button>
+    </div>
+
+    <div id="codes-container-v2">
+      <div class="loading-v2">INITIALIZING...</div>
+    </div>
+
+    <div style="height: 100px;"></div> 
+  </div>
+
+  <script>
+    (function() {
+      const APIS = {
+        zenless: 'https://kodokkyun-project.vercel.app/api/zzcode',
+        genshinimpact: 'https://kodokkyun-project.vercel.app/api/gscd',
+        starrail: 'https://kodokkyun-project.vercel.app/api/stcode',
+        hi3rd: 'https://kodokkyun-project.vercel.app/api/hicode'
+      };
+
+      const BGS = {
+        zenless: 'https://images7.alphacoders.com/130/thumb-1920-1307267.jpg',
+        genshinimpact: 'https://fastcdn.hoyoverse.com/content-v2/hk4e/159337/54b493f799071cf2050b919305288d5d_7897117480191368973.jpg',
+        starrail: 'https://i.ibb.co.com/VYZ3w3wB/Fyreflies-are-such-magical-creatures-aren-t-they-They-may-throw-themselves-at-a-flame-or-sudden-ups.png',
+        hi3rd: 'https://fastcdn.hoyoverse.com/content-v2/plat/101533/6fbf8271438e536e58169ac01efb0a84_723492315779207397.jpg'
+      };
+
+      const CODELOGO = {
+        zenless: 'https://i.ibb.co.com/JFcGnZvK/f3.png',
+        genshinimpact: 'https://i.ibb.co.com/Nn3J5SnW/1rf.png',
+        starrail: 'https://i.ibb.co.com/TDQgJmdk/unnamed.png',
+        hi3rd: 'https://i.ibb.co.com/tTGpYmcr/ewq.png'
+      };
+
+      // Konfigurasi Link Redeem Otomatis
+      const REDEEM_CONFIG = {
+        zenless: code => `https://zenless.hoyoverse.com/redemption?code=${code}`,
+        genshinimpact: code => `https://genshin.hoyoverse.com/en/gift?code=${code}`,
+        starrail: code => `https://hsr.hoyoverse.com/gift?code=${code}`,
+        hi3rd: code => `https://honkaiimpact3.hoyoverse.com/global/en/home?code=${code}` 
+      };
+
+      async function loadCodes(game) {
+        const container = document.getElementById('codes-container-v2');
+        const pg2 = document.getElementById('page2');
+        const logoImg = document.getElementById('game-logo-header');
+        
+        logoImg.classList.remove('animate-logo');
+        logoImg.src = CODELOGO[game];
+        pg2.style.backgroundImage = `url('${BGS[game]}')`;
+        
+        void logoImg.offsetWidth; 
+        logoImg.classList.add('animate-logo');
+        
+        container.innerHTML = '<div class="loading-v2">LOADING CODES...</div>';
+
+        try {
+          const res = await fetch(APIS[game]);
+          const data = await res.json();
+          container.innerHTML = '';
+
+          if (data.active && data.active.length > 0) {
+            data.active.forEach((item, index) => {
+              const rewardList = item.rewards.join(', ');
+              const card = document.createElement('div');
+              card.className = 'redeem-card-v2 reveal-card';
+              card.style.animationDelay = `${index * 0.1}s`;
+              
+              // Membuat link redeem khusus untuk kode ini
+              const finalRedeemUrl = REDEEM_CONFIG[game](item.code);
+              
+              card.innerHTML = `
+                <div class="redeem-header-v2">
+                  <span class="code-v2">${item.code}</span>
+                  <div class="btn-group-v2">
+                    <button class="btn-v2 btn-copy-v2" onclick="copyAction('${item.code}', this)">COPY</button>
+                    <button class="btn-v2 btn-redeem-v2" onclick="window.open('${finalRedeemUrl}', '_blank')">REDEEM</button>
+                  </div>
+                </div>
+                <div class="reward-v2" style="font-size:0.85rem; color:#aaa; border-top:1px solid rgba(255,255,255,0.05); padding-top:8px;">
+                  <strong>Rewards:</strong> ${rewardList}
+                </div>
+              `;
+              container.appendChild(card);
+            });
+          } else {
+            container.innerHTML = '<div class="loading-v2">NO ACTIVE CODES FOUND</div>';
+          }
+        } catch (e) {
+          container.innerHTML = '<div class="loading-v2" style="color:#f87171">CONNECTION ERROR</div>';
+        }
+      }
+
+      document.querySelectorAll('.tab-btn-v2').forEach(btn => {
+        btn.addEventListener('click', function() {
+          if(this.classList.contains('active')) return;
+          document.querySelectorAll('.tab-btn-v2').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          loadCodes(this.dataset.game);
+        });
+      });
+
+      window.copyAction = function(text, btn) {
+        navigator.clipboard.writeText(text);
+        const originalText = btn.innerText;
+        btn.innerText = 'COPIED!';
+        btn.style.background = '#059669';
+        setTimeout(() => {
+          btn.innerText = originalText;
+          btn.style.background = '#6366f1';
+        }, 1000);
+      };
+
+      loadCodes('zenless');
+    })();
+  </script>
+</div>
+
+
+  <!-- Page 3 -->
+  <div class="page page3">
+  
+  <div class="joki-master-container">
 
     <div class="joki-header">
         <h1 class="joki-header-title">ASTRAL STATION</h1>
@@ -2121,232 +2490,6 @@ function cancelHold() {
   <div class="page page5">
     
     <div class="gc-container">
-    <style>
-        :root {
-            --accent: #ffd369;
-            --hsr-accent: #69d3ff;
-            --zzz-accent: #9dff69; 
-            --hi3-accent: #ff85d0;
-            --glass: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.15);
-        }
-
-        .gc-container {
-            padding: 10px;
-            color: #fff;
-            max-width: 100%;
-            touch-action: pan-x pan-y !important; 
-        }
-
-        /* TAB BUTTONS */
-        .gc-tabs {
-            display: flex;
-            width: 100%;
-            gap: 6px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
-
-        .gc-tab-btn {
-            flex: 1;
-            width: 200px;
-            padding: 10px 5px;
-            border: 1px solid var(--border);
-            background: var(--glass);
-            color: #fff;
-            border-radius: 7px;
-            font-weight: bold;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .gc-tab-btn.active[data-game="genshin"] { background: var(--accent); color: #000; border-color: var(--accent); }
-        .gc-tab-btn.active[data-game="hsr"] { background: var(--hsr-accent); color: #000; border-color: var(--hsr-accent); }
-        .gc-tab-btn.active[data-game="zzz"] { background: var(--zzz-accent); color: #000; border-color: var(--zzz-accent); }
-        .gc-tab-btn.active[data-game="hi3"] { background: var(--hi3-accent); color: #000; border-color: var(--hi3-accent); }
-
-        .gc-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--accent);
-            margin: 20px 0 10px;
-            text-transform: uppercase;
-            border-left: 3px solid var(--accent);
-            padding-left: 10px;
-        }
-
-        .banner-row { display: flex; flex-direction: column; gap: 12px; padding-bottom: 10px; }
-        .b-card { width: 100%; background: linear-gradient(135deg, #1a1a1a, #000); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
-        .b-head { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; }
-        .b-icons { display: flex; gap: 5px; flex-wrap: wrap; }
-        .m-icon { width: 45px; height: 45px; border-radius: 8px; background: var(--glass); border: 1px solid var(--border); object-fit: cover;}
-
-        .e-grid { display: flex; flex-direction: column; gap: 15px; }
-            
-            .e-card {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-}
-
-.e-card:hover {
-    transform: translateY(-12px) scale(1.03) rotateX(5deg); /* 3D Lift & Tilt */
-    z-index: 10;
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-}
-
-/* Specific Glow Colors based on the active tab */
-.gc-tab-btn.active[data-game="genshin"] ~ .gc-content .e-card:hover { 
-    box-shadow: 0 0 20px rgba(255, 211, 105, 0.4); 
-    border-color: #ffd369; 
-}
-.gc-tab-btn.active[data-game="hsr"] ~ .gc-content .e-card:hover { 
-    box-shadow: 0 0 20px rgba(105, 211, 255, 0.4); 
-    border-color: #69d3ff; 
-}
-.gc-tab-btn.active[data-game="zzz"] ~ .gc-content .e-card:hover { 
-    box-shadow: 0 0 20px rgba(157, 255, 105, 0.4); 
-    border-color: #9dff69; 
-}
-
-/* Shine effect on hover */
-.e-card::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-    transform: rotate(45deg);
-    transition: 0.6s;
-}
-
-.e-card:hover::after {
-    left: 100%;
-}
-        
-        .e-thumb { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; display: block; }
-        .e-body { padding: 12px; }
-        .e-card:hover {
-    transform: translateY(-8px) scale(1.02); /* Mengangkat kartu ke atas */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5); /* Memberi kedalaman bayangan */
-    border-color: rgba(255, 255, 255, 0.4); /* Memperjelas border saat hover */
-    z-index: 10; /* Memastikan kartu yang di-hover berada di paling depan */
-}
-
-/* Efek saat ditekan (untuk mobile) */
-.e-card:active {
-    transform: scale(0.97);
-    transition: all 0.4s ease;
-}
-        .e-date {
-            display: inline-block;
-            background: var(--accent);
-            color: #000;
-            font-weight: 800;
-            font-size: 0.7rem;
-            padding: 2px 10px;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .e-name { font-weight: bold; font-size: 1rem; margin-bottom: 5px; line-height: 1.2; }
-        .e-desc { font-size: 0.82rem; color: #ccc; line-height: 1.4; margin-bottom: 10px; }
-
-        .r-row {
-            display: flex; gap: 8px; background: rgba(0,0,0,0.4);
-            padding: 8px; border-radius: 8px; overflow-x: auto;
-        }
-        .r-item { display: flex; flex-direction: column; align-items: center; min-width: 35px; }
-        .r-img { width: 25px; height: 25px; object-fit: contain; }
-        .r-amt { font-size: 0.6rem; color: var(--accent); }
-        .calendar-content{padding-bottom:50px;}
-        .loader { text-align: center; padding: 50px; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px;}
-    
-   /* =========================================================
-   MASONRY EVENT GRID – RESPONSIVE (PORTRAIT + LANDSCAPE)
-   ========================================================= */
-
-/* Base (Portrait / Mobile) */
-.page5 .e-grid {
-    display: block;
-    column-count: 1;
-    column-gap: 14px;
-}
-
-/* Landscape phones */
-@media (orientation: landscape) and (min-width: 480px) {
-    .page5 .e-grid {
-        column-count: 2;
-    }
-}
-
-/* Tablets / large landscape / desktop */
-@media (orientation: landscape) and (min-width: 900px) {
-    .page5 .e-grid {
-        column-count: 3;
-    }
-}
-
-/* Masonry card rules */
-.page5 .e-card {
-    display: inline-block;
-    width: 100%;
-    margin-bottom: 14px;
-    break-inside: avoid;
-    -webkit-column-break-inside: avoid;
-    page-break-inside: avoid;
-}
-
-/* Optional: reduce vertical bulk in landscape */
-@media (orientation: landscape) {
-    .page5 .e-body {
-        padding: 10px;
-    }
-
-    .page5 .e-desc {
-        font-size: 0.78rem;
-        line-height: 1.35;
-    }
-}
-
-/* Optional: smooth appearance */
-.page5 .e-card {
-    animation: masonryFade 0.35s ease both;
-}
-
-@keyframes masonryFade {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* Wider landscape (tablets / foldables / desktop landscape) */
-@media (min-width: 900px) and (orientation: landscape) {
-    .page5 .e-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-    </style>
 
     <div class="gc-tabs">
         <button class="gc-tab-btn active" data-game="genshin">Genshin</button>
@@ -2483,12 +2626,34 @@ gcTabBtns.forEach(btn => {
         }
 
         document.querySelectorAll('.gc-tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.gc-tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                loadGame(btn.dataset.game);
-            });
-        });
+    btn.addEventListener('click', async () => {
+        const content = document.getElementById('calendar-content');
+        
+        // 1. Set Active Tab UI
+        document.querySelectorAll('.gc-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // 2. Show Syncing State & Reset Animations
+        // We keep the structure but show a loader inside the list area
+        content.classList.remove('reveal-content');
+        const eventList = document.getElementById('event-list');
+        if (eventList) eventList.innerHTML = '<div class="loader">Syncing Data...</div>';
+
+        try {
+            // 3. Call your existing loadGame function
+            // Ensure this function internally populates #event-list and #banner-list
+            await loadGame(btn.dataset.game); 
+            
+            // 4. Trigger the Animation once data is loaded
+            setTimeout(() => {
+                content.classList.add('reveal-content');
+            }, 50);
+        } catch (err) {
+            console.error("Sync failed:", err);
+            if (eventList) eventList.innerHTML = '<div class="loader" style="color:red;">Failed to sync data.</div>';
+        }
+    });
+});
         document.querySelector('.gc-tab-btn[data-game="genshin"]').click();
         loadGame('genshin');
     </script>
@@ -2499,135 +2664,12 @@ gcTabBtns.forEach(btn => {
   
 <div class="page page4">
   <div id="game-downloader-container">
-    <style>
-      :root {
-        --sr-blue: #007bff;
-        --sr-accent: #f29d38;
-        --sr-bg-card: rgba(255, 255, 255, 0.08);
-        --sr-border: rgba(255, 255, 255, 0.15);
-      }
 
-      #game-downloader-container {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        width: 100%;
-      }
-    
-    .extra-tilt2 {
-  display: inline-block; /* Required for transform to work */
-  transform: skewX(-15deg); /* Negative degrees tilt to the right */
-}
-      /* Game Selector Tabs */
-      .resource-tabs {
-        display: flex;
-        gap: 8px;
-        margin-top: 25px;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      /* TRANSITION LOGIC */
-      .content-fade {
-        transition: opacity 0.4s ease-in-out, transform 0.4s ease-out;
-        opacity: 1;
-      }
-      .content-fade.is-hidden {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      /* Banner Container */
-      .resource-banner {
-        margin: 0 auto;
-        width: 100%;
-        max-width: 1000px;
-        aspect-ratio: 16 / 9;
-        position: relative;
-        overflow: hidden;
-        border-radius: 12px;
-        background: transparent;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      }
-
-      .slide-layer {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        opacity: 0;
-        transition: opacity 1s ease-in-out;
-        z-index: 1;
-        object-fit: cover;
-        background-size: cover;
-        background-position: center;
-      }
-
-      .slide-layer.active {
-        opacity: 1;
-        z-index: 2;
-      }
-
-      .resource-banner-content {
-        position: absolute;
-        bottom: 0; left: 0; width: 100%;
-        z-index: 10;
-        padding: 20px;
-        background: linear-gradient(transparent, rgba(0,0,0,0.85));
-        pointer-events: none;
-      }
-
-      .resource-banner-content h1 { margin: 0; font-size: 20px; color: #fff; text-transform: uppercase; }
-      .resource-banner-content h2 { margin: 5px 0 0; font-size: 13px; color: var(--sr-accent); font-weight: 400; border:none;}
-
-      /* Tilted UI Tags */
-      .type-tag { 
-        position: absolute; 
-        top: 0; right: 0; 
-        font-size: 9px; 
-        padding: 4px 12px; 
-        background: rgba(0,0,0,0.7); 
-        border-bottom-left-radius: 10px; 
-        color: #fff; 
-        text-transform: uppercase;
-        font-style: italic; /* Tilt Effect */
-        font-weight: bold;
-        transform: skewX(-15deg); /* Tilt Effect */
-        border-left: 3px solid var(--sr-accent);
-      }
-
-      /* Package Grid Layout */
-      .resource-section { margin-top: 30px; color: white; }
-      .resource-section h2 { border-bottom: 1px solid var(--sr-border); padding-bottom: 10px; font-size: 1.1rem; }
-      .package-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 15px;}
-      
-      .package-item {
-        background: var(--sr-bg-card);
-        border: 1px solid var(--sr-border);
-        border-radius: 10px;
-        padding: 20px 15px;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .package-item .title { font-size: 13px; font-weight: bold; margin-bottom: 10px; color: #fff; overflow-wrap: anywhere; line-height: 1.4; }
-      .package-item .size { font-size: 11px; color: #aaa; margin-bottom: 15px; font-style: italic; }
-      
-      .dl-link {
-        background: var(--sr-blue);
-        color: white;
-        text-decoration: none;
-        text-align: center;
-        padding: 10px;
-        border-radius: 6px;
-        font-weight: bold;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-    </style>
-
-    
+    <div class="resource-tabs">
+      <button class="tab-btn active title-font extra-tilt2" id="tab-sr" onclick="switchGameResource('sr')">STAR RAIL</button>
+      <button class="tab-btn title-font extra-tilt2" id="tab-zzz" onclick="switchGameResource('zzz')">ZENLESS</button>
+      <button class="tab-btn title-font extra-tilt2" id="tab-hi3" onclick="switchGameResource('hi3')">HONKAI IMPACT 3</button>
+    </div>
 
     <div class="resource-banner content-fade" id="res-banner">
       <div id="slide-container"></div>
@@ -2637,23 +2679,33 @@ gcTabBtns.forEach(btn => {
       </div>
     </div>
     
-    <div class="resource-tabs">
-      <button class="tab-btn active title-font extra-tilt2" id="tab-sr" onclick="switchGameResource('sr')">STAR RAIL</button>
-      <button class="tab-btn title-font extra-tilt2" id="tab-zzz" onclick="switchGameResource('zzz')">ZENLESS</button>
-      <button class="tab-btn title-font extra-tilt2" id="tab-hi3" onclick="switchGameResource('hi3')">HONKAI IMPACT 3</button>
-    </div>
+    
 
     <div id="fade-wrapper" class="content-fade">
-        <div class="resource-section">
-            <h2>Main Full Packages</h2>
-            <div id="main-list" class="package-grid"></div>
-        </div>
+    
 
-        <div class="resource-section">
-            <h2>Update Patches</h2>
-            <div id="patch-list" class="package-grid"></div>
-        </div>
+    <div class="resource-section" id="pre-major-section" style="display:none;">
+        <h2 style="color: #00ffcc;">Pre-Download Full Packages
+            <span id="pre-major-version" style="font-size: 0.6em; opacity: 0.8; margin-left: 10px; background: rgba(0,255,204,0.2); padding: 2px 8px; border-radius: 4px;"></span>
+        </h2>
+        <div id="pre-major-list" class="package-grid"></div>
     </div>
+
+    <div class="resource-section" id="pre-patch-section" style="display:none;">
+        <h2 style="color: #00ffcc;">Pre-Download Patches</h2>
+        <div id="pre-patch-list" class="package-grid"></div>
+    </div>
+    
+    <div class="resource-section">
+        <h2>Main Full Packages</h2>
+        <div id="main-list" class="package-grid"></div>
+    </div>
+
+    <div class="resource-section">
+        <h2>Update Patches</h2>
+        <div id="patch-list" class="package-grid"></div>
+    </div>
+</div>
 
     <script>
       (function() {
@@ -2759,23 +2811,76 @@ gcTabBtns.forEach(btn => {
         async function renderResources(apiUrl) {
           const mList = document.getElementById('main-list');
           const pList = document.getElementById('patch-list');
+          
+          // Pre-download Elements
+          const preMajorList = document.getElementById('pre-major-list');
+          const preMajorSec = document.getElementById('pre-major-section');
+          const preMajorVer = document.getElementById('pre-major-version');
+          
+          const prePatchList = document.getElementById('pre-patch-list');
+          const prePatchSec = document.getElementById('pre-patch-section');
 
           try {
             const res = await fetch(apiUrl);
             const json = await res.json();
             const data = json.data.game_packages[0];
 
+            // 1. Reset everything before rendering
             mList.innerHTML = '';
             pList.innerHTML = '';
-
-            data.main.major.game_pkgs.forEach(p => createItem(mList, p, 'Game'));
-            data.main.major.audio_pkgs.forEach(p => createItem(mList, p, 'Audio'));
             
-            data.main.patches.forEach(pSet => {
-              pSet.game_pkgs.forEach(p => createItem(pList, p, 'Patch'));
-              pSet.audio_pkgs.forEach(p => createItem(pList, p, 'Audio Patch'));
-            });
-          } catch (e) { mList.innerHTML = '<p>Manifest Offline.</p>'; }
+            if (preMajorList) preMajorList.innerHTML = '';
+            if (prePatchList) prePatchList.innerHTML = '';
+            if (preMajorVer) preMajorVer.textContent = '';
+            
+            if (preMajorSec) preMajorSec.style.display = 'none';
+            if (prePatchSec) prePatchSec.style.display = 'none';
+
+            // 2. Render MAIN Full Packages
+            if (data.main && data.main.major) {
+                data.main.major.game_pkgs.forEach(p => createItem(mList, p, 'Game'));
+                data.main.major.audio_pkgs.forEach(p => createItem(mList, p, 'Audio'));
+            }
+
+            // 3. Render MAIN Update Patches
+            if (data.main && data.main.patches) {
+                data.main.patches.forEach(pSet => {
+                    pSet.game_pkgs.forEach(p => createItem(pList, p, 'Patch'));
+                    pSet.audio_pkgs.forEach(p => createItem(pList, p, 'Audio Patch'));
+                });
+            }
+
+            // 4. Render PRE-DOWNLOAD Section
+            if (data.pre_download) {
+                const pre = data.pre_download;
+
+                // --- Handle Pre-Download Major (Full Packages) ---
+                if (pre.major && pre.major.game_pkgs && pre.major.game_pkgs.length > 0) {
+                    if (preMajorSec) preMajorSec.style.display = 'block';
+                    
+                    // Show version badge if available
+                    if (preMajorVer && pre.major.version) {
+                        preMajorVer.textContent = `v${pre.major.version}`;
+                    }
+
+                    pre.major.game_pkgs.forEach(p => createItem(preMajorList, p, 'Pre-Game'));
+                    pre.major.audio_pkgs.forEach(p => createItem(preMajorList, p, 'Pre-Audio'));
+                }
+
+                // --- Handle Pre-Download Patches (Update Only) ---
+                if (pre.patches && pre.patches.length > 0) {
+                    if (prePatchSec) prePatchSec.style.display = 'block';
+                    
+                    pre.patches.forEach(pSet => {
+                        pSet.game_pkgs.forEach(p => createItem(prePatchList, p, 'Pre-Patch'));
+                        pSet.audio_pkgs.forEach(p => createItem(prePatchList, p, 'Pre-Audio Patch'));
+                    });
+                }
+            }
+          } catch (e) { 
+              console.error("Resource Load Error:", e);
+              mList.innerHTML = '<p style="color:white;text-align:center;">Manifest Offline or API Error.</p>'; 
+          }
         }
 
         function createItem(container, pkg, type) {
@@ -3145,7 +3250,7 @@ function renderCodes(game) {
     const delay = i * 100; 
     
     return `
-    <div class="code-card" style="animation-delay: ${delay}ms">
+    <div class="code-card" style="">
       <div class="code-row">
         <div class="code-text title-font">${item.code}</div>
         <div class="buttons-group">
@@ -3203,7 +3308,21 @@ function togglePanel(btn) {
 // Start
 fetchCodes();
 </script>
- <script>
+<script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 const canvas = document.getElementById('warpCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -3215,6 +3334,16 @@ const baseSpeed = 1.5;
 const boostSpeed = 17;
 let speed = baseSpeed;
 let targetSpeed = baseSpeed;
+
+let scene, camera, renderer;
+let spaceObjects = [];
+let mixers = []; 
+const clock = new THREE.Clock(); 
+ 
+const staticUrls = [
+    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/spaceship.glb'
+];
+const staticScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
 
 let portal = {
     z: 0,
@@ -3239,14 +3368,25 @@ const patterns = {
 };
 
 const colors = ['rgba(130, 200, 255,', 'rgba(100, 255, 230,', 'rgba(255, 255, 255,', 'rgba(180, 150, 255,'];
-const portalPalette = ['0, 100, 255', '0, 255, 150', '200, 50, 255', '255, 100, 50'];
+const portalPalette = ['0, 100, 255', '0, 255, 150', '200, 50, 255', '180, 150, 255'];
+
+function drawSparkle(ctx, cx, cy, outerRadius, innerRadius) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - outerRadius);
+    ctx.bezierCurveTo(cx + innerRadius, cy - innerRadius, cx + innerRadius, cy - innerRadius, cx + outerRadius, cy);
+    ctx.bezierCurveTo(cx + innerRadius, cy + innerRadius, cx + innerRadius, cy + innerRadius, cx, cy + outerRadius);
+    ctx.bezierCurveTo(cx - innerRadius, cy + innerRadius, cx - innerRadius, cy + innerRadius, cx - outerRadius, cy);
+    ctx.bezierCurveTo(cx - innerRadius, cy - innerRadius, cx - innerRadius, cy - innerRadius, cx, cy - outerRadius);
+    ctx.closePath();
+    ctx.fill();
+}
 
 class Constellation {
     constructor() { this.reset(); }
     reset() {
         this.z = width + Math.random() * width;
-        this.x = (Math.random() - 0.5) * width * 0.6;
-        this.y = (Math.random() - 0.5) * height * 0.6;
+        this.x = (Math.random() - 0.5) * width * 0.8;
+        this.y = (Math.random() - 0.5) * height * 0.8;
         const keys = Object.keys(patterns);
         this.points = patterns[keys[Math.floor(Math.random() * keys.length)]];
         this.color = colors[Math.floor(Math.random() * colors.length)];
@@ -3257,31 +3397,29 @@ class Constellation {
     }
     draw() {
         let scale = (width / 2) / this.z;
-        let opacity = Math.min(1, (1 - this.z / width) * 2.5);
-        
+        let opacity = Math.min(1, (1 - this.z / width) * 2);
         if (this.z < width) {
             ctx.save();
-            ctx.lineWidth = 1.2 * scale;
-            ctx.strokeStyle = this.color + (opacity * 0.4) + ')';
-            ctx.shadowBlur = 5 * scale;
-            ctx.shadowColor = this.color + '0.5)';
-            
+            ctx.lineWidth = 0.8 * scale;
+            ctx.strokeStyle = this.color + (opacity * 0.15) + ')';
             ctx.beginPath();
             this.points.forEach((p, i) => {
                 let px = (this.x + p.x) * scale + centerX;
                 let py = (this.y + p.y) * scale + centerY;
-                if (i === 0) ctx.moveTo(px, py);
-                else ctx.lineTo(px, py);
+                if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
             });
             ctx.stroke();
-
             this.points.forEach((p) => {
                 let px = (this.x + p.x) * scale + centerX;
                 let py = (this.y + p.y) * scale + centerY;
-                ctx.fillStyle = this.color + opacity + ')';
-                ctx.beginPath();
-                ctx.arc(px, py, 2.5 * scale, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.shadowBlur = 10 * scale;
+                ctx.shadowColor = this.color + '1)';
+                let oR = Math.max(0.8, 5 * scale);
+                let iR = oR * 0.25;
+                ctx.fillStyle = this.color + (opacity * 0.8) + ')';
+                drawSparkle(ctx, px, py, oR, iR);
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                drawSparkle(ctx, px, py, oR * 0.4, iR * 0.4);
             });
             ctx.restore();
         }
@@ -3289,15 +3427,13 @@ class Constellation {
 }
 
 function init() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-    centerX = width / 2;
-    centerY = height / 2;
+    width = window.innerWidth; height = window.innerHeight;
+    canvas.width = width; canvas.height = height;
+    centerX = width / 2; centerY = height / 2;
     portal.maxZ = width;
     portal.z = portal.maxZ; 
     stars = [];
+    
     for (let i = 0; i < starCount; i++) {
         stars.push({
             x: Math.random() * width - centerX,
@@ -3311,10 +3447,11 @@ function init() {
 }
 
 function update() {
-    speed += (targetSpeed - speed) * 0.1;
+     speed += (targetSpeed - speed) * 0.1;
     if (targetSpeed === boostSpeed) portal.activeOpacity += (1 - portal.activeOpacity) * 0.05;
     else portal.activeOpacity += (0 - portal.activeOpacity) * 0.1;
-
+    
+    
     stars.forEach(s => {
         s.z -= speed;
         if (s.z <= 0) { s.z = width; s.x = Math.random() * width - centerX; s.y = Math.random() * height - centerY; s.px = 0; s.py = 0; }
@@ -3328,10 +3465,9 @@ function update() {
 }
 
 function draw() {
-    // Increase clear alpha slightly for smoother trails on high-refresh monitors
     ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
     ctx.fillRect(0, 0, width, height);
-
+    
     let portalScale = (portal.maxZ / (portal.z + 1)); 
     let portalRadius = portalScale * 20; 
     let finalOpacity = Math.min(1, (portal.maxZ - portal.z) / (portal.maxZ * 0.2)) * Math.min(1, portal.z / 200) * portal.activeOpacity;
@@ -3347,73 +3483,141 @@ function draw() {
         ctx.arc(centerX, centerY, portalRadius, 0, Math.PI * 2);
         ctx.fill();
     }
-
-    // 2. Draw Stars (Optimized: No shadowBlur)
     stars.forEach(s => {
         let x = (s.x / s.z) * (width / 2) + centerX;
         let y = (s.y / s.z) * (height / 2) + centerY;
         if (s.px !== 0) {
             let op = 1 - (s.z / width);
-            
-            // FAKE BLOOM: Draw a thick faint line behind the star
             ctx.globalAlpha = op * 0.3;
             ctx.strokeStyle = s.color + '1)';
-            ctx.lineWidth = op * 8; // The "glow" width
+            ctx.lineWidth = op * 8;
             ctx.beginPath(); ctx.moveTo(s.px, s.py); ctx.lineTo(x, y); ctx.stroke();
-            
-            // THE CORE: Draw the bright center
-            ctx.globalAlpha = op;
-            ctx.lineWidth = op * 2;
-            ctx.stroke();
+            ctx.globalAlpha = op; ctx.lineWidth = op * 2; ctx.stroke();
             ctx.globalAlpha = 1;
         }
         s.px = x; s.py = y;
     });
-
-    // 3. Draw Constellations (Optimized)
-    constellations.forEach(c => {
-        let scale = (width / 2) / c.z;
-        let opacity = Math.min(1, (1 - c.z / width) * 2.5);
-        
-        if (c.z < width) {
-            ctx.save();
-            // Connecting Lines
-            ctx.lineWidth = 1 * scale;
-            ctx.strokeStyle = c.color + (opacity * 0.3) + ')';
-            ctx.beginPath();
-            c.points.forEach((p, i) => {
-                let px = (c.x + p.x) * scale + centerX;
-                let py = (c.y + p.y) * scale + centerY;
-                if (i === 0) ctx.moveTo(px, py);
-                else ctx.lineTo(px, py);
-            });
-            ctx.stroke();
-
-            // Constellation Stars
-            c.points.forEach((p) => {
-                let px = (c.x + p.x) * scale + centerX;
-                let py = (c.y + p.y) * scale + centerY;
-                ctx.fillStyle = c.color + opacity + ')';
-                ctx.beginPath();
-                ctx.arc(px, py, 2 * scale, 0, Math.PI * 2);
-                ctx.fill();
-            });
-            ctx.restore();
-        }
-    });
-
+    constellations.forEach(c => c.draw());
     update();
     requestAnimationFrame(draw);
 }
 
+const resetSpeed = () => { targetSpeed = baseSpeed; };
+const boost = () => { targetSpeed = boostSpeed; };
+window.addEventListener('mousedown', boost);
+window.addEventListener('mouseup', resetSpeed);
+window.addEventListener('touchstart', (e) => { boost(); }, { passive: false });
+window.addEventListener('touchend', resetSpeed);
+document.addEventListener('visibilitychange', () => { if (document.hidden) resetSpeed(); });
 window.addEventListener('resize', init);
-window.addEventListener('mousedown', () => targetSpeed = boostSpeed);
-window.addEventListener('mouseup', () => targetSpeed = baseSpeed);
-window.addEventListener('touchstart', (e) => { e.preventDefault(); targetSpeed = boostSpeed; });
-window.addEventListener('touchend', () => targetSpeed = baseSpeed);
 
 init();
 draw();
+
+function initPlanet() {
+    const container = document.getElementById('threeContainer');
+    if(!container) return;
+    
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    container.appendChild(renderer.domElement);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 2.0));
+    const loader = new GLTFLoader();
+
+    const modelUrls = [
+        'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/bb.glb',
+        'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/pom.glb',
+        'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/paimon.glb',
+        ...staticUrls
+    ];
+
+    modelUrls.forEach((url, index) => {
+        loader.load(url, (gltf) => {
+            let obj = gltf.scene;
+            obj.userData.isStatic = staticUrls.includes(url);
+
+            if (obj.userData.isStatic) {
+                obj.userData.baseScale = staticScale;
+            } else {
+                const box = new THREE.Box3().setFromObject(obj);
+                const size = box.getSize(new THREE.Vector3()).length();
+                obj.userData.baseScale = (6 + Math.random() * 2) / (size || 1); 
+            }
+
+            obj.position.z = -((index + 1) * 150 + 400);
+            obj.position.x = 0;
+            obj.position.y = 0;
+
+            const spreadFactor = obj.userData.isStatic ? 0.14 : 0.015;
+            obj.userData.vx = (Math.random() - 0.5) * spreadFactor;
+            obj.userData.vy = (Math.random() - 0.5) * spreadFactor;
+
+            if (gltf.animations.length) {
+                const mixer = new THREE.AnimationMixer(obj);
+                mixer.clipAction(gltf.animations[0]).play();
+                mixers.push(mixer);
+                obj.userData.hasNativeAnim = true;
+            }
+
+            obj.scale.set(0,0,0);
+            obj.traverse(n => { if(n.isMesh) { n.material.transparent = true; n.material.opacity = 0; } });
+            scene.add(obj);
+            spaceObjects.push(obj);
+        });
+    });
+    animate3D();
+}
+
+function animate3D() {
+    requestAnimationFrame(animate3D);
+    const delta = clock.getDelta();
+    mixers.forEach(m => m.update(delta));
+
+    spaceObjects.forEach(obj => {
+        let moveStep = speed * 0.15;
+        obj.position.z += moveStep;
+
+        if (obj.userData.vx !== undefined) {
+            obj.position.x += obj.userData.vx * (speed * 0.4);
+            obj.position.y += obj.userData.vy * (speed * 0.4);
+        }
+
+        if (!obj.userData.isStatic && !obj.userData.hasNativeAnim) {
+            obj.rotation.y += 0.02;
+            obj.rotation.z += 0.01;
+        } else if (obj.userData.isStatic) {
+            obj.rotation.z = obj.userData.vx * 6; 
+        }
+
+        const horizonZ = -600;
+        const fullSizeZ = -50;
+        let progress = Math.max(0, Math.min(1, (obj.position.z - horizonZ) / (fullSizeZ - horizonZ)));
+        
+        let s = obj.userData.baseScale * progress;
+        obj.scale.set(s, s, s);
+
+        let alpha = Math.min(1, progress * 1.5);
+        const exitPoint = obj.userData.isStatic ? 80 : 25;
+        if (obj.position.z > 5) alpha = 1 - (obj.position.z / 20);
+        obj.traverse(n => { if(n.isMesh) n.material.opacity = alpha; });
+
+        if (obj.position.z > 45) {
+            obj.position.z = -600 - (Math.random() * 300);
+            obj.position.x = 0;
+            obj.position.y = 0;
+            const spread = obj.userData.isStatic ? 0.14 : 0.015;
+            obj.userData.vx = (Math.random() - 0.5) * spread;
+            obj.userData.vy = (Math.random() - 0.5) * spread;
+        }
+    });
+    renderer.render(scene, camera);
+}
+initPlanet();
 </script>
 </body>
 </html>

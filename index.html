@@ -3343,6 +3343,10 @@ const clock = new THREE.Clock();
 const staticUrls = [
     'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/spaceship.glb'
 ];
+const sideMoveUrls = [
+    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/train.glb'
+];
+  
 const staticScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
 
 let portal = {
@@ -3541,6 +3545,7 @@ function initPlanet() {
         loader.load(url, (gltf) => {
             let obj = gltf.scene;
             obj.userData.isStatic = staticUrls.includes(url);
+           obj.userData.isSideMover = sideMoveUrls.includes(url);
 
             if (obj.userData.isStatic) {
                 obj.userData.baseScale = staticScale;
@@ -3551,12 +3556,22 @@ function initPlanet() {
             }
 
             obj.position.z = -((index + 1) * 150 + 400);
+            if (obj.userData.isSideMover) {
+                obj.position.x = -200; // start left side
+            }
             obj.position.x = 0;
             obj.position.y = 0;
 
-            const spreadFactor = obj.userData.isStatic ? 0.14 : 0.015;
-            obj.userData.vx = (Math.random() - 0.5) * spreadFactor;
-            obj.userData.vy = (Math.random() - 0.5) * spreadFactor;
+            if (obj.userData.isSideMover) {
+    obj.userData.vx = 0.8;   // strong horizontal movement
+    obj.userData.vy = 0;
+}
+else {
+    const spreadFactor = obj.userData.isStatic ? 0.14 : 0.015;
+    obj.userData.vx = (Math.random() - 0.5) * spreadFactor;
+    obj.userData.vy = (Math.random() - 0.5) * spreadFactor;
+}
+
 
             if (gltf.animations.length) {
                 const mixer = new THREE.AnimationMixer(obj);
@@ -3608,6 +3623,9 @@ function animate3D() {
         obj.traverse(n => { if(n.isMesh) n.material.opacity = alpha; });
 
         if (obj.position.z > 45) {
+            if (obj.userData.isSideMover) {
+    obj.position.x = -200; // restart left
+}
             obj.position.z = -600 - (Math.random() * 300);
             obj.position.x = 0;
             obj.position.y = 0;

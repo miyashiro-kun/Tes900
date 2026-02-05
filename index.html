@@ -6,6 +6,7 @@
 <title>KODOK PAGE</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/jsm/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/jsm/loaders/DRACOLoader.js"></script>
 <script src="https://kit.fontawesome.com/424261530c.js" crossorigin="anonymous"></script>
 <style>
 * { box-sizing: border-box; 
@@ -3322,7 +3323,8 @@ fetchCodes();
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
+// Add this if your .gltf is compresse
+  
 const canvas = document.getElementById('warpCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -3339,7 +3341,10 @@ let scene, camera, renderer;
 let spaceObjects = [];
 let mixers = []; 
 const clock = new THREE.Clock(); 
- 
+const dracoLoader = new THREE.DRACOLoader();
+// This provides the decoding logic from Google's public server
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+loader.setDRACOLoader(dracoLoader);
 // --- ADD YOUR NEW MODELS HERE ---
 const staticUrls = [
     'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/spaceship.glb',

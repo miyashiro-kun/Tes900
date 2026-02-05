@@ -3340,9 +3340,9 @@ let spaceObjects = [];
 let mixers = []; 
 const clock = new THREE.Clock(); 
  
+// --- ADD YOUR NEW MODELS HERE ---
 const staticUrls = [
     'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/spaceship.glb',
-    // Strictly adding the train here
     'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/train.glb'
 ];
 const staticScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
@@ -3453,6 +3453,7 @@ function update() {
     if (targetSpeed === boostSpeed) portal.activeOpacity += (1 - portal.activeOpacity) * 0.05;
     else portal.activeOpacity += (0 - portal.activeOpacity) * 0.1;
     
+    
     stars.forEach(s => {
         s.z -= speed;
         if (s.z <= 0) { s.z = width; s.x = Math.random() * width - centerX; s.y = Math.random() * height - centerY; s.px = 0; s.py = 0; }
@@ -3473,6 +3474,7 @@ function draw() {
     let portalRadius = portalScale * 20; 
     let finalOpacity = Math.min(1, (portal.maxZ - portal.z) / (portal.maxZ * 0.2)) * Math.min(1, portal.z / 200) * portal.activeOpacity;
 
+    // 1. Draw Portal (Simplified Gradient)
     if (finalOpacity > 0.01) {
         const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, portalRadius);
         grad.addColorStop(0, 'rgba(0, 0, 0, 1)'); 
@@ -3543,8 +3545,7 @@ function initPlanet() {
             obj.userData.isStatic = staticUrls.includes(url);
 
             if (obj.userData.isStatic) {
-                // Keep the scale check for the train specifically, otherwise use staticScale
-                obj.userData.baseScale = url.includes('train') ? 1.2 : staticScale;
+                obj.userData.baseScale = staticScale;
             } else {
                 const box = new THREE.Box3().setFromObject(obj);
                 const size = box.getSize(new THREE.Vector3()).length();

@@ -3341,7 +3341,8 @@ let mixers = [];
 const clock = new THREE.Clock(); 
  
 const staticUrls = [
-    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/spaceship.glb'
+    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/spaceship.glb',
+    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/train.glb'
 ];
 const staticScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
 
@@ -3538,39 +3539,51 @@ function initPlanet() {
     ];
 
     modelUrls.forEach((url, index) => {
-        loader.load(url, (gltf) => {
-            let obj = gltf.scene;
-            obj.userData.isStatic = staticUrls.includes(url);
+    loader.load(url, (gltf) => {
+        let obj = gltf.scene;
+        obj.userData.isStatic = staticUrls.includes(url);
 
-            if (obj.userData.isStatic) {
-                obj.userData.baseScale = staticScale;
-            } else {
-                const box = new THREE.Box3().setFromObject(obj);
-                const size = box.getSize(new THREE.Vector3()).length();
-                obj.userData.baseScale = (6 + Math.random() * 2) / (size || 1); 
-            }
+        if (obj.userData.isStatic) {
+            // Use a fixed scale or a smaller range; 10-70 is very large for GLBs
+            obj.userData.baseScale = 1.5; 
+        } else {
+            const box = new THREE.Box3().setFromObject(obj);
+            const size = box.getSize(new THREE.Vector3()).length();
+            obj.userData.baseScale = (6 + Math.random() * 2) / (size || 1); 
+        }
 
-            obj.position.z = -((index + 1) * 150 + 400);
-            obj.position.x = 0;
-            obj.position.y = 0;
+        // Space them out along the Z axis so they don't spawn at once
+        obj.position.z = -((index + 1) * 200 + 400);
+        obj.position.x = 0;
+        obj.position.y = 0;
 
-            const spreadFactor = obj.userData.isStatic ? 0.14 : 0.015;
-            obj.userData.vx = (Math.random() - 0.5) * spreadFactor;
-            obj.userData.vy = (Math.random() - 0.5) * spreadFactor;
+        // If it's static, give it a specific movement so they don't overlap
+        const spreadFactor = obj.userData.isStatic ? 0.1 : 0.015;
+        obj.userData.vx = (Math.random() - 0.5) * spreadFactor;
+        obj.userData.vy = (Math.random() - 0.5) * spreadFactor;
 
-            if (gltf.animations.length) {
-                const mixer = new THREE.AnimationMixer(obj);
-                mixer.clipAction(gltf.animations[0]).play();
-                mixers.push(mixer);
-                obj.userData.hasNativeAnim = true;
-            }
+        if (gltf.animations.length) {
+            const mixer = new THREE.AnimationMixer(obj);
+            mixer.clipAction(gltf.animations[0]).play();
+            mixers.push(mixer);
+            obj.userData.hasNativeAnim = true;
+        }
 
-            obj.scale.set(0,0,0);
-            obj.traverse(n => { if(n.isMesh) { n.material.transparent = true; n.material.opacity = 0; } });
-            scene.add(obj);
-            spaceObjects.push(obj);
+        obj.scale.set(0,0,0);
+        obj.traverse(n => { 
+            if(n.isMesh) { 
+                n.material.transparent = true; 
+                n.material.opacity = 0; 
+                // Ensure depth testing is on so they don't look "ghostly"
+                n.material.depthWrite = true;
+            } 
         });
+        scene.add(obj);
+        spaceObjects.push(obj);
+    }, undefined, (error) => {
+        console.error("Error loading " + url, error);
     });
+});
     animate3D();
 }
 

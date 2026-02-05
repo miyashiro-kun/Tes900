@@ -6,7 +6,6 @@
 <title>KODOK PAGE</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/jsm/loaders/GLTFLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/jsm/loaders/DRACOLoader.js"></script>
 <script src="https://kit.fontawesome.com/424261530c.js" crossorigin="anonymous"></script>
 <style>
 * { box-sizing: border-box; 
@@ -3321,10 +3320,9 @@ fetchCodes();
 </script>
 
 <script type="module">
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-// Add this if your .gltf is compresse
-  
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
+
 const canvas = document.getElementById('warpCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -3341,14 +3339,9 @@ let scene, camera, renderer;
 let spaceObjects = [];
 let mixers = []; 
 const clock = new THREE.Clock(); 
-const dracoLoader = new THREE.DRACOLoader();
-// This provides the decoding logic from Google's public server
-dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
-loader.setDRACOLoader(dracoLoader);
-// --- ADD YOUR NEW MODELS HERE ---
+ 
 const staticUrls = [
-    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/spaceship.glb',
-    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/train.gltf'
+    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/spaceship.glb'
 ];
 const staticScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
 
@@ -3560,12 +3553,10 @@ function initPlanet() {
             obj.position.z = -((index + 1) * 150 + 400);
             obj.position.x = 0;
             obj.position.y = 0;
-        
+
             const spreadFactor = obj.userData.isStatic ? 0.14 : 0.015;
             obj.userData.vx = (Math.random() - 0.5) * spreadFactor;
             obj.userData.vy = (Math.random() - 0.5) * spreadFactor;
-
-            
 
             if (gltf.animations.length) {
                 const mixer = new THREE.AnimationMixer(obj);
@@ -3575,20 +3566,7 @@ function initPlanet() {
             }
 
             obj.scale.set(0,0,0);
-            obj.traverse(n => {
-    if (n.isMesh) {
-        n.material.transparent = true;
-        n.material.opacity = 0;
-
-        n.material.depthWrite = true;
-        n.material.depthTest = true;
-        n.material.side = THREE.DoubleSide;
-
-        if (n.material.map) {
-            n.material.map.anisotropy = 16;
-        }
-    }
-});
+            obj.traverse(n => { if(n.isMesh) { n.material.transparent = true; n.material.opacity = 0; } });
             scene.add(obj);
             spaceObjects.push(obj);
         });
@@ -3641,6 +3619,8 @@ function animate3D() {
     renderer.render(scene, camera);
 }
 initPlanet();
+window.THREE = THREE;
+window.GLTFLoader = GLTFLoader;
 </script>
 </body>
 </html>

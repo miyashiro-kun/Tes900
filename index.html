@@ -3575,16 +3575,12 @@ function initPlanet() {
         n.material.transparent = true;
         n.material.opacity = 0;
 
-        // FIX 1: Render both sides of the polygon (fixes holes in models)
-        n.material.side = THREE.DoubleSide;
-
-        // FIX 2: Ensure the renderer draws transparent parts in the right order
         n.material.depthWrite = true;
         n.material.depthTest = true;
+        n.material.side = THREE.DoubleSide;
 
-        // FIX 3: If the model has "alpha" textures (like hair/details), show them
-        if (n.material.alphaTest !== undefined) {
-            n.material.alphaTest = 0.5;
+        if (n.material.map) {
+            n.material.map.anisotropy = 16;
         }
     }
 });

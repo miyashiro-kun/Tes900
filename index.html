@@ -3348,7 +3348,7 @@ const sideMoveUrls = [
 ];
   
 const staticScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
-
+const sideMoveScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
 let portal = {
     z: 0,
     maxZ: 0,
@@ -3557,7 +3557,8 @@ function initPlanet() {
 
             obj.position.z = -((index + 1) * 150 + 400);
             if (obj.userData.isSideMover) {
-                obj.position.x = -200; // start left side
+                obj.position.x = -200;
+                obj.userData.baseScale = SideMoveScale;// start left side
             }
             obj.position.x = 0;
             obj.position.y = 0;

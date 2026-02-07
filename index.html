@@ -3545,13 +3545,6 @@ function initPlanet() {
 
             if (obj.userData.isStatic) {
                 obj.userData.baseScale = staticScale;
-
-               if (url.includes('train2.glb')) {
-                obj.userData.sideways = true;
-                obj.position.x = -window.innerWidth * 0.7;
-                obj.position.z = -150;
-                obj.userData.sideSpeed = 0.4 + Math.random() * 0.6;
-            }
             } else {
                 const box = new THREE.Box3().setFromObject(obj);
                 const size = box.getSize(new THREE.Vector3()).length();
@@ -3590,17 +3583,6 @@ function animate3D() {
     spaceObjects.forEach(obj => {
         let moveStep = speed * 0.15;
         obj.position.z += moveStep;
-        if (obj.userData.sideways) {
-        obj.position.x += obj.userData.sideSpeed * speed;
-
-        // reset when off right screen
-        if (obj.position.x > window.innerWidth * 0.7) {
-            obj.position.x = -window.innerWidth * 0.7;
-        }
-    } else {
-        obj.position.x += obj.userData.vx * speed;
-        obj.position.y += obj.userData.vy * speed;
-    }
 
         if (obj.userData.vx !== undefined) {
             obj.position.x += obj.userData.vx * (speed * 0.4);

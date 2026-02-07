@@ -3548,6 +3548,7 @@ function initPlanet() {
 
                if (url.includes('train2.glb')) {
                 obj.userData.sideways = true;
+                obj.rotation.x = -Math.PI / 2;
                 obj.position.x = -window.innerWidth * 0.7;
                 obj.userData.sideSpeed = 0.4 + Math.random() * 0.6;
             }

@@ -3320,8 +3320,8 @@ fetchCodes();
 </script>
 
 <script type="module">
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
-import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const canvas = document.getElementById('warpCanvas');
 const ctx = canvas.getContext('2d');
@@ -3343,12 +3343,8 @@ const clock = new THREE.Clock();
 const staticUrls = [
     'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/spaceship.glb'
 ];
-const sideMoveUrls = [
-    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/train.glb'
-];
-  
 const staticScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
-const sideMoveScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
+
 let portal = {
     z: 0,
     maxZ: 0,
@@ -3538,26 +3534,31 @@ function initPlanet() {
         'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/pom.glb',
         'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/paimon_v1.glb',
         'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/paimon.glb',
-        ...staticUrls,
-        ...sideMoveUrls
+        ...staticUrls
     ];
 
     modelUrls.forEach((url, index) => {
         loader.load(url, (gltf) => {
             let obj = gltf.scene;
             obj.userData.isStatic = staticUrls.includes(url);
-           obj.userData.isSideMove = sideMoveUrls.includes(url);
 
             if (obj.userData.isStatic) {
                 obj.userData.baseScale = staticScale;
-                obj.userData.baseScale = SideMoveScale;
             } else {
                 const box = new THREE.Box3().setFromObject(obj);
                 const size = box.getSize(new THREE.Vector3()).length();
                 obj.userData.baseScale = (6 + Math.random() * 2) / (size || 1); 
             }
 
-          if (gltf.animations.length) {
+            obj.position.z = -((index + 1) * 150 + 400);
+            obj.position.x = 0;
+            obj.position.y = 0;
+
+            const spreadFactor = obj.userData.isStatic ? 0.14 : 0.015;
+            obj.userData.vx = (Math.random() - 0.5) * spreadFactor;
+            obj.userData.vy = (Math.random() - 0.5) * spreadFactor;
+
+            if (gltf.animations.length) {
                 const mixer = new THREE.AnimationMixer(obj);
                 mixer.clipAction(gltf.animations[0]).play();
                 mixers.push(mixer);
@@ -3607,9 +3608,6 @@ function animate3D() {
         obj.traverse(n => { if(n.isMesh) n.material.opacity = alpha; });
 
         if (obj.position.z > 45) {
-            if (obj.userData.isSideMover) {
-    obj.position.x = -200; // restart left
-}
             obj.position.z = -600 - (Math.random() * 300);
             obj.position.x = 0;
             obj.position.y = 0;
@@ -3621,8 +3619,6 @@ function animate3D() {
     renderer.render(scene, camera);
 }
 initPlanet();
-window.THREE = THREE;
-window.GLTFLoader = GLTFLoader;
 </script>
 </body>
 </html>

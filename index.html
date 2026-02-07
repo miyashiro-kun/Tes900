@@ -2765,13 +2765,15 @@ function initPlanet() {
         loader.load(url, (gltf) => {
             let obj = gltf.scene;
             obj.userData.isStatic = staticUrls.includes(url);
-            if (url.includes('planet.glb')) {
-              obj.position.z -= Math.random() * 600;; // push it further back
-            }
+            
             if (obj.userData.isStatic) {
                 const randomOffset = Math.random() * 1200; // distance variation
                 obj.position.z -= randomOffset;
                 obj.userData.baseScale = staticScale;
+                  if (url.includes('train.glb')) {
+                  obj.position.z -= Math.random() * 600;
+                  obj.userData.baseScale = staticScale * 1.3; ; // push it further back
+                }
             } else {
                 const box = new THREE.Box3().setFromObject(obj);
                 const size = box.getSize(new THREE.Vector3()).length();

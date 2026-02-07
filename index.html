@@ -3332,7 +3332,8 @@ const baseSpeed = 1.5;
 const boostSpeed = 17;
 let speed = baseSpeed;
 let targetSpeed = baseSpeed;
-
+const minGap = 600; // distance between models
+let lastSpawnZ = -400;
 let scene, camera, renderer;
 let spaceObjects = [];
 let mixers = []; 
@@ -3542,8 +3543,11 @@ function initPlanet() {
             obj.userData.isStatic = staticUrls.includes(url);
 
             if (obj.userData.isStatic) {
-                const randomOffset = Math.random() * 1200; // distance variation
-                obj.position.z -= randomOffset;
+                const randomGap = minGap + Math.random() * 800;
+
+                obj.position.z = lastSpawnZ - randomGap;
+
+                lastSpawnZ = obj.position.z;
                 obj.userData.baseScale = staticScale;
             } else {
                 const box = new THREE.Box3().setFromObject(obj);
@@ -3570,10 +3574,41 @@ function initPlanet() {
             obj.traverse(n => { if(n.isMesh) { n.material.transparent = true; n.material.opacity = 0;n.material.metalness = 0.5;n.material.roughness = 0.1; } });
             scene.add(obj);
             spaceObjects.push(obj);
+
+
+           if (url.includes('train2.glb')) {   // your new model
+            createTrail(obj);
+            }
         });
     });
     animate3D();
 }
+
+  function createTrail(parent) {
+    const trailLength = 40;
+
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(trailLength * 3);
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  
+    const material = new THREE.LineBasicMaterial({
+        color: 0x88ccff,
+    transparent: true,
+    opacity: 0.5,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+    });
+
+    const line = new THREE.Line(geometry, material);
+    scene.add(line);
+
+    parent.userData.trail = {
+        line,
+        positions,
+        length: trailLength
+    };
+}
+
 
 function animate3D() {
     requestAnimationFrame(animate3D);
@@ -3616,6 +3651,25 @@ function animate3D() {
             obj.userData.vx = (Math.random() - 0.5) * spread;
             obj.userData.vy = (Math.random() - 0.5) * spread;
         }
+        if (obj.userData.trail) {
+        const trail = obj.userData.trail;
+        const pos = trail.positions;
+
+        // shift positions back
+        for (let i = pos.length - 3; i > 0; i -= 3) {
+            pos[i] = pos[i - 3];
+            pos[i + 1] = pos[i - 2];
+            pos[i + 2] = pos[i - 1];
+        }
+
+        // new head position
+        pos[0] = obj.position.x;
+        pos[1] = obj.position.y;
+        pos[2] = obj.position.z;
+
+        trail.line.geometry.attributes.position.needsUpdate = true;
+    }
+      
     });
     renderer.render(scene, camera);
 }

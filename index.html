@@ -73,17 +73,25 @@
 }
 
 /* online dot */
+/* ===== Orbiting status dot ===== */
 .status-dot-new {
   position: absolute;
-  right: 6px;
-  bottom: 6px;
+  top: 50%;
+  left: 50%;
   width: 14px;
   height: 14px;
   background: #00ffd5;
   border-radius: 50%;
   box-shadow: 0 0 12px #00ffd5;
   border: 2px solid #000;
-  z-index: 3;
+  transform: translate(-50%, -50%) rotate(0deg) translateX(55px);
+  transform-origin: center;
+  animation: orbitDot-new 4s linear infinite;
+}
+
+@keyframes orbitDot-new {
+  from { transform: translate(-50%, -50%) rotate(0deg) translateX(65px); }
+  to   { transform: translate(-50%, -50%) rotate(360deg) translateX(65px); }
 }
 
 /* info */
@@ -93,14 +101,34 @@
 
 /* username futuristic */
 .username-new {
-  font-size: 30px;
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: 900;
   letter-spacing: 2px;
-  background: linear-gradient(90deg,#7aa6ff,#00f0ff,#b4c6ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 25px rgba(120,170,255,0.8);
+  color: #00cfff; /* front face color */
+  position: relative;
+  display: inline-block;
+
+  /* create 3D extrusion using multiple shadows */
+  text-shadow:
+    1px 1px 0 #0090cc,
+    2px 2px 0 #0080bb,
+    3px 3px 0 #0070aa,
+    4px 4px 0 #006099,
+    5px 5px 0 #004f88;
 }
+
+/* optional: subtle highlight on top for more volume */
+.username-new::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: rgba(255,255,255,0.1);
+  z-index: 1;
+  transform: translate(-1px, -1px);
+  pointer-events: none;
+}
+
 
 /* tagline */
 .tagline-new {
@@ -2274,7 +2302,8 @@ function cancelHold() {
   <div id="threeContainer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;"></div>
     
 	
-	<div class="profile-header-new">
+	<div class="profile-header-new" style="transform: scale(0.75);margin-top:-30px;
+">
 
   <div class="avatar-zone-new">
     <div class="avatar-orbit-new"></div>
@@ -2293,7 +2322,6 @@ function cancelHold() {
     <div class="hud-line-new"></div>
 
     <div class="meta-row-new">
-      <span>SPACE USER</span>
       <span>ACTIVE</span>
       <span>GAMER</span>
     </div>

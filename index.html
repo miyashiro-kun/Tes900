@@ -3345,6 +3345,11 @@ const staticUrls = [
 ];
 const staticScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
 
+  const fixUrls = [
+    'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/train2.glb'
+];
+const fixScale = Math.floor(Math.random() * (70 - 10 + 1)) + 10; 
+
 let portal = {
     z: 0,
     maxZ: 0,
@@ -3534,16 +3539,25 @@ function initPlanet() {
         'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/pom.glb',
         'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/paimon_v1.glb',
         'https://raw.githubusercontent.com/miyashiro-kun/kodokkyun-project/refs/heads/main/Model/paimon.glb',
-        ...staticUrls
+        ...staticUrls,
+        ...fixUrls
     ];
 
     modelUrls.forEach((url, index) => {
         loader.load(url, (gltf) => {
             let obj = gltf.scene;
             obj.userData.isStatic = staticUrls.includes(url);
-
+            obj.userData.isFix = fixUrls.includes(url);
             if (obj.userData.isStatic) {
                 obj.userData.baseScale = staticScale;
+            } else {
+                const box = new THREE.Box3().setFromObject(obj);
+                const size = box.getSize(new THREE.Vector3()).length();
+                obj.userData.baseScale = (6 + Math.random() * 2) / (size || 1); 
+            }
+
+          if (obj.userData.isFix) {
+                obj.userData.baseScale = fixScale;
             } else {
                 const box = new THREE.Box3().setFromObject(obj);
                 const size = box.getSize(new THREE.Vector3()).length();
@@ -3555,6 +3569,7 @@ function initPlanet() {
             obj.position.y = 0;
 
             const spreadFactor = obj.userData.isStatic ? 0.14 : 0.015;
+          const spreadFactor = obj.userData.isFix ? 0.14 : 0.015;
             obj.userData.vx = (Math.random() - 0.5) * spreadFactor;
             obj.userData.vy = (Math.random() - 0.5) * spreadFactor;
 
@@ -3595,6 +3610,13 @@ function animate3D() {
             obj.rotation.z = obj.userData.vx * 6; 
         }
 
+      if (!obj.userData.isFix && !obj.userData.hasNativeAnim) {
+            obj.rotation.y += 0.02;
+            obj.rotation.z += 0.01;
+        } else if (obj.userData.isFix) {
+            obj.rotation.z = obj.userData.vx * 6; 
+        }
+
         const horizonZ = -600;
         const fullSizeZ = -50;
         let progress = Math.max(0, Math.min(1, (obj.position.z - horizonZ) / (fullSizeZ - horizonZ)));
@@ -3604,6 +3626,7 @@ function animate3D() {
 
         let alpha = Math.min(1, progress * 1.5);
         const exitPoint = obj.userData.isStatic ? 80 : 25;
+      const exitPoint = obj.userData.isFix ? 80 : 25;
         if (obj.position.z > 5) alpha = 1 - (obj.position.z / 20);
         obj.traverse(n => { if(n.isMesh) n.material.opacity = alpha; });
 
@@ -3612,6 +3635,7 @@ function animate3D() {
             obj.position.x = 0;
             obj.position.y = 0;
             const spread = obj.userData.isStatic ? 0.14 : 0.015;
+          const spread = obj.userData.isFix ? 0.14 : 0.015;
             obj.userData.vx = (Math.random() - 0.5) * spread;
             obj.userData.vy = (Math.random() - 0.5) * spread;
         }

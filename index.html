@@ -2136,58 +2136,7 @@ function cancelHold() {
       <p class="tagline">Wong Jowo tapi Gamer • <i class="fa-regular fa-chess-king fa-shake" style="color: #ffffff;"></i></p>
     </div>
 
-  <div class="links-container">
-    <div class="link-item">
-      <button class="modern-link" onclick="togglePanel(this)">
-        <div class="link-info">
-          <div class="icon-box tiktok-bg"><i class="fa-brands fa-tiktok fa-bounce" style="color: #ffffff;"></i></div>
-          <div class="link-text">
-            <span class="link-title">TikTok</span>
-            <span class="link-subtitle">Konten Gaming & Hiburan</span>
-          </div>
-        </div>
-        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
-      </button>
-      <div class="modern-panel">
-        <p>Mampir ke TikTok lur, konten seru tiap hari! 🙏</p>
-        <button class="action-btn" onclick="window.open('https://www.tiktok.com/@kodok.kyun?_r=1&_t=ZS-92Pj7eRBXST', '_blank')">Follow Yuk</button>
-      </div>
-    </div>
-
-    <div class="link-item">
-      <button class="modern-link" onclick="togglePanel(this)">
-        <div class="link-info">
-          <div class="icon-box saweria-bg"><i class="fa-solid fa-circle-dollar-to-slot fa-flip" style="color: #ffffff;"></i></div>
-          <div class="link-text">
-            <span class="link-title">Saweria</span>
-            <span class="link-subtitle">Support Creator Lokal</span>
-          </div>
-        </div>
-        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
-      </button>
-      <div class="modern-panel">
-        <p>Tip/Donasi untuk upgrade gear streaming. Suwun!</p>
-        <button class="action-btn" onclick="window.open('https://saweria.co/kodokkyunn99', '_blank')">Tip Saweria</button>
-      </div>
-    </div>
-
-    <div class="link-item highlight">
-      <button class="modern-link" onclick="togglePanel(this)">
-        <div class="link-info">
-          <div class="icon-box joki-bg"><i class="fa-solid fa-khanda fa-beat" style="color: #ffffff;"></i></div>
-          <div class="link-text">
-            <span class="link-title">Jasa Joki Game</span>
-            <span class="link-subtitle">Top-tier Rank Service</span>
-          </div>
-        </div>
-        <span class="arrow-icon"><i class="fa-solid fa-sun fa-spin"></i></span>
-      </button>
-      <div class="modern-panel">
-        <p>Gak ada waktu maen? Serahin ke ahlinya!</p>
-        <button class="action-btn joki-btn-color" id="JOKINext">Lihat Pricelist</button>
-      </div>
-    </div>
-  </div>
+  
 </div>
 
 
@@ -2816,7 +2765,9 @@ function initPlanet() {
         loader.load(url, (gltf) => {
             let obj = gltf.scene;
             obj.userData.isStatic = staticUrls.includes(url);
-
+            if (url.includes('planet.glb')) {
+              obj.position.z -= Math.random() * 600;; // push it further back
+            }
             if (obj.userData.isStatic) {
                 const randomOffset = Math.random() * 1200; // distance variation
                 obj.position.z -= randomOffset;

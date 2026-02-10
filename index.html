@@ -9,6 +9,24 @@
 <script src="https://kit.fontawesome.com/424261530c.js" crossorigin="anonymous"></script>
 <style>
 
+.pill-outline {
+  background: linear-gradient(to right, rgba(3, 252, 169, 1), rgba(0, 128, 0, 0));
+  border-radius: 0em 0em 0em 1em; /* Creates the rounded corners */
+  padding: 0.5em 1em; /* Adds space around the text */
+  display: inline-block; /* Ensures the background wraps the content correctly */
+  color: white;
+  font-weight: bold;
+  font-family: sans-serif;
+  margin-top: 5px;
+
+  white-space: nowrap;      /* Prevents text from wrapping to the next line */
+  overflow: hidden;         /* Hides any content that overflows the container */
+  text-overflow: ellipsis;
+}
+
+.pill-outline:hover {
+  opacity: 0.8;
+}
 
 
 /* ===== FUTURISTIC PROFILE HEADER ===== */
@@ -2030,267 +2048,7 @@ background: url(https://act.hoyoverse.com/sr/event/e20230216gift-97w0/images/bg_
 </style>
 </head>
 <body>
-<svg style="visibility: hidden; position: absolute;" width="0" height="0">
-  <filter id="liquid">
-    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="3" seed="1">
-      <animate attributeName="baseFrequency" dur="10s" values="0.01 0.01;0.05 0.05;0.01 0.01" repeatCount="indefinite" />
-    </feTurbulence>
-    <feDisplacementMap in="SourceGraphic" scale="50" />
-  </filter>
-</svg>
-<div class="radial-menu-layer">
-  <div class="menu-wrapper" id="triggerZone">
-      <div class="hold-button"></div>
-      <div class="menu-dim" id="menuDim"></div>
-    <div class="menu-container" id="menuContainer">
-    <div class="circular-ring">
-        
-      <div style="display: flex;justify-content: center; /* Centers horizontally */
-  align-items: center;">
-        <div class="pathlogo" style="width:47%;height:47%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
-  align-items: center;"></div>  
-  
-  <div class="pathlogo2" style="width:105%;height:105%;border:solid 4px #fff;border-radius:100%;position:absolute;display: flex;justify-content: center; /* Centers horizontally */
-  align-items: center;">
-      
-  <svg id="svg" width="210" height="210" viewBox="0 0 200 200">
-  <circle
-    id="arc"
-    cx="100"
-    cy="100"
-    r="80"
-    fill="none"
-    stroke="#fff"
-    stroke-width="10"
-    stroke-dasharray="100 400"
-    transform="rotate(-90 100 100)"
-  />
-</svg>
-  </div>  
-      <svg viewBox="0 0 100 100" class="svg-layer">
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 0; --bg: #00000099" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 1; --bg: #00000099" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 2; --bg: #00000099" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 3; --bg: #00000099" />
-        <circle class="ring-slice" cx="50" cy="50" r="38" style="--i: 4; --bg: #00000099" />
-      </svg>
-      
-      </div>
 
-      <div class="content-node" style="--angle: 18deg;">
-        <span class="icon"><i class="fa-solid fa-user" style="color: #ffffff;"></i></span>
-        <span class="label">Profile</span>
-      </div>
-      <div class="content-node" style="--angle: 90deg;">
-        <span class="icon"><i class="fa-solid fa-keyboard" style="color: #ffffff;"></i></span>
-        <span class="label">Code Redem</span>
-      </div>
-      <div class="content-node" style="--angle: 162deg;">
-        <span class="icon"><i class="fa-solid fa-gamepad" style="color: #ffffff;"></i></span>
-        <span class="label">Joki</span>
-      </div>
-      <div class="content-node" style="--angle: 234deg;">
-        <span class="icon"><i class="fa-solid fa-tv" style="color: #ffffff;"></i></span>
-        <span class="label">News</span>
-      </div>
-      <div class="content-node" style="--angle: 306deg;">
-        <span class="icon" style="margin-left:-15px;"><i class="fa-solid fa-newspaper" style="color: #ffffff;"></i>️</span>
-        <span class="label" style="margin-left:-15px;">Patches</span>
-      </div>
-    </div>
-  </div>
-  </div>
-</div>
-
-<script>
-const arc = document.getElementById("arc");
-const svg = document.getElementById("svg");
-
-// Shared function to handle the rotation logic
-function updateRotation(clientX, clientY) {
-  const rect = svg.getBoundingClientRect();
-
-  // center of the SVG
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
-
-  // position relative to center
-  const dx = clientX - cx;
-  const dy = clientY - cy;
-
-  // angle in degrees
-  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-
-  // rotate arc to face the pointer
-  arc.setAttribute(
-    "transform",
-    `rotate(${angle - 40} 100 100)`
-  );
-}
-
-// 1. Desktop Mouse Movement
-document.addEventListener("mousemove", (e) => {
-  updateRotation(e.clientX, e.clientY);
-});
-
-// 2. Mobile Touch Movement (Follows finger)
-document.addEventListener("touchmove", (e) => {
-  const touch = e.touches[0];
-  updateRotation(touch.clientX, touch.clientY);
-}, { passive: true });
-
-// 3. Mobile Touch Start (Snaps to finger immediately on touch)
-document.addEventListener("touchstart", (e) => {
-  const touch = e.touches[0];
-  updateRotation(touch.clientX, touch.clientY);
-}, { passive: true });
-</script>
-<script>
-  /* =============================
-     ELEMENT REFERENCES
-  ============================== */
-  const menu = document.getElementById('menuContainer');
-  const dim = document.getElementById('menuDim');
-  const slices = document.querySelectorAll('.ring-slice');
-    
-    
-  const LOGO_BGS = [
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-44.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-45.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-46.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-47.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-48.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-49.png",
-  "https://gamebrott.com/wp-content/uploads/2023/08/image-43.png"
-];    
-  /* =============================
-     CONFIG
-  ============================== */
-  const HOLD_DELAY = 700;
-  const CENTER_ZONE = { width: 0.35, height: 0.35 };
-
-  /* =============================
-     STATE
-  ============================== */
-  let holdTimer = null;
-  let holding = false;
-  let menuOpen = false;
-
-  /* =============================
-     HELPERS
-  ============================== */
-  function inCenterZone(x, y) {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-
-    return (
-      x >= w * (0.5 - CENTER_ZONE.width / 2) &&
-      x <= w * (0.5 + CENTER_ZONE.width / 2) &&
-      y >= h * (0.5 - CENTER_ZONE.height / 2) &&
-      y <= h * (0.5 + CENTER_ZONE.height / 2)
-    );
-  }
-
-  function showMenu() {
-      
-      const randomBg = LOGO_BGS[Math.floor(Math.random() * LOGO_BGS.length)];
-  
-  // 2. Select the pathlogo element
-  const logoElement = document.querySelector('.pathlogo');
-  
-  // 3. Apply the new background (keeping your linear-gradient overlay if needed)
-  if (logoElement) {
-    logoElement.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("${randomBg}")`;
-  }
-    menu.classList.add('active');
-  dim.classList.add('active');
-  // Prevent clicking items behind the menu while it's open
-  document.querySelector('.page1').style.pointerEvents = 'none';
-  menuOpen = true;
-}
-  
-
- function hideMenu() {
-  // --- REMOVE LIQUID FROM CANVAS ---
-  const canvas = document.getElementById('warpCanvas');
-  if (canvas) canvas.style.filter = 'none';
-
-  menu.classList.remove('active');
-  dim.classList.remove('active');
-  document.querySelector('.page1').style.pointerEvents = 'auto';
-  menuOpen = false;
-}
-
-  /* =============================
-     HOLD TO OPEN
-  ============================== */
-  function startHold(e) {
-  if (menuOpen) return;
-  if (!inCenterZone(e.clientX, e.clientY)) return;
-
-  // --- TRIGGER LIQUID ON CANVAS ONLY ---
-  const canvas = document.getElementById('warpCanvas');
-  if (canvas) canvas.style.filter = 'url(#liquid)';
-  
-  holding = true;
-  holdTimer = setTimeout(() => {
-    if (holding) showMenu();
-  }, HOLD_DELAY);
-}
-
-function cancelHold() {
-  holding = false;
-  clearTimeout(holdTimer);
-  
-  // Remove effect if user lets go before menu opens
-  if (!menuOpen) {
-    const canvas = document.getElementById('warpCanvas');
-    if (canvas) canvas.style.filter = 'none';
-  }
-}
-
-  /* =============================
-     EVENTS
-  ============================== */
-  window.addEventListener('pointerdown', startHold, { passive: true });
-  window.addEventListener('pointerup', cancelHold);
-  window.addEventListener('pointercancel', cancelHold);
-
-  /* =============================
-     CLOSE ON DIM CLICK
-  ============================== */
-  dim.addEventListener('click', hideMenu);
-
-  /* =============================
-     SLICE CLICK -> NAVIGATE
-  ============================== */
-  slices.forEach((slice, index) => {
-  slice.addEventListener('click', (e) => {
-    e.stopPropagation();
-    // Map the slices to your actual page order
-    // index 0=Profile(Page1), 1=Code(Page2), 2=Joki(Page3), etc.
-    goToPage(index); 
-    hideMenu();
-  });
-});
-
-  /* =============================
-     NAVIGATION (ADJUST TO YOUR APP)
-  ============================== */
-  function goToPage(index) {
-    const container = document.getElementById('container');
-    const width = window.innerWidth;
-    
-    // Smooth scroll the container to the selected page
-    container.scrollTo({
-        left: index * width,
-        behavior: 'smooth'
-    });
-    
-    // Optional: Update your island dots if you have them
-    updateDots(index);
-}
-</script>
 
 <div class="container" id="container">
   <!-- Page 1 Link Tree -->
@@ -2302,8 +2060,7 @@ function cancelHold() {
   <div id="threeContainer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;"></div>
     
 	
-	<div class="profile-header-new" style="transform: scale(0.75);margin-top:-30px;
-">
+	<div class="profile-header-new" style="transform: scale(0.75);margin-top:-30px;">
 
   <div class="avatar-zone-new">
     <div class="avatar-orbit-new"></div>
@@ -2313,8 +2070,8 @@ function cancelHold() {
   </div>
 
   <div class="info-zone-new">
-    <div class="username-new">Kodokkyun</div>
-    <div class="tagline-new">
+    <div class="username-new">Kodokkyun</div><br>
+    <div class="pill-outline">
       Wong Jowo tapi Gamer
       <i class="fa-regular fa-chess-king"></i>
     </div>
